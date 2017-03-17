@@ -1,0 +1,31 @@
+{% extends "billingsite/base.html"%}
+{% block title %} Roommate Bills {% endblock title %}
+
+{% block content %}
+<div class="container">
+   <div class="col-md-6 medium-centered col-lg-8 large-centered columns">
+      {% if user.is_superuser %}
+      <form method="post" action="" enctype="multipart/form-data">
+         {% csrf_token %}
+         <div class="row column">
+            <h1 clas"text-center">Edit Website Info</h1>
+            {{ form.errors }}
+            <label>
+               {{ form.utilitiesinfo.label_tag }}
+               {{ form.utilitiesinfo}}
+            </label>
+            <label>
+               {{ form.iouinfo.label_tag }}
+               {{ form.iouinfo}}
+            </label>
+            <label>
+               {{ form.choresinfo.label_tag }}
+               {{ form.choresinfo}}
+            </label>
+            <input type="submit" class="button expanded" value="Confirm Edit">
+         </div>
+      </form>
+      <a role="button" href="/home/" class="button alert expanded">Cancel</a>
+   </div>
+</div>
+{% endblock %}

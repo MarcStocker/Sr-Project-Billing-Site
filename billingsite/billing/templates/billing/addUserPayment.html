@@ -1,0 +1,47 @@
+{% extends "billingsite/base.html" %}
+{% load static %}
+{% block title %} Add User Payment {% endblock title %}
+
+
+{% block content %}
+<div class="column"> <!-- BEING Div Column -->
+   <div class="col-lg-12 col-md-12 col-sm-12 row"> <!-- BEGIN size 12 column -->
+      <form method="post" action="" enctype="multipart/form-data" runat="server">
+         {% csrf_token %}
+         <h1 class="text-center">Add a new Bill</h1>
+         {{ form.errors }}
+         <div class="col-lg-6 col-md-6 col-sm-6 column">
+            <label>
+               {{ form.utilType.label_tag }}
+               {{ form.utilType }}
+            </label>
+         </div>
+         <div class="col-lg-6 col-md-6 col-sm-6 column">
+            <label>
+               {{ form.amount.label_tag }}
+               {{ form.amount }}
+            </label>
+         </div>
+         <div class="col-lg-3 col-md-3 col-sm-3 column">
+            <label>
+               {{ form.statementDate.label_tag }}
+               {{ form.statementDate }}
+            </label>
+         </div>
+         <div class="col-lg-3 col-md-3 col-sm-3 column">
+            <label>
+               {{ form.dueDate.label_tag }}
+               {{ form.dueDate }}
+            </label>
+         </div>
+         <div class="col-lg-3 col-md-3 col-sm-3 column">
+            <label>
+               {{ form.datepaid.label_tag }}
+               {{ form.datepaid }}
+            </label>
+         </div>
+         </div>
+      </form>
+   </div> <!-- END size 12 column -->
+</div> <!-- END Div Column -->
+{% endblock %}

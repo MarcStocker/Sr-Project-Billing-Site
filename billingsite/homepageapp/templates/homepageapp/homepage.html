@@ -1,0 +1,46 @@
+{% extends "billingsite/base.html" %}
+
+{% block title %} Roommate Bills {% endblock title %}
+
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="span4">
+      <div class="col-md-4">
+        <div class="page-header">
+          <h1 class="text-center">Utilities Overview</h1>
+        </div>
+      </div>
+    </div>
+    <div class="span4">
+      <div class="col-md-4">
+        <div class="page-header">
+          <h1 class="text-center">IOU's Overview</h1>
+        </div>
+      </div>
+    </div>
+    <div class="span4">
+      <div class="col-md-4">
+        <div class="page-header">
+          <h1 class="text-center">Chores Overview</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Sample code  -->
+<br />
+<br />
+<br />
+<br />
+<hr />
+<hr />
+<hr />
+<div class="page-header text-center">
+  <h1>THE FOLLOWING IS EXAMPLE CODE</h1>
+</div>
+{% include "homepageapp/includes/grids.html"%}
+
+{% endblock %}
