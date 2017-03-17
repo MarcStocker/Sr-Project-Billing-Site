@@ -35,7 +35,11 @@
                <a href="/admin/">Admin Page</a>
             </li>
             <li class="active">
-               <a href="#">Log In/Off  <span class="glyphicon glyphicon-user" aria-hidden="true"></span></a>
+               {% if user.is_authenticated %}
+               <a href="/logout/">Logout  <span class="glyphicon glyphicon-user" aria-hidden="true"></span></a>
+               {% else %}
+               <a href="/login/">Login  <span class="glyphicon glyphicon-user" aria-hidden="true"></span></a>
+               {% endif %}
             </li>
          </ul>
          <!--  -->

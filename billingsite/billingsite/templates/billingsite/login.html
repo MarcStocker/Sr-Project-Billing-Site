@@ -1,0 +1,43 @@
+{% extends "billingsite/base.html" %}
+{% load static %}
+
+{% block title %} Log In - EdgarRaw {% endblock %}
+
+{% block content %}
+<div class="container">
+   <div class="row">
+      <ul class="nav nav-tabs" role="tablist">
+         <li role="presentation" class="active" >
+            <a href="#login" role="tab" data-toggle="tab">Login</a>
+         </li>
+         <li role="presentation" class="active" >
+            <a href="#register" role="tab" data-toggle="tab">Register</a>
+         </li>
+      </ul>
+      <div class="tab-content">
+         <div role="tabpanel" class="tab-pane active" id="login">
+            <form method="post" action="{% url 'login' %}">
+               {% csrf_token %}
+               <div class="row col log-in-form">
+                  <h4 class="text-center">Log In</h4>
+                  {{ form.errors }}
+                  <label> {{ form.username.label_tag }}
+                     {{ form.username }}
+                  </label>
+                  <label> {{ form.password.label_tag }}
+                     {{ form.password }}
+                  </label>
+                  <input type="submit" class="btn" value="Log In"></input>
+                  <a href="/login/register" class="btn">Register</a>
+               </div>
+            </form>
+         </div>
+         <div role="tabpanel" class="tab-pane active" id="register">
+            Nothing here yet
+         </div>
+      </div>
+   </div>
+</div>
+{% endblock %}
+
+<!-- <form method="post" action="{% url 'login' %}"> -->

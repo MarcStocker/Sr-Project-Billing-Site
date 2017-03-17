@@ -19,11 +19,24 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views
 
+from users.forms import LoginForm
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+
+    # Login URL
+    url(r'^login/', views.login, {'template_name':'billingsite/login.html','authentication_form':LoginForm}, name='login'),
+    # Log out URL
+    url(r'^logout/', views.logout,{'next_page':'/login'}),
+
+    # Home, etc. URLS
     url(r'^', include('homepageapp.urls')),
     url(r'^home/', include('homepageapp.urls')),
+
+    # Website App URLS
     url(r'^utilities/', include('billing.urls')),
     # url(r'^ious/', include('iou.urls')),
     # url(r'^chores/', include('chores.urls')),
+
+
 ]

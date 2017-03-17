@@ -9,10 +9,15 @@ urlpatterns = [
 
 
     # Edit/Add Information
+    #-------------------------------------------
     #<WebSite.com>/utilities/addUserPayment/
-    url(r'^addUserPayment/$', views.adduserpayment, name="adduserpayment"),
+    # url(r'^addUserPayment/$', views.adduserpayment, name="adduserpayment"),
+
     #<WebSite.com>/utilities/addBillPayment/
-    url(r'^addBillPayment/$', views.addbillpayment, name="addbillpayment"),
+    # url(r'^addBillPayment/$', views.addbillpayment, name="addbillpayment"),
+
+    #<WebSite.com>/utilities/addUtilityBill/
+    url(r'^addBill/$', views.addbill, name="addbill"),
 
 
 
@@ -20,5 +25,5 @@ urlpatterns = [
 
 
     #<WebSite.com>/billing/test/
-    url(r'^test/$', viewstest.test, name="test"),
+    url(r'^test/$', views.test, name="test"),
 ]

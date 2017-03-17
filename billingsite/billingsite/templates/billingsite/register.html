@@ -1,0 +1,40 @@
+{% extends "billingsite/base.html" %}
+{% load static %}
+
+{% block title %} Register - EdgarRaw {% endblock %}
+
+{% block content %}
+<div class="container">
+   <div class="row">
+      <div class="col-md-6 col-md-centered col-lg-4 col-lg-centered columns">
+         <form method="post" action="/login/register">
+            {% csrf_token %}
+            <div class="row column log-in-form">
+               <h4 class="text-center">Register a New Account</h4>
+               {{ form.errors }}
+               <label> {{ form.username.label_tag }}
+                  {{ form.username }}
+               </label>
+               <label> {{ form.email.label_tag }}
+                  {{ form.email }}
+               </label>
+               <label> {{ form.password1.label_tag }}
+                  {{ form.password1 }}
+               </label>
+               <label> {{ form.password2.label_tag }}
+                  {{ form.password2 }}
+               </label>
+               <input type="submit" class="button expanded" value="Register">
+            </div>
+         </form>
+      </div>
+   </div>
+</div>
+
+<div class="row">
+   <div class="col-md-6 medium-centered col-lg-4 large-centered columns">
+   </div>
+</div>
+{% endblock %}
+
+<!-- <form method="post" action="{% url 'login' %}"> -->
