@@ -2,39 +2,45 @@
 {% load static %}
 
 {% block title %} Register - EdgarRaw {% endblock %}
-
 {% block content %}
 <div class="container">
-   <div class="row">
-      <div class="col-md-6 col-md-centered col-lg-4 col-lg-centered columns">
-         <form method="post" action="/login/register">
-            {% csrf_token %}
-            <div class="row column log-in-form">
-               <h4 class="text-center">Register a New Account</h4>
-               {{ form.errors }}
-               <label> {{ form.username.label_tag }}
-                  {{ form.username }}
-               </label>
-               <label> {{ form.email.label_tag }}
-                  {{ form.email }}
-               </label>
-               <label> {{ form.password1.label_tag }}
-                  {{ form.password1 }}
-               </label>
-               <label> {{ form.password2.label_tag }}
-                  {{ form.password2 }}
-               </label>
-               <input type="submit" class="button expanded" value="Register">
+   <div class="col-lg-5 col-md-5 col-md-center col-lg-offset-3 col-md-offset-3 row main" style="background-color:#424242">
+      <div class="row" style="text-align:center; background-color:#000">
+         <div class="row" style="text-align:center; background-color:#3439c4; outline-color:#000">
+            <div class="col-lg-12 col-lg-centered">
+               <div class="col-lg-6 col-lg-offset-3 row">
+                  <form method="post" action="{% url 'homepageapp:home' %}">
+                     {% csrf_token %}
+                     <div class="col-lg-12 row col log-in-form">
+                        <h4 class="text-center">Log In</h4>
+                        {{ form.errors }}
+                        <label> {{ form.username.label_tag }}
+                           {{ form.username }}
+                        </label>
+                        <label> {{ form.email.label_tag }}
+                           {{ form.email }}
+                        </label>
+                        <label> {{ form.password1.label_tag }}
+                           {{ form.password1 }}
+                        </label>
+                        <label> {{ form.password2.label_tag }}
+                           {{ form.password2 }}
+                        </label>
+                        <input type="submit" class="btn btn-block" value="Register"></input>
+                        <br />
+                        <a href="/login/">Log In</a>
+                     </div>
+                  </form>
+               </div>
             </div>
-         </form>
+         </div> <!-- Tab div 10 END -->
       </div>
    </div>
-</div>
 
-<div class="row">
-   <div class="col-md-6 medium-centered col-lg-4 large-centered columns">
+   <div class="row">
+      <div class="col-md-6 medium-centered col-lg-4 large-centered columns">
+      </div>
    </div>
-</div>
-{% endblock %}
+   {% endblock %}
 
-<!-- <form method="post" action="{% url 'login' %}"> -->
+   <!-- <form method="post" action="{% url 'login' %}"> -->

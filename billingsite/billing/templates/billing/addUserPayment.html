@@ -5,43 +5,61 @@
 
 {% block content %}
 <div class="column"> <!-- BEING Div Column -->
-   <div class="col-lg-12 col-md-12 col-sm-12 row"> <!-- BEGIN size 12 column -->
-      <form method="post" action="" enctype="multipart/form-data" runat="server">
-         {% csrf_token %}
-         <h1 class="text-center">Pay a Roommate</h1>
-         {{ form.errors }}
-         <div class="col-lg-6 col-md-6 col-sm-6 column">
-            <label>
-               {{ form.payer.label_tag }}
-               {{ form.payer }}
-            </label>
+   <div class="col-lg-6 col-lg-centered col-md-6 col-md-centered col-md-offset-3">
+      <div class="row">
+         <div class="col-lg-12">
+            <form method="post" action="" enctype="multipart/form-data" runat="server">
+               {% csrf_token %}
+               <h1 class="text-center">Add a new User Payment</h1>
+               {{ form.errors }}
+               <div class="row">
+                  <div class="col-lg-6 col-lg-left">
+                     <div class="form-group">
+                        <label>
+                           {{ form.payer.label_tag }}
+                           {{ form.payer }}
+                        </label>
+                     </div>
+                  </div>
+                  <div class="col-lg-6 col-lg-right">
+                     <div class="form-group">
+                        <label>
+                           {{ form.payee.label_tag }}
+                           {{ form.payee }}
+                        </label>
+                     </div>
+                  </div>
+                  <div class="col-lg-6 col-lg-right">
+                     <div class="form-group">
+                        <label>
+                           {{ form.amount.label_tag }}
+                           {{ form.amount }}
+                        </label>
+                     </div>
+                  </div>
+                  <div class="col-lg-6 col-lg-right">
+                     <div class="form-group">
+                        <label>
+                           {{ form.date.label_tag }}
+                           {{ form.date }}
+                        </label>
+                     </div>
+                  </div>
+                  <div class="col-lg-6 col-lg-right">
+                     <div class="form-group">
+                        <label>
+                           {{ form.payType.label_tag }}
+                           {{ form.payType }}
+                        </label>
+                     </div>
+                  </div>
+               </div>
+               <input type="submit" class="btn btn-lg btn-group btn-success btn-block" value="Submit Payment" />
+            </form>
+            <form action="/utilities/">
+               <input type="submit" class="btn btn-group btn-danger btn-block" value="Cancel"/>
+            </form>
          </div>
-         <div class="col-lg-6 col-md-6 col-sm-6 column">
-            <label>
-               {{ form.payee.label_tag }}
-               {{ form.payee }}
-            </label>
-         </div>
-         <div class="col-lg-3 col-md-3 col-sm-3 column">
-            <label>
-               {{ form.date.label_tag }}
-               {{ form.date }}
-            </label>
-         </div>
-         <div class="col-lg-3 col-md-3 col-sm-3 column">
-            <label>
-               {{ form.amount.label_tag }}
-               {{ form.amount }}
-            </label>
-         </div>
-         <div class="col-lg-3 col-md-3 col-sm-3 column">
-            <label>
-               {{ form.payType.label_tag }}
-               {{ form.payType }}
-            </label>
-         </div>
-         </div>
-      </form>
-   </div> <!-- END size 12 column -->
-</div> <!-- END Div Column -->
-{% endblock %}
+      </div> <!-- END size 12 column -->
+   </div> <!-- END Div Column -->
+   {% endblock %}

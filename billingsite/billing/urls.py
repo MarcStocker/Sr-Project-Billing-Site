@@ -18,7 +18,18 @@ urlpatterns = [
 
     #<WebSite.com>/utilities/addUtilityBill/
     url(r'^addBill/$', views.addbill, name="addbill"),
+    #<WebSite.com>/utilities/addUtilityBill/
+    url(r'^addBillPayment/$', views.addbillpayment, name="addbillpayment"),
+    #<WebSite.com>/utilities/addUtilityBill/
+    url(r'^addUserPayment/$', views.adduserpayment, name="adduserpayment"),
 
+    #<WebSite.com>/utilities/addLease/
+    url(r'^addLease/$', views.addlease, name="addlease"),
+    #<WebSite.com>/utilities/addRoommate/
+    url(r'^addRoommate/$', views.addroommate, name="addroommate"),
+
+    #<WebSite.com>/utilities/admintablepage/
+    url(r'^admintablepage/$', views.admintablepage, name="admintablepage"),
 
 
 

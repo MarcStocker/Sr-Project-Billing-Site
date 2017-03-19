@@ -5,12 +5,13 @@
 
 {% block content %}
 <div class="column"> <!-- BEING Div Column -->
+   <!-- <div class="col-lg-10 col-lg-centered col-md-10 col-md-centered col-sm-10 row"> <!-- BEGIN size 12 column -->
    <div class="col-lg-6 col-lg-centered col-md-6 col-md-centered col-md-offset-3">
       <div class="row">
          <div class="col-lg-12">
             <form method="post" action="" enctype="multipart/form-data" runat="server">
                {% csrf_token %}
-               <h1 class="text-center">Add a new Bill</h1>
+               <h1 class="text-center">Add a new Utility Type</h1>
                {{ form.errors }}
                <div class="row">
                   <div class="col-lg-6 col-lg-left">
@@ -25,23 +26,7 @@
                      <div class="form-group">
                         <label>
                            {{ form.amount.label_tag }}<br />
-                           ${{ form.amount }}
-                        </label>
-                     </div>
-                  </div>
-                  <div class="col-lg-6 col-lg-right">
-                     <div class="form-group">
-                        <label>
-                           {{ form.owner.label_tag }}<br />
-                           ${{ form.owner }}
-                        </label>
-                     </div>
-                  </div>
-                  <div class="col-lg-6 col-lg-right">
-                     <div class="form-group">
-                        <label>
-                           {{ form.house.label_tag }}<br />
-                           {{ form.house }}
+                           {{ form.amount }}
                         </label>
                      </div>
                   </div>
@@ -74,9 +59,4 @@
       </div>
    </div>
 </div> <!-- END size 12 column -->
-   <script>
-      $(document).ready(function() {
-         $('.datepicker').datepicker();
-      });
-   </script>
 {% endblock %}

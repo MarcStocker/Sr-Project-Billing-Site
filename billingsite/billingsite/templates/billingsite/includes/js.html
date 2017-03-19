@@ -1,16 +1,29 @@
 {% load static %}
+   {# DatePicker code #}
+   <!-- Datepicker -->
+   <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+   <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+   <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+   <!-- Javascript for Date Input fields -->
+   <script src="{% static "myjs/dateSelectionField.js"%}"></script>
+   {#-------#}
+
    <script src="{% static "/myjs/tabs.js" %}"></script>
+   <script src="{% static "/myjs/dropdown.js" %}"></script>
    <!-- Bootstrap core JavaScript
    ================================================== -->
    <script src="{% static "/js/bootstrap.min.js" %}"></script>
 
+   {# Circliful Circle Graphs #}
+   <!-- Jquery Circliful -->
+   <link href="{% static "css/jquery.circliful.css" %}" rel="stylesheet" type="text/css" />
+   <script src="{% static "js/jquery.circliful.min.js" %}"></script>
+   <!-- Javascript for Circliful -->
+   <script src="{% static "myjs/circifulgraph.js" %}"></script>
+   {#-------#}
 
-    {# DatePicker code #}
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
-    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-    <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
-    <script>
-    $(document).ready(function() {
-      $('.datepicker').datepicker();
-    });
-    </script>
+   <!-- <script>
+      $( document ).ready(function() {
+         $('.datepicker').datepicker();
+      });
+   </script> -->

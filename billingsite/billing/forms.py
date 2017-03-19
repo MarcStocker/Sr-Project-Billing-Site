@@ -25,7 +25,8 @@ class UserPaymentForm(forms.ModelForm):
             'date','amount','payType'
         ]
 
-class addUtilityBillForm(forms.ModelForm):
+# Adding a New utility Type
+class addUtilityTypeForm(forms.ModelForm):
     name = forms.CharField()
     website = forms.CharField()
     class Meta:
@@ -56,10 +57,61 @@ class addNewBillForm(forms.ModelForm):
         fields= [
             'utilType','owner','amount',
             'statementDate','dueDate','datepaid',
+            'house',
         ]
+
+
+class addNewBillPaymentForm(forms.ModelForm):
+    date = forms.DateField(
+        label="Date Paid",
+        help_text="Date the bill was paid on",
+        widget=DateInput()
+    )
+    class Meta:
+        model = billPayment
+        fields= [
+            'payer','amount','date','payType','UtilBill',
+        ]
+
+class addNewUserPaymentForm(forms.ModelForm):
+    date = forms.DateField(
+        label="Date Paid",
+        help_text="Date that money was transferred",
+        widget=DateInput()
+    )
+    class Meta:
+        model = userPayment
+        fields= [
+            'payer','payee','amount','date','payType',
+        ]
+
 class addUtilityBillPaymentForm(forms.ModelForm):
     class Meta:
         model = UtilityBill
         fields= [
 
+        ]
+
+class addLeaseForm(forms.ModelForm):
+    startDate = forms.DateField(
+        label="Lease Start Date",
+        help_text="The day the lease begins",
+        widget=DateInput()
+    )
+    endDate = forms.DateField(
+        label="Lease End Date",
+        help_text="The day the lease ends",
+        widget=DateInput()
+    )
+    class Meta:
+        model = Lease
+        fields= [
+            'name', 'address', 'startDate', 'endDate',
+        ]
+
+class addRoommateForm(forms.ModelForm):
+    class Meta:
+        model = Roommate
+        fields= [
+            'name', 'house', 'user',
         ]

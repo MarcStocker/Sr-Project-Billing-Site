@@ -12,11 +12,10 @@
       </div>
    </div>
    <nav class="navbar navbar-inverse">
-
       <div class="container-fluid">
          <div class="nav navbar-nav">
             <li class="active">
-               <a class="navbar-brand" href="/home/">
+               <a class="navbar-brand" href="{% url 'homepageapp:home'%}">
                   <img alt="brand" src="{% static "images/homeicon.png" %}" />
                </a>
             </li>
@@ -32,7 +31,42 @@
          </div>
          <ul class="nav navbar-nav navbar-right">
             <li>
-               <a href="/admin/">Admin Page</a>
+               {% if user.is_superuser %}
+               <!-- Single Button -->
+               <div class="btn-group">
+                  <button type="button" class="btn btn-success btn-lg"><a href="/admin/" roll="button" style="color: #ffffff">Admin</a></button>
+                  <button type="button" class="btn btn-primary btn-success btn-lg dropdown-toggle" data-toggle="dropdown">
+                     <span class="caret"></span>
+                     <span class="sr-only">Toggle Dropdown</span>
+                  </button>
+                  <ul class="dropdown-menu">
+                     <li>
+                        <a href="{% url 'billing:addlease' %}">Add a new Lease/House</a>
+                     </li>
+                     <li>
+                        <a href="{% url 'billing:addroommate' %}">Add a Roommate to House X</a>
+                     </li>
+                     <li role="separator" class="divider "> </li>
+                     <li>
+                        <a href="#">Add a Utility Type</a>
+                     </li>
+                     <li>
+                        <a href="{% url 'billing:addbill' %}">Add a Utility Bill to House X</a>
+                     </li>
+                     <li role="separator" class="divider "> </li>
+                     <li>
+                        <a href="{% url 'billing:adduserpayment' %}">Add a User Payment</a>
+                     </li>
+                     <li>
+                        <a href="{% url 'billing:addbillpayment' %}">Add a Bill Payment</a>
+                     </li>
+                     <li role="separator" class="divider "> </li>
+                     <li>
+                        <a href="{% url 'billing:admintablepage' %}">View all Tables</a>
+                     </li>
+                  </ul>
+               </div>
+               {% endif %}
             </li>
             <li class="active">
                {% if user.is_authenticated %}

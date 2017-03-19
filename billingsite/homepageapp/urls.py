@@ -9,4 +9,5 @@ urlpatterns = [
     url(r'^$', views.home, name="home"),
     #<WebSite.com>/home/
     url(r'^home/$', views.home, name="home"),
+    url(r'^register/$', views.register, name="register"),
 ]

@@ -1,5 +1,7 @@
 from django.db import models
 from datetime import datetime
+from django.contrib.auth.models import User
+
 import datetime
 
 # Create your models here.
@@ -8,8 +10,8 @@ class Lease(models.Model):
         ordering=('id', 'name')
     name        = models.CharField(max_length=15)
     address     = models.CharField(max_length=50)
-    startDate   = models.DateField()
-    endDate     = models.DateField()
+    startDate   = models.DateField(null=True, blank=True)
+    endDate     = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return "#" + str(self.id) + " - " + str(self.name)
@@ -24,7 +26,12 @@ class Roommate(models.Model):
                         on_delete=models.SET_DEFAULT,
                         db_constraint=False
                         )
-    # user    = models.ForeignKey()
+    user    = models.ForeignKey(
+                        User, null=False,
+                        blank=False, default="",
+                        on_delete=models.SET_DEFAULT,
+                        db_constraint=False
+                        )
 
     def __str__(self):
         return "#" + str(self.id) + " - " + str(self.name)
@@ -47,6 +54,7 @@ class UtilityBill(models.Model):
     dueDate         = models.DateField(null=True, blank=True)
     statementDate   = models.DateField(null=True, blank=True)
     datepaid        = models.DateField(null=True, blank=True)
+    image           = models.FileField(max_length=144, upload_to='uploads/%Y/%m%d/', null=True, blank=True, default="")
     owner           = models.ForeignKey(
                                 'Roommate', null=False,
                                 blank=False, default="",
@@ -67,14 +75,14 @@ class UtilityBill(models.Model):
                                 )
 
     def __str__(self):
-        return "#" + str(self.id) + "-" + str(self.utilType.name) + "  due: " + str(self.amount) + "  by: " + str(self.dueDate)
+        return "#" + str(self.id) + "-" + str(self.utilType.name) + "  $" + str(self.amount) + "  due by: " + str(self.dueDate)
 
 class billPayment(models.Model):
     class Meta:
         ordering =('id', 'date')
     date        = models.DateField()
     amount      = models.DecimalField(max_digits=6, decimal_places=2)
-    payType     = models.TextField()
+    payType     = models.CharField(max_length=25)
     payer       = models.ForeignKey(
                             'Roommate', null=False,
                             blank=False, default="",
@@ -93,7 +101,7 @@ class userPayment(models.Model):
         ordering =('id', 'date')
     date    = models.DateField(null=True, blank=True)
     amount  = models.DecimalField(max_digits=6, decimal_places=2)
-    payType = models.TextField()
+    payType = models.CharField(max_length=25)
     payer   = models.ForeignKey(
                         'Roommate', null=False,
                         blank=False, default="",
