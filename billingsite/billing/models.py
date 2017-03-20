@@ -19,22 +19,66 @@ class Lease(models.Model):
 class Roommate(models.Model):
     class Meta:
         ordering=('id', 'name')
-    name    = models.CharField(max_length=25)
-    house   = models.ForeignKey(
+    name        = models.CharField(max_length=25)
+    house       = models.ForeignKey(
                         'Lease', null=False,
                         blank=False, default="",
                         on_delete=models.SET_DEFAULT,
                         db_constraint=False
                         )
-    user    = models.ForeignKey(
+    user        = models.ForeignKey(
                         User, null=False,
                         blank=False, default="",
                         on_delete=models.SET_DEFAULT,
                         db_constraint=False
                         )
+    totalowed   = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    totalpaid   = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    percentowed = models.DecimalField(max_digits=6, decimal_places=2, default=0)
 
     def __str__(self):
         return "#" + str(self.id) + " - " + str(self.name)
+
+    def getPercentOwed(self):
+        all_bills        = UtilityBill.objects.all()
+        all_userPayments = userPayment.objects.all()
+        totalowed=0
+        totalpaid=0
+        for i in all_bills:
+            if i.owner.id != self.id:
+                totalowed+=i.amount
+        print("Total owed=",totalowed)
+        for i in all_userPayments:
+            if i.payer.id == self.id:
+                totalpaid+=i.amount
+        print("Total paid=",totalpaid)
+        percentowed=totalpaid-totalpaid
+        percentowed=percentowed/totalowed
+        percentowed=round(percentowed*100,2)
+        return percentowed
+
+    # def updateowed(self, *args, **kwargs):
+    #     all_bills        = UtilityBill.objects.all()
+    #     all_userPayments = userPayment.objects.all()
+    #     totalowed=0
+    #     totalpaid=0
+    #     for i in all_bills:
+    #         if i.owner.id != self.id:
+    #             totalowed+=i.amount
+    #     for i in all_userpayments:
+    #         if i.payer.id == self.id:
+    #             totalpaid+=i.amount
+    #     self.totalowed=totalowed
+    #     self.totalpaid=totalpaid
+    #
+    #     percentowed=totalpaid-totalpaid
+    #     percentowed=percentowed/totalowed
+    #     percentowed=percentowed*100
+    #     self.percentowed=percentowed
+    #
+    #     super(Roommate, self).save(*args, **kwargs)
+
+
 
 class UtilityType(models.Model):
     class Meta:

@@ -47,11 +47,14 @@
             <div role="tabpanel" class="tab-pane fade in active .panelcust" id="overview">
                <h2>This is the tab for "Home"</h2>
                <div class="row">
+                  {% for roommate in all_roommates %}
+                  {% if roommate.house.id == 0 %}
                   <div class="col-xs-4 col-md-3 ">
-                     <h3>Marc</h3>
-                     <div class="test-circle" data-percent="46"></div>
-                     <!-- <img src="{% static "/images/circlegraph.png" %}" alt="..."> -->
+                     <h3>{{ roommate.name }}</h3>
+                     <div class="test-circle" data-percent="{{ roommate.percentowed }}"></div>
                   </div>
+                  {% endif %}
+                  {% endfor %}
                   <div class="col-xs-4 col-md-3">
                      <h3>Dom</h3>
                      <div class="test-circle" data-percent="37"></div>

@@ -19,6 +19,8 @@ import os
 @login_required(login_url="/login/")
 def billinghome(request):
     #Overview is for house id=
+    cur_user=request.user
+    print("CURRENT USER IS: "+str(cur_user.username))
     houseid=1
     numroommates=5
     my_roommates=[]
@@ -36,7 +38,8 @@ def billinghome(request):
         if i.id == houseid:
             print("--- Retrieving Data for House :", i.name, " - ID:", houseid)
     inum=0
-    #Collect total owed for entire house
+
+    # Collect total owed for entire house
     totalowed=0
     for i in all_bills:
         if i.house == houseid:
@@ -93,6 +96,12 @@ def billinghome(request):
     for i in percentowed:
         print(str(i)+"%")
 
+    for i in all_roommates:
+        if i.house.id == houseid:
+            print("User: " + str(i.name))
+            print("  Owes: " + str(i.getPercentOwed()))
+
+
 
 
 
@@ -100,6 +109,7 @@ def billinghome(request):
     collections=143.43
     totmoney=collections-debt
     totmoney=round(totmoney,2)
+
     context = {
         'debt':debt,
         'collections':collections,
@@ -107,6 +117,7 @@ def billinghome(request):
         'numroommates':numroommates,
         'roommateowes':roommateowes,
         'roommatepaid':roommatepaid,
+        'all_roommates':all_roommates,
     }
     return render(request, 'billing/billinghome.html', context)
 
