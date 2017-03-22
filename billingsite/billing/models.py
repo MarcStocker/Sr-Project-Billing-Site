@@ -32,6 +32,7 @@ class Roommate(models.Model):
                         on_delete=models.SET_DEFAULT,
                         db_constraint=False
                         )
+    isactive    = models.BooleanField(default=True)
     totalowed   = models.DecimalField(max_digits=6, decimal_places=2, default=0)
     totalpaid   = models.DecimalField(max_digits=6, decimal_places=2, default=0)
     percentowed = models.DecimalField(max_digits=6, decimal_places=2, default=0)
@@ -40,45 +41,38 @@ class Roommate(models.Model):
         return "#" + str(self.id) + " - " + str(self.name)
 
     def getPercentOwed(self):
+        print("\n ~~~~ \n getPercentOwed()")
         all_bills        = UtilityBill.objects.all()
         all_userPayments = userPayment.objects.all()
+        all_paymentrequests = PaymentRequest.objects.all()
         totalowed=0
         totalpaid=0
-        for i in all_bills:
-            if i.owner.id != self.id:
-                totalowed+=i.amount
+        for i in all_paymentrequests:
+            if i.requestee.id == self.id:
+                totalowed += i.amount
         print("Total owed=",totalowed)
         for i in all_userPayments:
             if i.payer.id == self.id:
                 totalpaid+=i.amount
         print("Total paid=",totalpaid)
-        percentowed=totalpaid-totalpaid
-        percentowed=percentowed/totalowed
-        percentowed=round(percentowed*100,2)
-        return percentowed
+        percentowed = totalpaid - totalowed
+        print("\n ____\n END")
+        if totalowed == 0:
+            return 100
+        elif totalpaid == 0:
+            return 0
+        else:
+            percentowed = percentowed / totalowed
+            percentowed = round(percentowed*100,2)
+            return percentowed
 
-    # def updateowed(self, *args, **kwargs):
-    #     all_bills        = UtilityBill.objects.all()
-    #     all_userPayments = userPayment.objects.all()
-    #     totalowed=0
-    #     totalpaid=0
-    #     for i in all_bills:
-    #         if i.owner.id != self.id:
-    #             totalowed+=i.amount
-    #     for i in all_userpayments:
-    #         if i.payer.id == self.id:
-    #             totalpaid+=i.amount
-    #     self.totalowed=totalowed
-    #     self.totalpaid=totalpaid
-    #
-    #     percentowed=totalpaid-totalpaid
-    #     percentowed=percentowed/totalowed
-    #     percentowed=percentowed*100
-    #     self.percentowed=percentowed
-    #
-    #     super(Roommate, self).save(*args, **kwargs)
-
-
+    def getOwedTo(self, rmid):
+        owed = 0
+        for i in PaymentRequest.objects.all():
+            if i.payer.id == self.id:
+                if i.requester.id == rmid:
+                    owed+=i.amount
+        return owed
 
 class UtilityType(models.Model):
     class Meta:
@@ -120,6 +114,34 @@ class UtilityBill(models.Model):
 
     def __str__(self):
         return "#" + str(self.id) + "-" + str(self.utilType.name) + "  $" + str(self.amount) + "  due by: " + str(self.dueDate)
+    def createRequests(self, roommates):
+        print("\n ~~~~ \n createRequests()")
+        return 0
+
+
+class PaymentRequest(models.Model):
+    class Meta:
+        ordering =('id', 'date')
+    date        = models.DateField()
+    amount      = models.DecimalField(max_digits=6, decimal_places=2)
+    requester   = models.ForeignKey(
+                            'Roommate', null=False,
+                            blank=False, default="",
+                            on_delete=models.SET_DEFAULT,
+                            db_constraint=False, related_name="requester"
+                            )
+    requestee       = models.ForeignKey(
+                            'Roommate', null=False,
+                            blank=False, default="",
+                            on_delete=models.SET_DEFAULT,
+                            db_constraint=False, related_name="requestee"
+                            )
+    UtilBill    = models.ForeignKey(
+                            'UtilityBill', null=False,
+                            blank=False, default="",
+                            on_delete=models.SET_DEFAULT,
+                            db_constraint=False
+                            )
 
 class billPayment(models.Model):
     class Meta:
