@@ -50,7 +50,7 @@ def billinghome(request):
             if temptotstillowed >= 1:
                 roommates_iowe[i.name] = [temptotbill, temptotpay, temptotstillowed]
             elif temptotstillowed <0:
-                roommate_collections[i.name] = [temptotcollections, temptotpayments, temptotstillowed]
+                roommate_collections[i.name] = [temptotbill, temptotpay, temptotstillowed]
 
             # Code for Roommate_Collections
             all_requests = PaymentRequest.objects.filter(requester_id=cur_roommate.id, requestee_id=i.id)
@@ -61,7 +61,8 @@ def billinghome(request):
                 temptotcollections += charge.amount
             for payment in userpayments:
                 temptotpayments += payment.amount
-            tempstillowed = temptotcollections - temptotpayments
+            temptotstillowed=temptotcollections-temptotpayments
+            print("Total Still Owed: " + str(temptotstillowed))
             if temptotstillowed >= 1:
                 roommate_collections[i.name] = [temptotcollections, temptotpayments, temptotstillowed]
             elif temptotstillowed < 0:

@@ -119,56 +119,53 @@
                <h2>Debts: Money you Owe to Others.</h2>
                {% for key, values in roommates_iowe.items %}
                <div class="panel panel-default panel-inverted col-xs-4 col-md-4" style="background-color:#252424">
-               <h3>{{ key }}</h3>
-               <table class="table table-inverted">
-                  <thead>
-                     <tr>
-                        <th>Total Owed</th>
-                        <th>Total Paid</th>
-                        <th>Total Still Owed</th>
-                     </tr>
-                  </thead>
-                  <tbody>
-                     <tr>
-                        <td>{{ values.1 }}</td>
-                        <td>{{ values.2 }}</td>
-                        <td>{{ values.3 }}</td>
-                     </tr>
-                  </tbody>
-               </table>
+                  <h3>{{ key }}</h3>
+                  <table class="table table-inverted">
+                     <thead>
+                        <tr>
+                           <th>Total Owed</th>
+                           <th>Total Paid</th>
+                           <th>Total Still Owed</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr>
+                           <td>{{ values.0 }}</td>
+                           <td>{{ values.1 }}</td>
+                           <td>{{ values.2 }}</td>
+                        </tr>
+                     </tbody>
+                  </table>
                </div>
                {% endfor %}
             </div>
             <div role="tabpanel" class="tab-pane fade" id="collections">
                <h2>Collections: What others owe you.</h2>
-               {% for key, values in roommates_collections.items %}
+               {% for key, values in roommate_collections.items %}
                <div class="panel panel-default panel-inverted col-xs-4 col-md-4" style="background-color:#252424">
-               <h3>{{ key }}</h3>
-               <table class="table table-inverted">
-                  <thead>
-                     <tr>
-                        <th>Total Owed</th>
-                        <th>Total Paid</th>
-                        <th>Total Still Owed</th>
-                     </tr>
-                  </thead>
-                  <tbody>
-                     <tr>
-                        <td>{{ values.1 }}</td>
-                        <td>{{ values.2 }}</td>
-                        <td>{{ values.3 }}</td>
-                     </tr>
-                  </tbody>
-               </table>
+                  <h3>{{ key }}</h3>
+                  <table class="table table-inverted">
+                     <thead>
+                        <tr>
+                           <th>Total Owed</th>
+                           <th>Total Paid</th>
+                           <th>Total Still Owed</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr>
+                           <td>${{ values.0 }}</td>
+                           <td>${{ values.1 }}</td>
+                           <td>${{ values.2 }}</td>
+                        </tr>
+                     </tbody>
+                  </table>
                </div>
                {% endfor %}
-                  <h3>Dom</h3>
-                  <img src="{% static "/images/graph50.png" %}" alt="...">
-               </div>
-            </div> <!-- END Tab Panes Div -->
-         </div> <!-- Tab div 10 END -->
-      </div> <!-- Size 12 Column END -->
-   </div> <!-- END Dic Column -->
-   {% endblock %}
-   <script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
+         </div> <!-- END Tab Panes Div -->
+      </div> <!-- Tab div 10 END -->
+   </div> <!-- Size 12 Column END -->
+</div> <!-- END Dic Column -->
+{% endblock %}
+<script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
 </div>
