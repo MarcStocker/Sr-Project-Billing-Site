@@ -27,19 +27,49 @@ def billinghome(request):
     house        = cur_roommate.house
     my_roommates = Roommate.objects.filter(house_id=house.id)
 
-    # print("Cur_roommate = " + str(cur_roommate))
-
-    # if request.user.id != 1:
-        # my_roommates = getmyroommates(request) #Get all users roommates
-    # else: # For Admin Account
-        # my_roommates=[]
-    # house = my_roommates[1].house
-
-    # TODO - Total Owed Overall - #DONE
+    # TODO - Total Owed Overall - # DONE
     my_roommatespaid={}
     for i in my_roommates:
         my_roommatespaid[i.name]=i.getPercentPaid()
         # print(i.name + " has paid "+ str(my_roommatespaid[i.name]) + "%")
+    # TODO - Debt Tab
+    roommates_iowe       = {}
+    roommate_collections = {}
+    for i in my_roommates:
+        if i.id != cur_roommate.id:
+            # Code for Roommates_iowe
+            all_requests = PaymentRequest.objects.filter(requester_id=i.id, requestee_id=cur_roommate.id)
+            userpayments = userPayment.objects.filter(payee_id=i.id, payer_id=cur_roommate.id)
+            temptotbill = 0
+            temptotpay   = 0
+            for bill in all_requests:
+                temptotbill+=bill.amount
+            for payment in userpayments:
+                temptotpay+=payment.amount
+            temptotstillowed = temptotbill - temptotpay
+            if temptotstillowed >= 1:
+                roommates_iowe[i.name] = [temptotbill, temptotpay, temptotstillowed]
+            elif temptotstillowed <0:
+                roommate_collections[i.name] = [temptotcollections, temptotpayments, temptotstillowed]
+
+            # Code for Roommate_Collections
+            all_requests = PaymentRequest.objects.filter(requester_id=cur_roommate.id, requestee_id=i.id)
+            userpayments = userPayment.objects.filter(payee_id=cur_roommate.id, payer_id=i.id)
+            temptotpayments     = 0
+            temptotcollections  = 0
+            for charge in all_requests:
+                temptotcollections += charge.amount
+            for payment in userpayments:
+                temptotpayments += payment.amount
+            tempstillowed = temptotcollections - temptotpayments
+            if temptotstillowed >= 1:
+                roommate_collections[i.name] = [temptotcollections, temptotpayments, temptotstillowed]
+            elif temptotstillowed < 0:
+                roommates_iowe[i.name] = [temptotcollections, temptotpayments, temptotstillowed]
+
+
+
+
 
     # TODO - Total Collections of Current User
     curuser_collect=cur_roommate.getTotCollections()
@@ -51,22 +81,16 @@ def billinghome(request):
 
 
     numroommates= 0
-    roommates_iowe= []
 
     roommateowes=[]
     roommatepaid=[]
 
     last5bills  = UtilityBill.objects.filter(house_id=house.id)
     last5bills  = last5bills.order_by('dueDate')
-    print("\n====== Printing last 5 bills ...\\\\///////")
-    for i in last5bills:
-        print("$"+str(i.amount))
-    print("\n-------------------")
-    print("       END ")
-    print("-------------------")
-    print("  END BILLING HOME ")
-    print("-------------------\n\n")
+    print("\n------------------- END ------------------- END BILLING HOME -------------------\n\n")
     context = {
+        'page_name'         :"Utilities - Roommate Homebase",
+        'house'             :house,
         'totmoney'          :totmoney,
         'last5bills'        :last5bills,
         'curuser_debt'      :curuser_debt,
@@ -74,10 +98,10 @@ def billinghome(request):
         'roommateowes'      :roommateowes,
         'roommatepaid'      :roommatepaid,
         'my_roommates'      :my_roommates,
-        'my_roommatespaid'  :my_roommatespaid,
-        'curuser_collect'   :curuser_collect,
         'roommates_iowe'    :roommates_iowe,
-        'house'             :house,
+        'curuser_collect'   :curuser_collect,
+        'my_roommatespaid'  :my_roommatespaid,
+        'roommate_collections':roommate_collections,
     }
     return render(request, 'billing/billinghome.html', context)
 
@@ -198,8 +222,9 @@ def addbill(request):
     else:
         form = addNewBillForm()
     context = {
-        'sitename':"Roommate Homebase",
-        'page_name':"Add a Bill",
+        'page_name' :"Add New Bill - Roommate Homebase",
+        'sitename'  :"Roommate Homebase",
+        'page_name' :"Add a Bill",
         'form':form,
     }
     return render(request, 'billing/addBill.html', context)
@@ -214,9 +239,10 @@ def addbilltype(request):
     else:
         form = addNewBillForm()
     context = {
-        'sitename':"Roommate Homebase",
-        'page_name':"Add a Bill Payment",
-        'form':form,
+        'page_name' :"Add a New Bill Type - Roommate Homebase",
+        'sitename'  :"Roommate Homebase",
+        'page_name' :"Add a Bill Payment",
+        'form'      :form,
     }
     return render(request, 'billing/addBill.html', context)
 
@@ -230,9 +256,10 @@ def addbillpayment(request):
     else:
         form = addNewBillPaymentForm()
     context = {
-        'sitename':"Roommate Homebase",
-        'page_name':"Add a Bill Payment",
-        'form':form,
+        'page_name' :"Add Bill Payment - Roommate Homebase",
+        'sitename'  :"Roommate Homebase",
+        'page_name' :"Add a Bill Payment",
+        'form'      :form,
     }
     return render(request, 'billing/addBillPayment.html', context)
 
@@ -246,9 +273,10 @@ def adduserpayment(request):
     else:
         form = addNewUserPaymentForm()
     context = {
-        'sitename':"Roommate Homebase",
-        'page_name':"Add a User Payment",
-        'form':form,
+        'page_name' :"Add User Payment - Roommate Homebase",
+        'sitename'  :"Roommate Homebase",
+        'page_name' :"Add a User Payment",
+        'form'      :form,
     }
     return render(request, 'billing/addUserPayment.html', context)
 
@@ -262,9 +290,10 @@ def addlease(request):
     else:
         form = addLeaseForm()
     context = {
-        'sitename':"Roommate Homebase",
-        'page_name':"Add a Lease",
-        'form':form,
+        'page_name' :"Add Lease - Roommate Homebase",
+        'sitename'  :"Roommate Homebase",
+        'page_name' :"Add a Lease",
+        'form'      :form,
     }
     return render(request, 'billing/addLease.html', context)
 
@@ -278,9 +307,10 @@ def addroommate(request):
     else:
         form = addRoommateForm()
     context = {
-        'sitename':"Roommate Homebase",
-        'page_name':"Add a Roommate",
-        'form':form,
+        'page_name' :"Add Roommate - Roommate Homebase",
+        'sitename'  :"Roommate Homebase",
+        'page_name' :"Add a Roommate",
+        'form'      :form,
     }
     return render(request, 'billing/addRoommate.html', context)
 
@@ -295,8 +325,8 @@ def admintablepage(request):
     all_PaymentRequests = PaymentRequest.objects.all()
 
     context = {
-        'sitename':"Roommate Homebase",
-        'page_name':"Admin - All Tables",
+        'sitename'  :"Roommate Homebase",
+        'page_name' :"Admin - All Tables",
         'all_users'          :all_users,
         'all_leases'         :all_leases,
         'all_roommates'      :all_roommates,
@@ -328,61 +358,3 @@ def test(request):
     print("")
 
     return HttpResponseRedirect("/utilities/")
-
-
-def getmyroommates(request):
-    print("DEBUG - getmyroommates()")
-    my_roommates= []
-    all_roommates = Roommate.objects.order_by('-name')
-    cur_user    = request.user
-    #Find the current Users roommate object
-    for i in all_roommates:
-        if i.user.id == cur_user.id:
-            if i.isactive == True:
-                cur_roommate = i
-                # The current Roommate has been found... now find his roommates
-                for i in all_roommates:
-                    if i.house.id == cur_roommate.house.id:
-                        my_roommates.append(i)
-
-    #Return all roommates of cur_roommate
-    print("Current Roommates of house: #" + str(cur_roommate.house.id) + " " + str(cur_roommate.house.name))
-    for i in my_roommates:
-        print(i)
-    return my_roommates #Returns a list of all roommates in users house
-
-
-
-
-
-# def adduserpayment(request):
-    #     if request.method=='POST':
-    #         form = UserPaymentForm(request.POST, request.FILES)
-    #         if form.is_valid():
-    #             j = form.save(request, commit=False)
-    #             j.save()
-    #             return HttpResponseRedirect('/billing/billinghome/')
-    #     else:
-    #         form = UserPaymentForm()
-    #     context = {
-    #         'sitename':"Roommate Homebase",
-    #         'page_name':"Add a User Payment",
-    #         'form':form,
-    #     }
-    #     return render(request, 'billing/addUserPayment.html')
-    #
-    # def addbillpayment(request):
-    #     if request.method=='POST':
-    #         form = addUtilityBillForm(request.POST, request.FILES)
-    #         if form.is_valid():
-    #             j = form.save(request, commit=False)
-    #             j.save()
-    #             return HttpResponseRedirect('/billing/billinghome/')
-    #     else:
-    #         form = UtilityBillPaymentForm()
-    #     context = {
-    #         'sitename':"Roommate Homebase",
-    #         'page_name':"Add a Bill Payment",
-    #         'form':form,
-    #     }
-    #     return render(request, 'billing/addBillPayment.html')

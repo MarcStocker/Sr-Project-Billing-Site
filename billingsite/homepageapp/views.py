@@ -12,6 +12,7 @@ import datetime
 from django.contrib.auth.decorators import login_required
 
 from .forms import RegisterForm
+from billing.forms import UtilityBill, Roommate
 
 # import pandas as pd
 
@@ -22,11 +23,29 @@ def home(request):
     randomnumber=random.randint(0,100)
     print(randomnumber)
 
-    cwd=os.getcwd()
-    print(cwd)
-    context = {
-        'randnum':randomnumber,
-    }
+    # cwd=os.getcwd()
+    # print(cwd)
+
+    if request.user.is_authenticated():
+        cur_roommate = Roommate.objects.get(user=request.user.id)
+        house        = cur_roommate.house
+        last5bills   = UtilityBill.objects.filter(house_id=house.id)
+        last5bills   = last5bills.order_by('dueDate')
+
+        my_roommates = Roommate.objects.filter(house_id=house.id)
+
+        context = {
+        'page_name'     :"Home - Roommate Homebase",
+        'last5bills'    :last5bills,
+        'my_roommates'  :my_roommates,
+        }
+
+    else:
+        context = {
+        'page_name' :"Home - Roommate Homebase",
+        'randnum'   :randomnumber,
+        }
+
     return render(request, 'homepageapp/homepage.html', context)
 
 def register(request):
@@ -38,12 +57,13 @@ def register(request):
             print(login(request, user))
             return HttpResponseRedirect('/')
 
-    else:
-        form = RegisterForm
-        print("something")
-        # form = blog_entry()
-    context = {
-        'page_name':"Register",
-        'form':form,
-    }
-    return render(request, 'billingsite/register.html', context)
+        else:
+            form = RegisterForm
+            print("something")
+            # form = blog_entry()
+            context = {
+            'page_name':"Register",
+            'form':form,
+            'page_name' :"Register - Roommate Homebase",
+            }
+            return render(request, 'billingsite/register.html', context)

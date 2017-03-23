@@ -5,29 +5,82 @@
 
 {% block content %}
 <div class="container">
-  <div class="row">
-    <div class="span4">
-      <div class="col-md-4">
-        <div class="page-header">
-          <h1 class="text-center">Utilities Overview</h1>
-        </div>
+   <div class="column">
+      <div class="span4 col-md-left">
+         <div class="col-md-4">
+            <div class="page-header">
+               <h1 class="text-center">Utilities Overview</h1>
+            </div>
+            <!-- BEGIN Last 5 Bills -->
+            {% if user.is_authenticated %}
+            <!-- Overview Table -->
+            <div class="rows">
+               <div class="panel panel-default panel-inverted col-xs-12 col-md-12"  style="background-color:#252424">
+                  <h2>Payment Overview</h2>
+                  <table class="table table-inverted table-bordered ">
+                     <thead>
+                        <tr>
+                           <th>Name</th>
+                           <th>Owed</th>
+                           <th>Paid</th>
+                           <th>Total Left</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        {% for roommate in my_roommates %}
+                        <tr>
+                           <td>{{ roommate.name }}</td>
+                           <td>${{ roommate.getTotDebt }}</td>
+                           <td>${{ roommate.getTotPaid }}</td>
+                           <td>${{ roommate.getTotRemaining }}</td>
+                        </tr>
+                        {% endfor %}
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+            <div class="panel panel-default panel-inverted col-xs-12 col-md-12" style="background-color:#252424">
+               <h2>Last 5 Utility Bills</h2>
+               <table class="table table-inverted table-bordered">
+                  <thead>
+                     <tr>
+                        <th>Utility</th>
+                        <th>Amount</th>
+                        <th>Date Due</th>
+                        <th>Owner</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     {% for bill in last5bills %}
+                     <tr>
+                        <td>{{ bill.utilType.name }}</td>
+                        <td>${{ bill.amount }}</td>
+                        <td>{{ bill.dueDate }}</td>
+                        <td>{{ bill.owner.name }}</td>
+                     </tr>
+                     {% endfor %}
+                  </tbody>
+               </table>
+            </div>
+            {% endif %}
+            <!-- END 5 Bills -->
+         </div>
       </div>
-    </div>
-    <div class="span4">
+   </div>
+   <div class="span4 col-md-center">
       <div class="col-md-4">
-        <div class="page-header">
-          <h1 class="text-center">IOU's Overview</h1>
-        </div>
+         <div class="page-header">
+            <h1 class="text-center">IOU's Overview</h1>
+         </div>
       </div>
-    </div>
-    <div class="span4">
+   </div>
+   <div class="span4 col-md-right">
       <div class="col-md-4">
-        <div class="page-header">
-          <h1 class="text-center">Chores Overview</h1>
-        </div>
+         <div class="page-header">
+            <h1 class="text-center">Chores Overview</h1>
+         </div>
       </div>
-    </div>
-  </div>
+   </div>
 </div>
 
 <!-- Sample code  -->
@@ -39,7 +92,7 @@
 <hr />
 <hr />
 <div class="page-header text-center">
-  <h1>THE FOLLOWING IS EXAMPLE CODE</h1>
+   <h1>THE FOLLOWING IS EXAMPLE CODE</h1>
 </div>
 {% include "homepageapp/includes/grids.html"%}
 

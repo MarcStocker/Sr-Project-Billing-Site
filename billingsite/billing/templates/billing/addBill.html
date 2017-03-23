@@ -1,6 +1,6 @@
 {% extends "billingsite/base.html" %}
 {% load static %}
-{% block title %} Add User Payment {% endblock title %}
+{% block title %} {{ page_name }} {% endblock title %}
 
 
 {% block content %}
@@ -67,6 +67,13 @@
                            {{ form.datepaid.label_tag }}<br />
                            {{ form.datepaid }}
                         </label>
+                     </div>
+                  </div>
+                  <!-- TODO: Add PDF upload for Bills -->
+                  <div class="col-lg-6 col-sm-6 col-lg-left col-sm-right">
+                     <div class="form-group">
+                        {{ form.image.label_tag }}<br />
+                        {{ form.image }}
                      </div>
                   </div>
                </div>
