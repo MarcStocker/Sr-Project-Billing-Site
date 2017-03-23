@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 
 from .models import Lease, Roommate, UtilityBill
 from .models import UtilityType, billPayment, userPayment
+from .models import PaymentRequest
 from .forms import UserPaymentForm, addUtilityTypeForm
 from .forms import addUtilityBillPaymentForm, addNewBillForm
 from .forms import addLeaseForm, addRoommateForm
@@ -20,27 +21,31 @@ import os
 def billinghome(request):
     print("\n\n\n\n-------------------\ndef billinghome(request)")
     print("-------------------\n\n")
+    cur_roommate = Roommate.objects.get(user=request.user.id)
 
-    if request.user.id != 0:
-        my_roommates = getmyroommates(request)
+    if request.user.id != 1:
+        my_roommates = getmyroommates(request) #Get all users roommates
     else: # For Admin Account
         my_roommates=[]
+    house = my_roommates[1].house
 
-    # TODO - Total Owed to Current User
-    all_roommatesOwe=[]
+    # TODO - Total Owed Overall - #DONE
+    my_roommatespaid={}
     for i in my_roommates:
-        all_roommatesOwe.append(i.getPercentOwed())
-        # TODO - Derive Percentages out of this
+        my_roommatespaid[i.name]=i.getPercentPaid()
+        print(i.name + " has paid "+ str(my_roommatespaid[i.name]) + "%")
 
+    # TODO - Total Collections of Current User
+    curuser_collect=cur_roommate.getTotCollections()
     # TODO - Total Debt Of Current User
+    curuser_debt=cur_roommate.getTotDebt()
+    totmoney = curuser_collect - curuser_debt
     # TODO - Display all Bill by month in new Tab
     # TODO - Display all Payments for each user in a new Tab
 
 
-    debt        = 0
-    totmoney    = 0
-    collections = 0
     numroommates= 0
+    roommates_iowe= []
 
     roommateowes=[]
     roommatepaid=[]
@@ -48,14 +53,16 @@ def billinghome(request):
     print("-------------------")
     print("-------------------\n\n")
     context = {
-        'debt'              :debt,
         'totmoney'          :totmoney,
-        'collections'       :collections,
+        'curuser_debt'      :curuser_debt,
         'numroommates'      :numroommates,
         'roommateowes'      :roommateowes,
         'roommatepaid'      :roommatepaid,
         'my_roommates'      :my_roommates,
-        'all_roommatesowe'  :all_roommatesOwe,
+        'my_roommatespaid'  :my_roommatespaid,
+        'curuser_collect'   :curuser_collect,
+        'roommates_iowe'    :roommates_iowe,
+        'house'             :house,
     }
     return render(request, 'billing/billinghome.html', context)
 
@@ -170,6 +177,7 @@ def addbill(request):
         if form.is_valid():
             j = form.save(request)
             j.save()
+            j.createRequests()
             return HttpResponseRedirect('/utilities/admintablepage/')
     else:
         form = addNewBillForm()
@@ -268,17 +276,19 @@ def admintablepage(request):
     all_billpayments    = billPayment.objects.all()
     all_utilityBills    = UtilityBill.objects.all()
     all_utilityTypes    = UtilityType.objects.all()
+    all_PaymentRequests = PaymentRequest.objects.all()
 
     context = {
         'sitename':"Roommate Homebase",
         'page_name':"Admin - All Tables",
-        'all_users':all_users,
-        'all_leases':all_leases,
-        'all_roommates':all_roommates,
-        'all_userpayments':all_userpayments,
-        'all_billpayments':all_billpayments,
-        'all_utilityBills':all_utilityBills,
-        'all_utilityTypes':all_utilityTypes,
+        'all_users'          :all_users,
+        'all_leases'         :all_leases,
+        'all_roommates'      :all_roommates,
+        'all_userpayments'   :all_userpayments,
+        'all_billpayments'   :all_billpayments,
+        'all_utilityBills'   :all_utilityBills,
+        'all_utilityTypes'   :all_utilityTypes,
+        'all_PaymentRequests':all_PaymentRequests,
     }
     return render(request, 'billingsite/adminTablePage.html', context)
 
@@ -307,7 +317,7 @@ def test(request):
 def getmyroommates(request):
     print("DEBUG - getmyroommates()")
     my_roommates= []
-    all_roommates = Roommate.objects.all()
+    all_roommates = Roommate.objects.order_by('-name')
     cur_user    = request.user
     #Find the current Users roommate object
     for i in all_roommates:
@@ -323,7 +333,7 @@ def getmyroommates(request):
     print("Current Roommates of house: #" + str(cur_roommate.house.id) + " " + str(cur_roommate.house.name))
     for i in my_roommates:
         print(i)
-    return my_roommates
+    return my_roommates #Returns a list of all roommates in users house
 
 
 

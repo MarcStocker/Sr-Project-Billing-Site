@@ -6,6 +6,13 @@
 {% block content %}
 <div class="column"> <!-- BEING Div Column -->
    <div class="col-lg-12 col-md-12 col-sm-12 row"> <!-- size 12 column begin -->
+      <div class="col-lg-2 large-left col-md-2 medium-left sidebar"> <!-- Left Div Begin -->
+      </div>
+      <div class="col-lg-10 large-right col-md-10 medium-centered small-centered columns main"> <!-- Tab Div 10 Begin -->
+         <div>
+            <h1>Utilities for: {{ house.name }}</h1>
+         </div>
+      </div>
       {# Info on left of page #}
       <div class="col-lg-2 large-left col-md-2 medium-left sidebar"> <!-- Left Div Begin -->
          <ul class="nav nav-pills nav-stacked">
@@ -39,46 +46,60 @@
             <li role="presentation" class="active"><a href="#overview" aria-controls="overview" role="tab" data-toggle="tab">Overview <span class="badge">${{ totmoney }}</span></a></li>
             {% endif %}
 
-            <li role="presentation"><a href="#debts" aria-controls="debts" role="tab" data-toggle="tab">Debts <span class="badge btn-danger">${{ debt }}</span></a></li>
-            <li role="presentation"><a href="#collections" aria-controls="collections" role="tab" data-toggle="tab">Collections <span class="badge btn-success">${{ collections }}</span></a></li>
+            <li role="presentation"><a href="#debts" aria-controls="debts" role="tab" data-toggle="tab">Debts <span class="badge btn-danger">${{ curuser_debt }}</span></a></li>
+            <li role="presentation"><a href="#collections" aria-controls="collections" role="tab" data-toggle="tab">Collections <span class="badge btn-success">${{ curuser_collect }}</span></a></li>
          </ul>
          <!-- END Tab Selection ul -->
          <div class="tab-content"> <!-- BEGIN Tab Panes Div -->
             <div role="tabpanel" class="tab-pane fade in active .panelcust" id="overview">
-               <h2>This is the tab for "Home"</h2>
+               <h2><u>Percentage of bills paid by roommates</u></h2>
                <div class="row">
-                  <!-- {% for all_roommatesowe in my_roommates %} -->
-                  <!-- {% if roommate.house.id == 1 %} -->
-                  <!-- <div class="col-xs-4 col-md-3 "> -->
-                     <!-- <h3>{{ roommate.name }}</h3> -->
-                     <!-- <div class="test-circle" data-percent="{{ roommate.getPercentOwed }}"></div> -->
-                  <!-- </div> -->
-                  <!-- {% endif %} -->
-                  <!-- {% endfor %} -->
-                  <div class="col-xs-4 col-md-3">
-                     <h3>Dom</h3>
-                     <div class="test-circle" data-percent="37"></div>
+                  {% for key, values in my_roommatespaid.items %}
+                  <div class="col-xs-4 col-md-3 ">
+                     <h3>{{ key }}</h3>
+                     <div class="test-circle" data-percent="{{ values }}" title="Percent Paid for {{ key }}" description="Percent Paid"></div>
                   </div>
-                  <div class="col-xs-4 col-md-3">
-                     <h3>Erik</h3>
-                     <div class="test-circle" data-percent="77"></div>
-                  </div>
-                  <div class="col-xs-4 col-md-3">
-                     <h3>John</h3>
-                     <div class="test-circle" data-percent="93"></div>
-                  </div>
-                  <div class="col-xs-4 col-md-3">
-                     <h3>Edgar</h3>
-                     <div class="test-circle" data-percent="88"></div>
+                  {% endfor %}
+               </div>
+               <hr />
+               <div class="col-xs-6 col-md-4"
+                  <h3>Tables</h3>
+                  <div class="row">
+                     Overview
+                     <table class="table table-inverted table-bordered ">
+                        <thead>
+                           <tr>
+                              <th>Name</th>
+                              <th>Owed</th>
+                              <th>Paid</th>
+                              <th>Total Left</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           {% for roommate in my_roommates %}
+                           <tr>
+                              <td>{{ roommate.name }}</td>
+                              <td>${{ roommate.getTotDebt }}</td>
+                              <td>${{ roommate.getTotPaid }}</td>
+                              <td>${{ roommate.getTotRemaining }}</td>
+                           </tr>
+                           {% endfor %}
+                        </tbody>
+                     </table>
                   </div>
                </div>
             </div>
             <div role="tabpanel" class="tab-pane fade" id="debts">
                <h2>Debts: Money you Owe to Others.</h2>
+               <!-- {% for key, values in roommates_iowe %} -->
                <div class="col-xs-4 col-md-3">
-                  <h3>Erik</h3>
-                  <img src="{% static "/images/graph50.png" %}" alt="...">
-               </div>
+                  <h3>Data</h3>
+                  <!-- <h3>{{ key }}</h3> -->
+                  <!-- {% if values == 1 %} -->
+                  <!-- <img src="{% static "/images/graph50.png" %}" alt="..."> -->
+               <!-- </div> -->
+               <!-- {% endif %} -->
+               <!-- {% endfor %} -->
             </div>
             <div role="tabpanel" class="tab-pane fade" id="collections">
                <h2>Collections: What others owe you.</h2>

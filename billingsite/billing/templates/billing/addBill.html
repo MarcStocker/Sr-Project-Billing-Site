@@ -13,7 +13,7 @@
                <h1 class="text-center">Add a new Bill</h1>
                {{ form.errors }}
                <div class="row">
-                  <div class="col-lg-6 col-lg-left">
+                  <div class="col-lg-6 col-sm-6 col-lg-left col-sm-left">
                      <div class="form-group">
                         <label>
                            {{ form.utilType.label_tag }}<br />
@@ -21,7 +21,7 @@
                         </label>
                      </div>
                   </div>
-                  <div class="col-lg-6 col-lg-right">
+                  <div class="col-lg-6 col-sm-6 col-lg-right col-sm-right">
                      <div class="form-group">
                         <label>
                            {{ form.amount.label_tag }}<br />
@@ -29,7 +29,7 @@
                         </label>
                      </div>
                   </div>
-                  <div class="col-lg-6 col-lg-right">
+                  <div class="col-lg-6 col-sm-6 col-lg-left col-sm-left">
                      <div class="form-group">
                         <label>
                            {{ form.owner.label_tag }}<br />
@@ -37,7 +37,7 @@
                         </label>
                      </div>
                   </div>
-                  <div class="col-lg-6 col-lg-right">
+                  <div class="col-lg-6 col-sm-6 col-lg-right col-sm-right">
                      <div class="form-group">
                         <label>
                            {{ form.house.label_tag }}<br />
@@ -45,25 +45,30 @@
                         </label>
                      </div>
                   </div>
-               </div>
-               <!-- <div class="col-lg-6 col-md-6 col-sm-6 column"> -->
-               <div class="form-group">
-                  <label>
-                     {{ form.statementDate.label_tag }}<br />
-                     {{ form.statementDate }}
-                  </label>
-               </div>
-               <div class="form-group">
-                  <label>
-                     {{ form.dueDate.label_tag }}<br />
-                     {{ form.dueDate }}
-                  </label>
-               </div>
-               <div class="form-group">
-                  <label>
-                     {{ form.datepaid.label_tag }}<br />
-                     {{ form.datepaid }}
-                  </label>
+                  <div class="col-lg-6 col-sm-6 col-lg-left col-sm-left">
+                     <div class="form-group">
+                        <label>
+                           {{ form.statementDate.label_tag }}<br />
+                           {{ form.statementDate }}
+                        </label>
+                     </div>
+                  </div>
+                  <div class="col-lg-6 col-sm-6 col-lg-right col-sm-right">
+                     <div class="form-group">
+                        <label>
+                           {{ form.dueDate.label_tag }}<br />
+                           {{ form.dueDate }}
+                        </label>
+                     </div>
+                  </div>
+                  <div class="col-lg-6 col-sm-6 col-lg-left col-sm-left">
+                     <div class="form-group">
+                        <label>
+                           {{ form.datepaid.label_tag }}<br />
+                           {{ form.datepaid }}
+                        </label>
+                     </div>
+                  </div>
                </div>
             </div>
             <input type="submit" class="btn btn-lg btn-group btn-success btn-block" value="Submit Bill" />

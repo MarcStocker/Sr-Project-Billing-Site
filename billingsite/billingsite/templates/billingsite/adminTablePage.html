@@ -48,6 +48,29 @@
                   {% endfor %}
                </tbody>
             </table>
+            <table class="table table-inverted table-bordered">
+               <h3> PaymentRequests </h3>
+               <thead>
+                  <tr>
+                     <th>ID</th>
+                     <th>Owner</th>
+                     <th>Payer</th>
+                     <th>Amount</th>
+                     <th>From Bill</th>
+                  </tr>
+               </thead>
+               <tbody>
+                  {% for request in all_PaymentRequests %}
+                  <tr>
+                     <td> {{ request.id }} </td>
+                     <td> {{ request.requester }} </td>
+                     <td> {{ request.requestee }} </td>
+                     <td> {{ request.amount }} </td>
+                     <td> {{ request.UtilBill.id }} </td>
+                  </tr>
+                  {% endfor %}
+               </tbody>
+            </table>
 
             {% endif %}
          </div>
