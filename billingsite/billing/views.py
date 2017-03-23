@@ -86,13 +86,16 @@ def billinghome(request):
     roommateowes=[]
     roommatepaid=[]
 
-    last5bills  = UtilityBill.objects.filter(house_id=house.id)
-    last5bills  = last5bills.order_by('dueDate')
+    # TODO - All Bills Associated With House
+    all_bills = UtilityBill.objects.filter(house_id=house.id)
+    all_bills = all_bills.order_by('-dueDate')
+    last5bills= all_bills.order_by('-dueDate')[:5]
     print("\n------------------- END ------------------- END BILLING HOME -------------------\n\n")
     context = {
         'page_name'         :"Utilities - Roommate Homebase",
         'house'             :house,
         'totmoney'          :totmoney,
+        'all_bills'         :all_bills,
         'last5bills'        :last5bills,
         'curuser_debt'      :curuser_debt,
         'numroommates'      :numroommates,

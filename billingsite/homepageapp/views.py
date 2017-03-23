@@ -27,19 +27,18 @@ def home(request):
     # print(cwd)
 
     if request.user.is_authenticated():
-        cur_roommate = Roommate.objects.get(user=request.user.id)
-        house        = cur_roommate.house
-        last5bills   = UtilityBill.objects.filter(house_id=house.id)
-        last5bills   = last5bills.order_by('dueDate')
-
-        my_roommates = Roommate.objects.filter(house_id=house.id)
-
-        context = {
-        'page_name'     :"Home - Roommate Homebase",
-        'last5bills'    :last5bills,
-        'my_roommates'  :my_roommates,
-        }
-
+        if Roommate.objects.filter(user_id=request.user.id).exists() == True:
+            print("YEESSS")
+            cur_roommate = Roommate.objects.get(user_id=request.user.id)
+            house        = cur_roommate.house
+            last5bills   = UtilityBill.objects.filter(house_id=house.id)
+            last5bills   = last5bills.order_by('-dueDate')[:5]
+            my_roommates = Roommate.objects.filter(house_id=house.id)
+            context = {
+            'page_name'     :"Home - Roommate Homebase",
+            'last5bills'    :last5bills,
+            'my_roommates'  :my_roommates,
+            }
     else:
         context = {
         'page_name' :"Home - Roommate Homebase",

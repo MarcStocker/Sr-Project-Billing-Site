@@ -51,6 +51,8 @@
 
             <li role="presentation"><a href="#debts" aria-controls="debts" role="tab" data-toggle="tab">Debts <span class="badge btn-danger">${{ curuser_debt }}</span></a></li>
             <li role="presentation"><a href="#collections" aria-controls="collections" role="tab" data-toggle="tab">Collections <span class="badge btn-success">${{ curuser_collect }}</span></a></li>
+            <li role="presentation"><a href="#allbills" aria-controls="allbills" role="tab" data-toggle="tab">All Bills</a></li>
+            <li role="presentation"><a href="#allpayments" aria-controls="allpayments" role="tab" data-toggle="tab">All Payments</a></li>
          </ul>
          <!-- END Tab Selection ul -->
          <div class="tab-content"> <!-- BEGIN Tab Panes Div -->
@@ -162,6 +164,36 @@
                   </table>
                </div>
                {% endfor %}
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="allbills">
+               <h2>All Bills: Every utility bill Associated with your house.</h2>
+               <div class="panel panel-default panel-inverted col-xs-12 col-md-12" style="background-color:#252424">
+                  <table class="table table-inverted">
+                     <thead>
+                        <tr>
+                           <th>Bill</th>
+                           <th>Amount</th>
+                           <th>State Date</th>
+                           <th>Due Date</th>
+                           <th>Owner</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        {% for bill in all_bills%}
+                        <tr>
+                           <td>{{ bill.utilType.name }}</td>
+                           <td>{{ bill.amount }}</td>
+                           <td>{{ bill.statementDate }}</td>
+                           <td>{{ bill.dueDate }}</td>
+                           <td>{{ bill.owner.name }}</td>
+                        </tr>
+                        {% endfor %}
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="allpayments">
+            </div>
          </div> <!-- END Tab Panes Div -->
       </div> <!-- Tab div 10 END -->
    </div> <!-- Size 12 Column END -->
