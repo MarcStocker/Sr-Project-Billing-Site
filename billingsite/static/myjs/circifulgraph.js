@@ -1,9 +1,7 @@
 $( document ).each(function() {
    $('.test-circle').circliful({
-      animationStep        :  4.5,
+      animationStep        :  3,
       foregroundBorderWidth:  10,
       backgroundBorderWidth:  15,
-      pointSize            :  "15",
-      iconSize             :  "10",
    });
 });

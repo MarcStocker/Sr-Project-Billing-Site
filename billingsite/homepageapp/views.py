@@ -55,14 +55,14 @@ def register(request):
             user = authenticate(username=form.cleaned_data.get('username'), password=form.cleaned_data.get('password1'))
             print(login(request, user))
             return HttpResponseRedirect('/')
+    else:
+        form = RegisterForm
+        print("something")
+        # form = blog_entry()
 
-        else:
-            form = RegisterForm
-            print("something")
-            # form = blog_entry()
-            context = {
-            'page_name':"Register",
-            'form':form,
-            'page_name' :"Register - Roommate Homebase",
-            }
-            return render(request, 'billingsite/register.html', context)
+        context = {
+        'page_name':"Register",
+        'form':form,
+        'page_name' :"Register - Roommate Homebase",
+        }
+        return render(request, 'billingsite/register.html', context)

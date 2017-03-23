@@ -22,7 +22,6 @@ def register(request):
     else:
         form = RegisterForm
         print("something")
-        # form = blog_entry()
     context = {
         'page_name':"Register",
         'form':form,

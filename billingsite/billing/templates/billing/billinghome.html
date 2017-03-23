@@ -42,11 +42,11 @@
          <!-- Tab Selection ul -->
          <ul class="nav nav-tabs">
             {% if totmoney > 0 %}
-            <li role="presentation" class="active"><a href="#overview" aria-controls="overview" role="tab" data-toggle="tab">Overview <span class="badge">$+{{ totmoney }}</span></a></li>
+            <li role="presentation" class="active"><a href="#overview" aria-controls="overview" role="tab" data-toggle="tab">Overview <span class="badge btn-success">$+{{ totmoney }}</span></a></li>
             {% elif totmoney == 0 %}
             <li role="presentation" class="active"><a href="#overview" aria-controls="overview" role="tab" data-toggle="tab">Overview <span class="badge">${{ totmoney }}</span></a></li>
             {% else %}
-            <li role="presentation" class="active"><a href="#overview" aria-controls="overview" role="tab" data-toggle="tab">Overview <span class="badge">${{ totmoney }}</span></a></li>
+            <li role="presentation" class="active"><a href="#overview" aria-controls="overview" role="tab" data-toggle="tab">Overview <span class="badge btn-danger">${{ totmoney }}</span></a></li>
             {% endif %}
 
             <li role="presentation"><a href="#debts" aria-controls="debts" role="tab" data-toggle="tab">Debts <span class="badge btn-danger">${{ curuser_debt }}</span></a></li>
@@ -119,6 +119,7 @@
             </div>
             <div role="tabpanel" class="tab-pane fade" id="debts">
                <h2>Debts: Money you Owe to Others.</h2>
+               {% if roommates_iowe %}
                {% for key, values in roommates_iowe.items %}
                <div class="panel panel-default panel-inverted col-xs-4 col-md-4" style="background-color:#252424">
                   <h3>{{ key }}</h3>
@@ -140,6 +141,10 @@
                   </table>
                </div>
                {% endfor %}
+               {% else %}
+               <hr />
+               <h1>You do not owe money to anyone!</h1>
+               {% endif %}
             </div>
             <div role="tabpanel" class="tab-pane fade" id="collections">
                <h2>Collections: What others owe you.</h2>
@@ -193,6 +198,35 @@
                </div>
             </div>
             <div role="tabpanel" class="tab-pane fade" id="allpayments">
+               <h2>All Payments: Every Payment Made to a Roommate.</h2>
+               <div class="panel panel-default panel-inverted col-xs-12 col-md-12" style="background-color:#252424">
+                  <table class="table table-inverted">
+                     <thead>
+                        <tr>
+                           <th>ID</th>
+                           <th>Payer</th>
+                           <th>Amount</th>
+                           <th>Receiver</th>
+                           <th>Date Paid</th>
+                           <th>Method</th>
+                           <th>House ID</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        {% for payment in all_payments %}
+                        <tr>
+                           <td>{{ payment.id }}</td>
+                           <td>{{ payment.payer.name }}</td>
+                           <td>${{ payment.amount }}</td>
+                           <td>{{ payment.payee.name }}</td>
+                           <td>{{ payment.date }}</td>
+                           <td>{{ payment.payType }}</td>
+                           <td>{{ payment.payer.house.id }}</td>
+                        </tr>
+                        {% endfor %}
+                     </tbody>
+                  </table>
+               </div>
             </div>
          </div> <!-- END Tab Panes Div -->
       </div> <!-- Tab div 10 END -->
