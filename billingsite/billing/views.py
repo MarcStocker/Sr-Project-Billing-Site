@@ -57,9 +57,10 @@ def billinghome(request):
     roommatepaid=[]
 
     last5bills  = UtilityBill.objects.filter(house_id=house.id)
+    last5bills  = last5bills.order_by('dueDate')
     print("\n====== Printing last 5 bills ...\\\\///////")
     for i in last5bills:
-        print("-"+i)
+        print("$"+str(i.amount))
     print("\n-------------------")
     print("       END ")
     print("-------------------")
@@ -67,6 +68,7 @@ def billinghome(request):
     print("-------------------\n\n")
     context = {
         'totmoney'          :totmoney,
+        'last5bills'        :last5bills,
         'curuser_debt'      :curuser_debt,
         'numroommates'      :numroommates,
         'roommateowes'      :roommateowes,

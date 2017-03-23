@@ -84,7 +84,7 @@ class Roommate(models.Model):
         # Retrieve all payment requests
         owed=0
         for i in all_requests:
-            if i.requestee == self:
+            if i.requestee == self and i.requester != self:
                 owed+=i.amount
         return owed
     def getTotDebt(self):

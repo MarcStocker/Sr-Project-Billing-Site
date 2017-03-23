@@ -63,10 +63,8 @@
                </div>
                <hr />
                <!-- Overview Table -->
-               <div class="col-xs-6 col-md-4"
-                  <h3>Tables</h3>
-                  <div class="row">
-                     Overview
+                  <div class="panel panel-default panel-inverted col-xs-4 col-md-4"  style="background-color:#252424">
+                     <h2>Payment Overview</h2>
                      <table class="table table-inverted table-bordered ">
                         <thead>
                            <tr>
@@ -87,43 +85,41 @@
                            {% endfor %}
                         </tbody>
                      </table>
-                  </div>
                </div>
                <!-- BEGIN Last 5 Bills -->
-               <div class="panel panel-default panel-invert col-xs-8 col-md-6 col-md-offset-2" style="background-color:#252424">
-                  <div class="panel-heading" style="color:#fff; background-color:#464545">Last 5 Utility Bills</div>
-                  <table class="table table-inverted table-bordered">
-                     <thead>
-                        <tr>
-                           <th>Utility</th>
-                           <th>Amount</th>
-                           <th>Date Due</th>
-                           <th>Owner</th>
-                        </tr>
-                     </thead>
-                     <tbody>
-                        {% for bill in last5bills %}
-                        <tr>
-                           <td>{{ biil.utilType.name }}</td>
-                           <td>{{ biil.amount }}</td>
-                           <td>{{ biil.dueDate }}</td>
-                           <td>{{ biil.owner.name }}</td>
-                        </tr>
-                        {% endfor %}
-                     </tbody>
-                  </table>
-                  </div>
+                  <div class="panel panel-default panel-invert col-xs-6 col-md-6 col-sm-offset-1" style="background-color:#252424">
+                     <h2>Last 5 Utility Bills</h2>
+                     <table class="table table-inverted table-bordered">
+                        <thead>
+                           <tr>
+                              <th>Utility</th>
+                              <th>Amount</th>
+                              <th>Date Due</th>
+                              <th>Owner</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           {% for bill in last5bills %}
+                           <tr>
+                              <td>{{ bill.utilType.name }}</td>
+                              <td>${{ bill.amount }}</td>
+                              <td>{{ bill.dueDate }}</td>
+                              <td>{{ bill.owner.name }}</td>
+                           </tr>
+                           {% endfor %}
+                        </tbody>
+                     </table>
                </div>
                <!-- END 5 Bills -->
             </div>
             <div role="tabpanel" class="tab-pane fade" id="debts">
                <h2>Debts: Money you Owe to Others.</h2>
                <!-- {% for key, values in roommates_iowe %} -->
-               <div class="col-xs-4 col-md-3">
-                  <h3>Data</h3>
-                  <!-- <h3>{{ key }}</h3> -->
-                  <!-- {% if values == 1 %} -->
-                  <!-- <img src="{% static "/images/graph50.png" %}" alt="..."> -->
+               <!-- <div class="col-xs-4 col-md-3"> -->
+               <!-- <h3>Data</h3> -->
+               <!-- <h3>{{ key }}</h3> -->
+               <!-- {% if values == 1 %} -->
+               <!-- <img src="{% static "/images/graph50.png" %}" alt="..."> -->
                <!-- </div> -->
                <!-- {% endif %} -->
                <!-- {% endfor %} -->
@@ -142,9 +138,9 @@
                   <h3>Dom</h3>
                   <img src="{% static "/images/graph50.png" %}" alt="...">
                </div>
-      </div> <!-- END Tab Panes Div -->
-      </div> <!-- Tab div 10 END -->
-   </div> <!-- Size 12 Column END -->
-</div> <!-- END Dic Column -->
-{% endblock %}
+            </div> <!-- END Tab Panes Div -->
+         </div> <!-- Tab div 10 END -->
+      </div> <!-- Size 12 Column END -->
+   </div> <!-- END Dic Column -->
+   {% endblock %}
    <script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
