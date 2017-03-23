@@ -19,21 +19,27 @@ import os
 # Create your views here.
 @login_required(login_url="/login/")
 def billinghome(request):
-    print("\n\n\n\n-------------------\ndef billinghome(request)")
-    print("-------------------\n\n")
-    cur_roommate = Roommate.objects.get(user=request.user.id)
 
-    if request.user.id != 1:
-        my_roommates = getmyroommates(request) #Get all users roommates
-    else: # For Admin Account
-        my_roommates=[]
-    house = my_roommates[1].house
+    print("\n\n\n\n==========================================================")
+    print("def billinghome(request)")
+    print(">>>>>>>>>>>>>>>>>>>\n\n")
+    cur_roommate = Roommate.objects.get(user=request.user.id)
+    house        = cur_roommate.house
+    my_roommates = Roommate.objects.filter(house_id=house.id)
+
+    # print("Cur_roommate = " + str(cur_roommate))
+
+    # if request.user.id != 1:
+        # my_roommates = getmyroommates(request) #Get all users roommates
+    # else: # For Admin Account
+        # my_roommates=[]
+    # house = my_roommates[1].house
 
     # TODO - Total Owed Overall - #DONE
     my_roommatespaid={}
     for i in my_roommates:
         my_roommatespaid[i.name]=i.getPercentPaid()
-        print(i.name + " has paid "+ str(my_roommatespaid[i.name]) + "%")
+        # print(i.name + " has paid "+ str(my_roommatespaid[i.name]) + "%")
 
     # TODO - Total Collections of Current User
     curuser_collect=cur_roommate.getTotCollections()
@@ -49,8 +55,15 @@ def billinghome(request):
 
     roommateowes=[]
     roommatepaid=[]
+
+    last5bills  = UtilityBill.objects.filter(house_id=house.id)
+    print("\n====== Printing last 5 bills ...\\\\///////")
+    for i in last5bills:
+        print("-"+i)
     print("\n-------------------")
+    print("       END ")
     print("-------------------")
+    print("  END BILLING HOME ")
     print("-------------------\n\n")
     context = {
         'totmoney'          :totmoney,
@@ -178,6 +191,7 @@ def addbill(request):
             j = form.save(request)
             j.save()
             j.createRequests()
+
             return HttpResponseRedirect('/utilities/admintablepage/')
     else:
         form = addNewBillForm()

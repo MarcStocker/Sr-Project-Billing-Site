@@ -1,6 +1,7 @@
 from django.db import models
 from datetime import datetime
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
 
 import datetime
 
@@ -15,7 +16,6 @@ class Lease(models.Model):
 
     def __str__(self):
         return "#" + str(self.id) + " - " + str(self.name)
-
 class Roommate(models.Model):
     class Meta:
         ordering=('id', 'name')
@@ -39,10 +39,9 @@ class Roommate(models.Model):
 
     def __str__(self):
         return "#" + str(self.id) + " - " + str(self.name)
-
     def getPercentPaid(self):
-        print("\n ~~~~ \n getPercentOwed()")
-        print("FOR USER: " + self.name)
+        # print("\n ~~~~ \n getPercentOwed()")
+        # print("FOR USER: " + self.name)
         all_bills           = UtilityBill.objects.all()
         all_userPayments    = userPayment.objects.all()
         all_paymentrequests = PaymentRequest.objects.all()
@@ -51,29 +50,28 @@ class Roommate(models.Model):
         for i in all_paymentrequests:
             if i.requestee.id == self.id and i.requester.id != i.requestee.id:
                 totalowed += i.amount
-        print("Total owed=",totalowed)
+        # print("Total owed=",totalowed)
         for i in all_userPayments:
             if i.payer.id == self.id:
                 totalpaid+=i.amount
-        print("Total paid=",totalpaid)
+        # print("Total paid=",totalpaid)
         percentowed = totalowed - totalpaid
         if totalowed == 0:
-            print("All Paid Up")
-            print("\n ____\n END")
+            # print("All Paid Up")
+            # print("\n ____\n END")
             return 100
         elif totalpaid == 0:
-            print("Nothing Paid yet")
-            print("\n ____\n END")
+            # print("Nothing Paid yet")
+            # print("\n ____\n END")
             return 0
         else:
             percentowed = percentowed / totalowed
             percentowed = percentowed - 1
             percentowed = percentowed * -1
             percentowed = round(percentowed*100,2)
-            print("Percent Paid= " + str(percentowed) + "%")
-            print("\n ____\n END")
+            # print("Percent Paid= " + str(percentowed) + "%")
+            # print("\n ____\n END")
             return percentowed
-
     def getOwedTo(self, rmid):
         owed = 0
         for i in PaymentRequest.objects.all():
@@ -81,7 +79,6 @@ class Roommate(models.Model):
                 if i.requester.id == rmid:
                     owed+=i.amount
         return owed
-
     def getTotOwed(self):
         all_requests = PaymentRequest.objects.all()
         # Retrieve all payment requests
@@ -90,16 +87,14 @@ class Roommate(models.Model):
             if i.requestee == self:
                 owed+=i.amount
         return owed
-
     def getTotDebt(self):
         # Retrieve all payment requests
         owed=self.getTotOwed()
         # Retrieve all Payments made
         paid=self.getTotPaid()
         totDebt = self.getTotOwed() - self.getTotPaid()
-        print("Total Debt for '" + self.name + "' :"+ str(totDebt))
+        # print("Total Debt for '" + self.name + "' :"+ str(totDebt))
         return totDebt
-
     def getTotPaid(self):
         all_payments = userPayment.objects.all()
         # Retrieve all Payments made
@@ -108,7 +103,6 @@ class Roommate(models.Model):
             if i.payer == self:
                 paid+=i.amount
         return paid
-
     def getTotRemaining(self):
         all_payments = userPayment.objects.all()
         all_requests = PaymentRequest.objects.all()
@@ -119,7 +113,6 @@ class Roommate(models.Model):
 
         leftover=debt-paid
         return leftover
-
     def getTotCollections(self):
         all_payments = userPayment.objects.all()
         all_requests = PaymentRequest.objects.all()
@@ -138,7 +131,16 @@ class Roommate(models.Model):
 
         totcollections = collections - paid
         return totcollections
-
+    def emailuser(self, subject, message, emailfrom):
+        print("\n===================================================================")
+        print("   Emailing User: New Bill Created")
+        print("Sending Email To: " + self.user.email)
+        print("            From: " + emailfrom)
+        print("Subject: "+ subject)
+        print("---------------------------------------- ")
+        print(message)
+        # send_mail(str(subject), str(message), str(emailfrom)+'@RoommateHomebase.com', [str(self.user.email)], fail_silently=False)
+        print("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 class UtilityType(models.Model):
     class Meta:
         ordering =('id', 'name')
@@ -149,7 +151,6 @@ class UtilityType(models.Model):
 
     def __str__(self):
         return "#" + str(self.id) + " - " + str(self.name)
-
 class UtilityBill(models.Model):
     class Meta:
         ordering =('id', 'dueDate')
@@ -184,13 +185,13 @@ class UtilityBill(models.Model):
         super(UtilityBill, self).save(*args, **kwargs)
 
     def createRequests(self):
-        print("\n ~~~~ \n createRequests()")
+        # print("\n ~~~~ \n createRequests()")
         all_roommates = Roommate.objects.all()
         my_roommates  = []
-        print("--- Roommate in House ---")
+        # print("--- Roommate in House ---")
         for i in all_roommates:
             if i.house.id == self.house.id:
-                print("Roomie: " + i.name)
+                # print("Roomie: " + i.name)
                 my_roommates.append(i)
 
         print("----")
@@ -208,7 +209,6 @@ class UtilityBill(models.Model):
             paymentReq.save()
             print("Success!!\n")
         return 0
-
 class PaymentRequest(models.Model):
     class Meta:
         ordering =('id', 'date')
@@ -235,7 +235,19 @@ class PaymentRequest(models.Model):
 
     def __str__(self):
         return self.requester.name + " request payment of: $" + str(self.amount) + " From: " + self.requestee.name
-
+    def save(self, *args, **kwargs):
+        subject     = "New Bill: $" + str(self.amount) + " > " + self.requester.name
+                    #  Hello User!
+        line1       = "Hello "+self.requestee.name+"!!\n"
+                    #  You have a new bill payment request from 'Roommate' for PG&E.
+        line2       = "You have a new bill payment request from '" + self.requester.name + "' for " + self.UtilBill.utilType.name + ".\n"
+                    #  The amount requested is $##.##
+        line3       = "The amount requested is $" + str(self.amount) + "."
+                    #  You will receive another reminder in 2 weeks.
+        message     = "Hello "+self.requestee.name+"!!\nYou have a new bill payment request from '"+self.requester.name+"' for "+self.UtilBill.utilType.name+".\nYou will receive another email reminder in 2 weeks regarding this payment"
+        emailfrom   = "NewBills"
+        self.requestee.emailuser(subject,message,emailfrom)
+        super(PaymentRequest, self).save(*args, **kwargs)
 class billPayment(models.Model):
     class Meta:
         ordering =('id', 'date')
@@ -256,7 +268,6 @@ class billPayment(models.Model):
                             )
     def __str__(self):
         return self.payer.name + " " + self.UtilBill.utilType.name + " - $" + str(self.amount) + " || Payed on: " + str(self.date)
-
 class userPayment(models.Model):
     class Meta:
         ordering =('id', 'date')
