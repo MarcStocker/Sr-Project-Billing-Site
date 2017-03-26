@@ -1,4 +1,4 @@
-# Senor Project --- Roommate Billing Website
+# Senior Project --- Roommate Billing Website
 Website to handle Utilities between roommates, keep track of money owed, and chore lists. 
 
 ## Billing 
