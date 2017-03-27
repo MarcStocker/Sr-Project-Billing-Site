@@ -1,10 +1,12 @@
-# Senor Project --- Roommate Billing Website
+# Senior Project --- Roommate Billing Website
 Website to handle Utilities between roommates, keep track of money owed, and chore lists. 
 
 ## Billing 
 This section of the website will handle utilities between roommates.
 - Total amount for each month
 - Automattically split the bill for # of roommates in house
+Preview:
+![alt tag](https://puu.sh/uWptf/bcb5d29e2c.png)
 
 ## IOU
 This section will handle money that roommates have borrowed or owe for shared household items. 
