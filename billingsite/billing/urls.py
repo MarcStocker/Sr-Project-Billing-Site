@@ -36,5 +36,6 @@ urlpatterns = [
 
 
     #<WebSite.com>/billing/test/
-    url(r'^test/$', views.test, name="test"),
+    url(r'^test/$', viewstest.test, name="test"),
+    url(r'^deleteallbills$', views.deleteallbills, name="deleteallbills"),
 ]

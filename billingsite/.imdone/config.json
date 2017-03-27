@@ -1,0 +1,104 @@
+{
+  "exclude": [
+    "^(node_modules|bower_components|\\.imdone|target|build|dist|logs)[\\/\\\\]?|\\.(git|svn|hg|npmignore)|\\~$|\\.(jpg|png|gif|swp|ttf|otf)$"
+  ],
+  "watcher": true,
+  "keepEmptyPriority": false,
+  "code": {
+    "include_lists": [
+      "TODO",
+      "DOING",
+      "DONE",
+      "PLANNING",
+      "FIXME",
+      "ARCHIVE",
+      "HACK",
+      "CHANGED",
+      "XXX",
+      "IDEA",
+      "NOTE",
+      "REVIEW",
+      "11290",
+      "11356",
+      "11809",
+      "8152",
+      "7531",
+      "5866",
+      "10093",
+      "9682",
+      "1450",
+      "WIP",
+      "DELETE"
+    ]
+  },
+  "lists": [
+    {
+      "name": "TODO",
+      "hidden": false
+    },
+    {
+      "name": "WIP",
+      "hidden": false
+    },
+    {
+      "name": "DONE",
+      "hidden": false
+    },
+    {
+      "name": "DELETE",
+      "hidden": true
+    },
+    {
+      "name": "NOTE",
+      "hidden": false
+    },
+    {
+      "name": "11290",
+      "hidden": false
+    },
+    {
+      "name": "11356",
+      "hidden": false
+    },
+    {
+      "name": "11809",
+      "hidden": false
+    },
+    {
+      "name": "8152",
+      "hidden": false
+    },
+    {
+      "name": "XXX",
+      "hidden": false
+    },
+    {
+      "name": "7531",
+      "hidden": false
+    },
+    {
+      "name": "5866",
+      "hidden": false
+    },
+    {
+      "name": "10093",
+      "hidden": false
+    },
+    {
+      "name": "9682",
+      "hidden": false
+    },
+    {
+      "name": "1450",
+      "hidden": false
+    }
+  ],
+  "marked": {
+    "gfm": true,
+    "tables": true,
+    "breaks": false,
+    "pedantic": false,
+    "smartLists": true,
+    "langPrefix": "language-"
+  }
+}

@@ -19,16 +19,15 @@ from billing.forms import UtilityBill, Roommate
 # Create your views here.
 
 def home(request):
-    random.seed()
-    randomnumber=random.randint(0,100)
-    print(randomnumber)
 
+    # random.seed()
+    # randomnumber=random.randint(0,100)
+    # print(randomnumber)
     # cwd=os.getcwd()
     # print(cwd)
 
     if request.user.is_authenticated():
         if Roommate.objects.filter(user_id=request.user.id).exists() == True:
-            print("YEESSS")
             cur_roommate = Roommate.objects.get(user_id=request.user.id)
             house        = cur_roommate.house
             last5bills   = UtilityBill.objects.filter(house_id=house.id)

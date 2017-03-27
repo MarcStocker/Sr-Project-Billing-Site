@@ -42,17 +42,52 @@
          <!-- Tab Selection ul -->
          <ul class="nav nav-tabs">
             {% if totmoney > 0 %}
-            <li role="presentation" class="active"><a href="#overview" aria-controls="overview" role="tab" data-toggle="tab">Overview <span class="badge btn-success">$+{{ totmoney }}</span></a></li>
+            <li role="presentation" class="active">
+               <a href="#overview" aria-controls="overview" role="tab" data-toggle="tab">
+                  Overview
+                  <span class="badge btn-success"> $+{{ totmoney }} </span>
+               </a>
+            </li>
             {% elif totmoney == 0 %}
-            <li role="presentation" class="active"><a href="#overview" aria-controls="overview" role="tab" data-toggle="tab">Overview <span class="badge">${{ totmoney }}</span></a></li>
+            <li role="presentation" class="active">
+               <a href="#overview" aria-controls="overview" role="tab" data-toggle="tab">
+                  Overview
+                  <span class="badge">
+                     ${{ totmoney }}
+                  </span>
+               </a>
+            </li>
             {% else %}
-            <li role="presentation" class="active"><a href="#overview" aria-controls="overview" role="tab" data-toggle="tab">Overview <span class="badge btn-danger">${{ totmoney }}</span></a></li>
+            <li role="presentation" class="active">
+               <a href="#overview" aria-controls="overview" role="tab" data-toggle="tab">
+                  Overview
+                  <span class="badge btn-danger"> ${{ totmoney }} </span>
+               </a>
+               </li>
             {% endif %}
 
-            <li role="presentation"><a href="#debts" aria-controls="debts" role="tab" data-toggle="tab">Debts <span class="badge btn-danger">${{ curuser_debt }}</span></a></li>
-            <li role="presentation"><a href="#collections" aria-controls="collections" role="tab" data-toggle="tab">Collections <span class="badge btn-success">${{ curuser_collect }}</span></a></li>
-            <li role="presentation"><a href="#allbills" aria-controls="allbills" role="tab" data-toggle="tab">All Bills</a></li>
-            <li role="presentation"><a href="#allpayments" aria-controls="allpayments" role="tab" data-toggle="tab">All Payments</a></li>
+            <li role="presentation">
+               <a href="#debts" aria-controls="debts" role="tab" data-toggle="tab">
+                  Debts
+                  <span class="badge btn-danger">${{ curuser_debt }}</span>
+               </a>
+            </li>
+            <li role="presentation">
+               <a href="#collections" aria-controls="collections" role="tab" data-toggle="tab">
+                  Collections
+                  <span class="badge btn-success">${{ curuser_collect }}</span>
+               </a>
+            </li>
+            <li role="presentation">
+               <a href="#allbills" aria-controls="allbills" role="tab" data-toggle="tab">
+                  All Bills
+               </a>
+            </li>
+            <li role="presentation">
+               <a href="#allpayments" aria-controls="allpayments" role="tab" data-toggle="tab">
+                  All Payments
+               </a>
+            </li>
          </ul>
          <!-- END Tab Selection ul -->
          <div class="tab-content"> <!-- BEGIN Tab Panes Div -->
@@ -60,9 +95,9 @@
                <h2><u>Percentage of bills paid by roommates</u></h2>
                <div class="row">
                   {% for key, values in my_roommatespaid.items %}
-                  <div class="col-xs-4 col-md-3 ">
+                  <div class="col-xs-2 col-md-2 ">
                      <h3>{{ key }}</h3>
-                     <div class="test-circle" data-percent="{{ values }}" title="Percent Paid for {{ key }}" description="Percent Paid"></div>
+                     <div class="test-circle" data-percent="{{ values }}" title="Percent Paid for {{ key }}" description="Percent Paid" data-dimension="150"></div>
                   </div>
                   {% endfor %}
                </div>
@@ -70,7 +105,7 @@
                <!-- Overview Table -->
                <div class="panel panel-default panel-inverted col-xs-4 col-md-4"  style="background-color:#252424">
                   <h2>Payment Overview</h2>
-                  <table class="table table-inverted table-bordered ">
+                  <table class="table table-inverted table-bordered table-striped table-hover background-color:#595959">
                      <thead>
                         <tr>
                            <th>Name</th>
@@ -85,7 +120,13 @@
                            <td>{{ roommate.name }}</td>
                            <td>${{ roommate.getTotDebt }}</td>
                            <td>${{ roommate.getTotPaid }}</td>
-                           <td>${{ roommate.getTotRemaining }}</td>
+                           {% if roommate.getTotRemaining < 0 %}
+                           <td style="color:#00d502"><b>${{ roommate.getTotRemaining }}</b></td>
+                           {% elif roommate.getTotRemaining > 0 %}
+                           <td style="color:#d61610"><b>${{ roommate.getTotRemaining }}</b></td>
+                           {% else %}
+                           <td><b>${{ roommate.getTotRemaining }}</b></td>
+                           {% endif %}
                         </tr>
                         {% endfor %}
                      </tbody>
@@ -94,7 +135,7 @@
                <!-- BEGIN Last 5 Bills -->
                <div class="panel panel-default panel-invert col-xs-6 col-md-6 col-sm-offset-1" style="background-color:#252424">
                   <h2>Last 5 Utility Bills</h2>
-                  <table class="table table-inverted table-bordered">
+                  <table class="table table-inverted table-bordered table-striped table-hover background-color:#595959">
                      <thead>
                         <tr>
                            <th>Utility</th>

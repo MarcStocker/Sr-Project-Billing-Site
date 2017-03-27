@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.core.mail import send_mail
 
 import datetime
+import smtplib
+import time
 
 # Create your models here.
 class Lease(models.Model):
@@ -131,16 +133,26 @@ class Roommate(models.Model):
 
         totcollections = collections - paid
         return totcollections
-    def emailuser(self, subject, message, emailfrom):
-        print("\n===================================================================")
+    def emailuser(self, message, emailfrom):
+        print("\n===================================")
         print("   Emailing User: New Bill Created")
-        print("Sending Email To: " + self.user.email)
-        print("            From: " + emailfrom)
-        print("Subject: "+ subject)
-        print("---------------------------------------- ")
-        print(message)
-        # send_mail(str(subject), str(message), str(emailfrom)+'@RoommateHomebase.com', [str(self.user.email)], fail_silently=False)
-        print("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        print("Sending Email To: " + str(self.user.email))
+        print("            From: " + str(emailfrom))
+        print(str(message))
+        print("__________________________________________________________________~")
+        print("Sending message...")
+        myemailgeek  = "marcsageek@gmail.com"
+        passwordgeek = "usmtfzbmbyudsvcr"
+        print("  creating server")
+        server = smtplib.SMTP("smtp.gmail.com", 587)
+        print("  Starting ttls")
+        server.starttls()
+        print("  Logging in")
+        server.login(myemailgeek, passwordgeek)
+        # server.sendmail(str(myemailgeek), str(self.user.email), str(message))
+        print("  Quitting Server")
+        server.quit()
+        print("Message sent")
 class UtilityType(models.Model):
     class Meta:
         ordering =('id', 'name')
@@ -180,11 +192,8 @@ class UtilityBill(models.Model):
 
     def __str__(self):
         return "#" + str(self.id) + "-" + str(self.utilType.name) + "  $" + str(self.amount) + "  due by: " + str(self.dueDate)
-
-    def save(self, *args, **kwargs):
-        super(UtilityBill, self).save(*args, **kwargs)
-
     def createRequests(self):
+        print("\n\nBegin createRequests()")
         # print("\n ~~~~ \n createRequests()")
         all_roommates = Roommate.objects.all()
         my_roommates  = []
@@ -198,6 +207,7 @@ class UtilityBill(models.Model):
 
         # Create a new PaymentRequest for each Roommate
         for i in my_roommates:
+            time.sleep(.3)
             print("Creating Payment Request for: " + i.name)
             paymentReq = PaymentRequest.objects.create(
                                     date    = self.statementDate,
@@ -206,9 +216,17 @@ class UtilityBill(models.Model):
                                     requestee   = i,
                                     UtilBill    = self,
             )
+            print("Before paymentReq.save()")
+            time.sleep(.2)
             paymentReq.save()
-            print("Success!!\n")
-        return 0
+            print("After paymentReq.save()")
+            time.sleep(.2)
+            print("Before paymentReq.email()")
+            paymentReq.email()
+            print("After paymentReq.email()")
+            print("Request Saved...")
+            print("Success!! Email has been sent to : " + i.name + " at: [" + i.user.email + "]\n")
+        print("\n\nEND createRequests()")
 class PaymentRequest(models.Model):
     class Meta:
         ordering =('id', 'date')
@@ -232,22 +250,29 @@ class PaymentRequest(models.Model):
                             on_delete=models.SET_DEFAULT,
                             db_constraint=False
                             )
+    # house       = models.ForeignKey(
+    #                         'house', null=False,
+    #                         blank=False, default="",
+    #                         on_delete=models.SET_DEFAULT,
+    #                         db_constraint=False
+    #                         )
 
     def __str__(self):
         return self.requester.name + " request payment of: $" + str(self.amount) + " From: " + self.requestee.name
-    def save(self, *args, **kwargs):
-        subject     = "New Bill: $" + str(self.amount) + " > " + self.requester.name
+    def email(self):
+        subject     = "New Bill: $" + str(self.amount) + " > " + str(self.requester.name) + "\n"
                     #  Hello User!
         line1       = "Hello "+self.requestee.name+"!!\n"
                     #  You have a new bill payment request from 'Roommate' for PG&E.
         line2       = "You have a new bill payment request from '" + self.requester.name + "' for " + self.UtilBill.utilType.name + ".\n"
                     #  The amount requested is $##.##
-        line3       = "The amount requested is $" + str(self.amount) + "."
+        line3       = "The amount requested is $" + str(self.amount) + ".\n"
+        line4       = "Click the link and sign in to view your bills (http://bills.dynu.net/utilities/)"
                     #  You will receive another reminder in 2 weeks.
-        message     = "Hello "+self.requestee.name+"!!\nYou have a new bill payment request from '"+self.requester.name+"' for "+self.UtilBill.utilType.name+".\nYou will receive another email reminder in 2 weeks regarding this payment"
+        message     = subject + line1 + line2 + line3 + line4
+        # message     = "Hello "+self.requestee.name+"!!\nYou have a new bill payment request from '"+self.requester.name+"' for "+self.UtilBill.utilType.name+".\nYou will receive another email reminder in 2 weeks regarding this payment"
         emailfrom   = "NewBills"
-        self.requestee.emailuser(subject,message,emailfrom)
-        super(PaymentRequest, self).save(*args, **kwargs)
+        self.requestee.emailuser(message,emailfrom)
 class billPayment(models.Model):
     class Meta:
         ordering =('id', 'date')

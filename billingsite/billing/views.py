@@ -15,6 +15,7 @@ from decimal import *
 
 import random
 import os
+import time
 
 # Create your views here.
 @login_required(login_url="/login/")
@@ -118,119 +119,15 @@ def billinghome(request):
         'roommate_collections':roommate_collections,
     }
     return render(request, 'billing/billinghome.html', context)
-
-# @login_required(login_url="/login/")
-# def billinghome(request):
-    #     #Overview is for house id=
-    #     cur_user=request.user
-    #     print("CURRENT USER IS: "+str(cur_user.username))
-    #     houseid=1
-    #     numroommates=5
-    #     my_roommates=[]
-    #     roommatepaid=[]
-    #     money_owed=[]
-    #     all_roommates=Roommate.objects.all()
-    #     all_userpayments=userPayment.objects.all()
-    #     all_billpayments=billPayment.objects.all()
-    #     all_bills=UtilityBill.objects.all()
-    #     all_houses=Lease.objects.all()
-    #     print("======")
-    #     print("======")
-    #     print("======")
-    #     for i in all_houses:
-    #         if i.id == houseid:
-    #             print("--- Retrieving Data for House :", i.name, " - ID:", houseid)
-    #     inum=0
-    #
-    #     # Collect total owed for entire house
-    #     totalowed=0
-    #     for i in all_bills:
-    #         if i.house == houseid:
-    #             totalowed+=i.amount
-    #
-    #     # Amount each Roommate has paid
-    #     for i in all_roommates:
-    #         if i.house.id == 1:
-    #             my_roommates.append(i.id)
-    #             totalpaid=0
-    #             for j in all_userpayments:
-    #                 if j.payer.id == i.id:
-    #                     totalpaid+=j.amount
-    #             for j in all_billpayments:
-    #                 if j.payer.id == i.id:
-    #                     totalpaid+=j.amount/numroommates
-    #             roommatepaid.append(totalpaid)
-    #
-    #     print("------------- Roommate Paid ------------------")
-    #     for i in roommatepaid:
-    #         print(i)
-    #
-    #     housetotal=0
-    #     for i in all_houses:
-    #         if i.id == houseid:
-    #             for j in all_bills:
-    #                 if j.house.id == houseid:
-    #                     housetotal+=j.amount
-    #     print("------------- Total Bills For House ------------------")
-    #     print("$", housetotal)
-    #
-    #     perroommate=housetotal/numroommates
-    #     perroommate=round(perroommate,2)
-    #     print("------------- Total Owed Per Roommate ------------------")
-    #     print("$", perroommate)
-    #
-    #     roommateowes=[]
-    #     iternum=0
-    #     for i in roommatepaid:
-    #         roommateowes.append(round(perroommate-i,2))
-    #
-    #     print("------------- Total Owed for each Roommate ------------------")
-    #     for i in roommateowes:
-    #         print("$", i)
-    #
-    #     percentowed=[]
-    #     for i in range(0,int(numroommates)):
-    #         tempnum=roommateowes[i]-roommatepaid[i]
-    #         tempnum=tempnum/roommateowes[i]
-    #         tempnum=tempnum*100
-    #         percentowed.append(round(tempnum,0))
-    #
-    #     print("------------- Percent Still Owed ------------------")
-    #     for i in percentowed:
-    #         print(str(i)+"%")
-    #
-    #     for i in all_roommates:
-    #         if i.house.id == houseid:
-    #             print("User: " + str(i.name))
-    #             print("  Owes: " + str(i.getPercentOwed()))
-    #
-    #
-    #
-    #
-    #
-    #     debt=56.32
-    #     collections=143.43
-    #     totmoney=collections-debt
-    #     totmoney=round(totmoney,2)
-    #
-    #     context = {
-    #         'debt':debt,
-    #         'collections':collections,
-    #         'totmoney':totmoney,
-    #         'numroommates':numroommates,
-    #         'roommateowes':roommateowes,
-    #         'roommatepaid':roommatepaid,
-    #         'all_roommates':all_roommates,
-    #     }
-    #     return render(request, 'billing/billinghome.html', context)
-
 def addbill(request):
     if request.method=='POST':
         form = addNewBillForm(request.POST, request.FILES)
         if form.is_valid():
             j = form.save(request)
+            print("Before Save")
             j.save()
             j.createRequests()
+            print("After Save")
 
             return HttpResponseRedirect('/utilities/admintablepage/')
     else:
@@ -242,7 +139,6 @@ def addbill(request):
         'form':form,
     }
     return render(request, 'billing/addBill.html', context)
-
 def addbilltype(request):
     if request.method=='POST':
         form = addUtilityTypeForm(request.POST)
@@ -259,7 +155,6 @@ def addbilltype(request):
         'form'      :form,
     }
     return render(request, 'billing/addBill.html', context)
-
 def addbillpayment(request):
     if request.method=='POST':
         form = addNewBillPaymentForm(request.POST, request.FILES)
@@ -276,7 +171,6 @@ def addbillpayment(request):
         'form'      :form,
     }
     return render(request, 'billing/addBillPayment.html', context)
-
 def adduserpayment(request):
     if request.method=='POST':
         form = addNewUserPaymentForm(request.POST, request.FILES)
@@ -293,7 +187,6 @@ def adduserpayment(request):
         'form'      :form,
     }
     return render(request, 'billing/addUserPayment.html', context)
-
 def addlease(request):
     if request.method=='POST':
         form = addLeaseForm(request.POST)
@@ -310,7 +203,6 @@ def addlease(request):
         'form'      :form,
     }
     return render(request, 'billing/addLease.html', context)
-
 def addroommate(request):
     if request.method=='POST':
         form = addRoommateForm(request.POST)
@@ -327,7 +219,6 @@ def addroommate(request):
         'form'      :form,
     }
     return render(request, 'billing/addRoommate.html', context)
-
 def admintablepage(request):
     all_users           = User.objects.all()
     all_leases          = Lease.objects.all()
@@ -351,7 +242,6 @@ def admintablepage(request):
         'all_PaymentRequests':all_PaymentRequests,
     }
     return render(request, 'billingsite/adminTablePage.html', context)
-
 def test(request):
     current_user = request.user
     print("")
@@ -361,14 +251,25 @@ def test(request):
     print("Email:   " + str(current_user.email))
     print("=================================")
     print("")
-    all_users = User.objects.all()
-    for i in all_users:
-        print("User name:  " + str(i.username))
-        print("User ID:    " + str(i.id))
-        if i.email != "":
-            print("User email: " + str(i.email))
-        print("---")
-    user2 = User.objects.get(pk=2)
-    print("")
 
     return HttpResponseRedirect("/utilities/")
+
+def deleteallbills(request):
+    print("Deleting all Requests, Bills, and payments")
+    print("   Deleting PaymentRequests...")
+    for i in PaymentRequest.objects.all():
+        time.sleep(.1)
+        i.delete()
+    print("   Deleting UtilityBills...")
+    for i in UtilityBill.objects.all():
+        time.sleep(.1)
+        i.delete()
+    print("   Deleting userPayments...")
+    for i in userPayment.objects.all():
+        time.sleep(.1)
+        i.delete()
+    print("   Deleting billPayments...")
+    for i in billPayment.objects.all():
+        time.sleep(.1)
+        i.delete()
+    return HttpResponseRedirect("/utilities/admintablepage")
