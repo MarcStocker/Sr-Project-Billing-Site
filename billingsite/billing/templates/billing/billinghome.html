@@ -13,6 +13,8 @@
             <h1>Utilities for: {{ house.name }}</h1>
          </div>
       </div>
+
+
       {# Info on left of page #}
       <div class="col-lg-2 large-left col-md-2 medium-left sidebar"> <!-- Left Div Begin -->
          <ul class="nav nav-pills nav-stacked">
@@ -36,6 +38,7 @@
             </li>
          </ul>
       </div> <!-- Left Div END -->
+
       {# Info on right of page #}
       {# Tab selection #}
       <div class="col-lg-10 large-right col-md-10 medium-centered small-centered columns main"> <!-- Tab Div 10 Begin -->
@@ -93,7 +96,9 @@
          <div class="tab-content"> <!-- BEGIN Tab Panes Div -->
             <div role="tabpanel" class="tab-pane fade in active .panelcust" id="overview">
                <h2><u>Percentage of bills paid by roommates</u></h2>
-               <div class="row">
+
+               <!-- Payment Graphs -->
+               <div class="row" id="container">
                   {% for key, values in my_roommatespaid.items %}
                   <div class="col-xs-2 col-md-2 ">
                      <h3>{{ key }}</h3>
@@ -102,6 +107,7 @@
                   {% endfor %}
                </div>
                <hr />
+
                <!-- Overview Table -->
                <div class="panel panel-default panel-inverted col-xs-4 col-md-4"  style="background-color:#252424">
                   <h2>Payment Overview</h2>
@@ -132,6 +138,10 @@
                      </tbody>
                   </table>
                </div>
+
+
+
+
                <!-- BEGIN Last 5 Bills -->
                <div class="panel panel-default panel-invert col-xs-6 col-md-6 col-sm-offset-1" style="background-color:#252424">
                   <h2>Last 5 Utility Bills</h2>
@@ -155,9 +165,12 @@
                         {% endfor %}
                      </tbody>
                   </table>
-               </div>
-               <!-- END 5 Bills -->
-            </div>
+               </div> <!-- END 5 Bills -->
+
+            </div> <!-- END First Tab -->
+
+
+            <!-- BEGIN 2nd Tab -->
             <div role="tabpanel" class="tab-pane fade" id="debts">
                <h2>Debts: Money you Owe to Others.</h2>
                {% if roommates_iowe %}
@@ -187,6 +200,11 @@
                <h1>You do not owe money to anyone!</h1>
                {% endif %}
             </div>
+            <!-- END 2nd Tab -->
+
+
+
+            <!-- BEGIN 3rd Tab -->
             <div role="tabpanel" class="tab-pane fade" id="collections">
                <h2>Collections: What others owe you.</h2>
                {% for key, values in roommate_collections.items %}
@@ -211,6 +229,8 @@
                </div>
                {% endfor %}
             </div>
+
+
             <div role="tabpanel" class="tab-pane fade" id="allbills">
                <h2>All Bills: Every utility bill Associated with your house.</h2>
                <div class="panel panel-default panel-inverted col-xs-12 col-md-12" style="background-color:#252424">
@@ -238,6 +258,8 @@
                   </table>
                </div>
             </div>
+
+
             <div role="tabpanel" class="tab-pane fade" id="allpayments">
                <h2>All Payments: Every Payment Made to a Roommate.</h2>
                <div class="panel panel-default panel-inverted col-xs-12 col-md-12" style="background-color:#252424">
@@ -269,6 +291,8 @@
                   </table>
                </div>
             </div>
+
+
          </div> <!-- END Tab Panes Div -->
       </div> <!-- Tab div 10 END -->
    </div> <!-- Size 12 Column END -->
