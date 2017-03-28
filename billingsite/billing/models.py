@@ -135,23 +135,23 @@ class Roommate(models.Model):
         return totcollections
     def emailuser(self, message, emailfrom):
         print("\n===================================")
-        print("   Emailing User: New Bill Created")
-        print("Sending Email To: " + str(self.user.email))
-        print("            From: " + str(emailfrom))
+        print("From: " + str(emailfrom))
+        print("  To: " + str(self.user.email))
+        print("\n")
         print(str(message))
         print("__________________________________________________________________~")
         print("Sending message...")
-        myemailgeek  = "marcsageek@gmail.com"
-        passwordgeek = "usmtfzbmbyudsvcr"
-        print("  creating server")
-        server = smtplib.SMTP("smtp.gmail.com", 587)
-        print("  Starting ttls")
-        server.starttls()
-        print("  Logging in")
-        server.login(myemailgeek, passwordgeek)
+        # myemailgeek  = "marcsageek@gmail.com"
+        # passwordgeek = "usmtfzbmbyudsvcr"
+        # print("  creating server")
+        # server = smtplib.SMTP("smtp.gmail.com", 587)
+        # print("  Starting ttls")
+        # server.starttls()
+        # print("  Logging in")
+        # server.login(myemailgeek, passwordgeek)
         # server.sendmail(str(myemailgeek), str(self.user.email), str(message))
-        print("  Quitting Server")
-        server.quit()
+        # print("  Quitting Server")
+        # server.quit()
         print("Message sent")
 class UtilityType(models.Model):
     class Meta:
@@ -260,16 +260,18 @@ class PaymentRequest(models.Model):
     def __str__(self):
         return self.requester.name + " request payment of: $" + str(self.amount) + " From: " + self.requestee.name
     def email(self):
-        subject     = "New Bill: $" + str(self.amount) + " > " + str(self.requester.name) + "\n"
+        subject     = "New Bill: $" + str(self.amount) + " > " + str(self.requester.name) + "\n\n\n"
                     #  Hello User!
-        line1       = "Hello "+self.requestee.name+"!!\n"
+        line1       = "Hello "+self.requestee.name+"!!\n\n"
                     #  You have a new bill payment request from 'Roommate' for PG&E.
         line2       = "You have a new bill payment request from '" + self.requester.name + "' for " + self.UtilBill.utilType.name + ".\n"
                     #  The amount requested is $##.##
         line3       = "The amount requested is $" + str(self.amount) + ".\n"
         line4       = "Click the link and sign in to view your bills (http://bills.dynu.net/utilities/)"
-                    #  You will receive another reminder in 2 weeks.
-        message     = subject + line1 + line2 + line3 + line4
+        line5       = "\n\nYou currently have an unpaid total of $" + str(self.requestee.getTotRemaining()) + "."
+        line6       = "\n\n --The Roommate Homebase Team"
+
+        message     = subject + line1 + line2 + line3 + line4 + line5 + line6
         # message     = "Hello "+self.requestee.name+"!!\nYou have a new bill payment request from '"+self.requester.name+"' for "+self.UtilBill.utilType.name+".\nYou will receive another email reminder in 2 weeks regarding this payment"
         emailfrom   = "NewBills"
         self.requestee.emailuser(message,emailfrom)

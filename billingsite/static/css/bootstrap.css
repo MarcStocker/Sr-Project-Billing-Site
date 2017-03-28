@@ -2318,9 +2318,9 @@ th {
   border-bottom-width: 2px;
 }
 .table-striped > tbody > tr:nth-of-type(odd) {
-  background-color: #363636;
+  background-color: #212121;
 }
-.table-hover > tbody > tr:hover {
+.table-hover > tbody > tr:hover > td {
   background-color: #090909;
 }
 table col[class*="col-"] {
@@ -2353,7 +2353,7 @@ table th[class*="col-"] {
 .table-hover > tbody > tr.active:hover > td,
 .table-hover > tbody > tr:hover > .active,
 .table-hover > tbody > tr.active:hover > th {
-  background-color: #e8e8e8;
+  background-color: #090909;
 }
 .table > thead > tr > td.success,
 .table > tbody > tr > td.success,

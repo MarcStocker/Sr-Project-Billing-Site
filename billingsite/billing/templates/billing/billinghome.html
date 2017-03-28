@@ -98,7 +98,7 @@
                <h2><u>Percentage of bills paid by roommates</u></h2>
 
                <!-- Payment Graphs -->
-               <div class="row" id="container">
+               <div class="row">
                   {% for key, values in my_roommatespaid.items %}
                   <div class="col-xs-2 col-md-2 ">
                      <h3>{{ key }}</h3>
@@ -175,6 +175,10 @@
                <h2>Debts: Money you Owe to Others.</h2>
                {% if roommates_iowe %}
                {% for key, values in roommates_iowe.items %}
+               <script src="https://code.highcharts.com/highcharts.js"></script>
+               <script src="https://code.highcharts.com/modules/exporting.js"></script>
+
+               <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
                <div class="panel panel-default panel-inverted col-xs-4 col-md-4" style="background-color:#252424">
                   <h3>{{ key }}</h3>
                   <table class="table table-inverted">
