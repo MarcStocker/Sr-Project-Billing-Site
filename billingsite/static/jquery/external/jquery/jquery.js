@@ -2484,7 +2484,6 @@ function matcherFromGroupMatchers( elementMatchers, setMatchers ) {
 			matchedCount += i;
 
 			// Apply set filters to unmatched elements
-			// NOTE: This can be skipped if there are no unmatched elements (i.e., `matchedCount`
 			// equals `i`), unless we didn't visit _any_ elements in the above loop because we have
 			// no element matchers and no seed.
 			// Incrementing an initially-string "0" `i` allows `i` to remain a string only in that
@@ -2860,7 +2859,6 @@ var rootjQuery,
 
 	// A simple way to check for HTML strings
 	// Prioritize #id over <tag> to avoid XSS via location.hash (#9521)
-	// Strict HTML recognition (#11290: must start with <)
 	rquickExpr = /^(?:\s*(<[\w\W]+>)[^>]*|#([\w-]*))$/,
 
 	init = jQuery.fn.init = function( selector, context, root ) {
@@ -4679,7 +4677,6 @@ function buildFragment( elems, context, scripts, selection, ignored ) {
 		}
 	}
 
-	// Fix #11356: Clear elements from fragment
 	if ( tmp ) {
 		safe.removeChild( tmp );
 	}
@@ -6095,7 +6092,6 @@ function domManip( collection, args, callback, ignored ) {
 				}
 			}
 
-			// Fix #11809: Avoid leaking memory
 			fragment = first = null;
 		}
 	}
@@ -9078,7 +9074,6 @@ var
 	// IE leaves an \r character at EOL
 	rheaders = /^(.*?):[ \t]*([^\r\n]*)\r?$/mg,
 
-	// #7653, #8125, #8152: local protocol detection
 	rlocalProtocol = /^(?:about|app|app-storage|.+-extension|file|res|widget):$/,
 	rnoContent = /^(?:GET|HEAD)$/,
 	rprotocol = /^\/\//,
@@ -9250,7 +9245,7 @@ function ajaxHandleResponses( s, jqXHR, responses ) {
 }
 
 /* Chain conversions given the request and the original response
- * Also sets the responseXXX fields on the jqXHR instance
+ * Also sets the response
  */
 function ajaxConvert( s, response, jqXHR, isSuccess ) {
 	var conv2, current, conv, tmp, prev,
@@ -9583,9 +9578,6 @@ jQuery.extend( {
 		jqXHR.success = jqXHR.done;
 		jqXHR.error = jqXHR.fail;
 
-		// Remove hash character (#7531: and string promotion)
-		// Add protocol if not provided (#5866: IE7 issue with protocol-less urls)
-		// Handle falsy url in the settings object (#10093: consistency with old signature)
 		// We also use the url parameter if available
 		s.url = ( ( url || s.url || ajaxLocation ) + "" )
 			.replace( rhash, "" )
@@ -9646,7 +9638,6 @@ jQuery.extend( {
 			if ( s.data ) {
 				cacheURL = ( s.url += ( rquery.test( cacheURL ) ? "&" : "?" ) + s.data );
 
-				// #9682: remove data so that it's not used in an eventual retry
 				delete s.data;
 			}
 
@@ -9785,7 +9776,6 @@ jQuery.extend( {
 				response = ajaxHandleResponses( s, jqXHR, responses );
 			}
 
-			// Convert no matter what (that way responseXXX fields are always set)
 			response = ajaxConvert( s, response, jqXHR, isSuccess );
 
 			// If successful, handle type chaining
@@ -10299,7 +10289,6 @@ if ( xhrSupported ) {
 								if ( !status && options.isLocal && !options.crossDomain ) {
 									status = responses.text ? 200 : 404;
 
-								// IE - #1450: sometimes returns 1223 when it should be 204
 								} else if ( status === 1223 ) {
 									status = 204;
 								}

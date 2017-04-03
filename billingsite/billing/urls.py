@@ -38,4 +38,8 @@ urlpatterns = [
     #<WebSite.com>/billing/test/
     url(r'^test/$', viewstest.test, name="test"),
     url(r'^deleteallbills$', views.deleteallbills, name="deleteallbills"),
+    url(r'^emailusers/$', views.emailusers, name="emailusers"),
+
+
+    url(r'^deleterequests/$', views.deleterequests, name="deleterequests"),
 ]

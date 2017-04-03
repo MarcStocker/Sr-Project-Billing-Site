@@ -52,12 +52,16 @@ class addNewBillForm(forms.ModelForm):
         help_text="Date the Bill was paid",
         widget=DateInput()
     )
+    billdoc = forms.FileField(
+        label="Bill Document",
+        help_text="Upload a PDF or Image of your bill"
+    )
     class Meta:
         model = UtilityBill
         fields= [
             'utilType','owner','amount',
             'statementDate','dueDate','datepaid',
-            'house',
+            'house','billdoc'
         ]
 
 
@@ -115,3 +119,6 @@ class addRoommateForm(forms.ModelForm):
         fields= [
             'name', 'house', 'user',
         ]
+
+class sendEmailForm(forms.Form):
+    textbody = forms.CharField(label='Your name', max_length=500)

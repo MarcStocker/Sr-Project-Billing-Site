@@ -71,10 +71,13 @@
                      <li>
                         <a href="{% url 'billing:admintablepage' %}">View all Tables</a>
                      </li>
+                     <li>
+                       <a href ="{% url 'billing:emailusers' %}">Email All Users</a>
+                     </li>
                      <li role="separator" class="divider "> </li>
                      <li role="separator" class="divider "> </li>
                      <li>
-                       <a href="{% url 'billing:deleteallbills' %}" style="color:#e00b0b">DELETE ALL BILLS</a>
+                       <a href="{% url 'billing:deleteallbills' %}" style="color:#e00b0b; background-color:#370f00">DELETE ALL BILLS</a>
                      </li>
                   </ul>
                </div>
@@ -88,12 +91,6 @@
                {% endif %}
             </li>
          </ul>
-         <!--  -->
       </div>
-
    </nav>
-   <div class="col-mid-6">
-      <hr class="afx">
-
-   </div>
 </div>

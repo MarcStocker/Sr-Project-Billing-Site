@@ -1,21 +1,22 @@
-from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, HttpResponseRedirect
 
+from .models import PaymentRequest
 from .models import Lease, Roommate, UtilityBill
 from .models import UtilityType, billPayment, userPayment
-from .models import PaymentRequest
-from .forms import UserPaymentForm, addUtilityTypeForm
-from .forms import addUtilityBillPaymentForm, addNewBillForm
 from .forms import addLeaseForm, addRoommateForm
+from .forms import addUtilityBillPaymentForm, addNewBillForm
 from .forms import addNewBillPaymentForm, addNewUserPaymentForm
+from .forms import UserPaymentForm, addUtilityTypeForm, sendEmailForm
 
 from decimal import *
 
 import random
 import os
 import time
+import smtplib
 
 # Create your views here.
 @login_required(login_url="/login/")
@@ -66,8 +67,6 @@ def billinghome(request):
             print("Total Still Owed: " + str(temptotstillowed))
             if temptotstillowed >= 1:
                 roommate_collections[i.name] = [temptotcollections, temptotpayments, temptotstillowed]
-            elif temptotstillowed < 0:
-                roommates_iowe[i.name] = [temptotcollections, temptotpayments, temptotstillowed]
 
 
 
@@ -93,12 +92,12 @@ def billinghome(request):
     last5bills= all_bills.order_by('-dueDate')[:5]
 
     #
-    all_payments    = userPayment.objects.all()
+    all_payments    = userPayment.objects.filter(house_id=1)
+    print("House id= " + str(house.id))
     house_payments  = []
     for i in my_roommates:
         for j in all_payments:
-            if j.payer.house.id == house.id:
-                house_payments.append(j)
+            house_payments.append(j)
 
     print("\n-------------------\n      END \n-------------------\n END BILLING HOME \n-------------------\n\n")
     context = {
@@ -107,7 +106,7 @@ def billinghome(request):
         'totmoney'          :totmoney,
         'all_bills'         :all_bills,
         'last5bills'        :last5bills,
-        'all_payments'       :all_payments,
+        'all_payments'      :all_payments,
         'curuser_debt'      :curuser_debt,
         'numroommates'      :numroommates,
         'roommateowes'      :roommateowes,
@@ -253,6 +252,39 @@ def test(request):
     print("")
 
     return HttpResponseRedirect("/utilities/")
+def emailusers(request):
+    if request.method=='POST':
+        form = sendEmailForm(request.POST)
+        message = form
+        for i in form:
+            print(i)
+        print(form)
+        myemailgeek  = "marcsageek@gmail.com"
+        passwordgeek = "usmtfzbmbyudsvcr"
+        print("  creating server")
+        server = smtplib.SMTP("smtp.gmail.com", 587)
+        print("  Starting ttls")
+        server.starttls()
+        print("  Logging in")
+        server.login(myemailgeek, passwordgeek)
+        # for i in Roommates.objects.all():
+            # server.sendmail(str(myemailgeek), str(i.user.email), str(message))
+        server.sendmail(str(myemailgeek), str("MarcStocker@outlook.com"), str(message))
+        print("  Quitting Server")
+        server.quit()
+        print("Message sent")
+
+        return HtmlResponseRedirect("/utilities/")
+    else:
+        form = sendEmailForm()
+    context = {
+        'page_name' :"Admin Email Panel",
+        'sitename'  :"Roommate Homebase",
+        'page_name' :"Email Users",
+        'form'      :form,
+    }
+    return render(request, 'billing/sendemail.html', context)
+
 
 def deleteallbills(request):
     print("Deleting all Requests, Bills, and payments")
@@ -273,3 +305,16 @@ def deleteallbills(request):
         time.sleep(.1)
         i.delete()
     return HttpResponseRedirect("/utilities/admintablepage")
+
+def deleterequests(request):
+    print("\n\nDeleting lastest Requests, and Bill associated with it.\n")
+    last_bill = UtilityBill.objects.all().reverse()[0]
+    print("Last Bill= " + str(last_bill.id) + " - $" + str(last_bill.amount))
+    lastid = last_bill.id
+    recent_requests = PaymentRequest.objects.filter(UtilBill_id=lastid)
+    for i in recent_requests:
+        time.sleep(.2)
+        i.delete()
+    last_bill.delete()
+    print("Selected Payment requests associated with Bill ID: " + str(lastid))
+    return HttpResponseRedirect('/utilities/')

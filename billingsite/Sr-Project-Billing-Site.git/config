@@ -1,0 +1,8 @@
+[core]
+	repositoryformatversion = 0
+	filemode = false
+	bare = true
+[remote "origin"]
+	url = git@github.com:MarcStocker/Sr-Project-Billing-Site.git
+	fetch = +refs/*:refs/*
+	mirror = true

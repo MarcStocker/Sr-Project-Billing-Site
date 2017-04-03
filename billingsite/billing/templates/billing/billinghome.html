@@ -36,6 +36,9 @@
             <li class="active text-center"> <!-- Add a New Roommate link -->
                <a href="/utilities/addRoommate/">Add a New Roommate</a>
             </li>
+            <li class="active text-center">
+              <a href="/utilities/deleterequests/">Delete lastest requests/bill</a>
+            </li>
          </ul>
       </div> <!-- Left Div END -->
 
@@ -123,15 +126,13 @@
                      <tbody>
                         {% for roommate in my_roommates %}
                         <tr>
-                           <td>{{ roommate.name }}</td>
-                           <td>${{ roommate.getTotDebt }}</td>
+                           <td>{{  roommate.name }}</td>
+                           <td>${{ roommate.getTotOwed }}</td>
                            <td>${{ roommate.getTotPaid }}</td>
-                           {% if roommate.getTotRemaining < 0 %}
+                           {% if roommate.getTotRemaining <= 0 %}
                            <td style="color:#00d502"><b>${{ roommate.getTotRemaining }}</b></td>
                            {% elif roommate.getTotRemaining > 0 %}
                            <td style="color:#d61610"><b>${{ roommate.getTotRemaining }}</b></td>
-                           {% else %}
-                           <td><b>${{ roommate.getTotRemaining }}</b></td>
                            {% endif %}
                         </tr>
                         {% endfor %}
@@ -264,6 +265,7 @@
             </div>
 
 
+            <!-- TODO: Grab Payments from other houses -->
             <div role="tabpanel" class="tab-pane fade" id="allpayments">
                <h2>All Payments: Every Payment Made to a Roommate.</h2>
                <div class="panel panel-default panel-inverted col-xs-12 col-md-12" style="background-color:#252424">
@@ -284,7 +286,7 @@
                         <tr>
                            <td>{{ payment.id }}</td>
                            <td>{{ payment.payer.name }}</td>
-                           <td>${{ payment.amount }}</td>
+                           <td>${{payment.amount }}</td>
                            <td>{{ payment.payee.name }}</td>
                            <td>{{ payment.date }}</td>
                            <td>{{ payment.payType }}</td>

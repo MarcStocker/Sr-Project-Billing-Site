@@ -3,9 +3,19 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 
-import datetime
+from datetime import datetime
 import smtplib
 import time
+
+sendemails   = True
+sendmailtrue = True
+
+url = "http://bills.dynu.net/utilities/"
+
+def bill_directory_path(instance, filename):
+    billname = str(instance.utilType.name.replace(' ','_'))
+    print("\n\n\n\n Billname: " + billname)
+    return "uploads/bills/str(self.statementDate.date(time_string, '%Y'))/" + billname + '/' + "lease_id_" + str(instance.house.id) + billname + (str(instance.statementDate.strftime('%Y.%m.%d')))
 
 # Create your models here.
 class Lease(models.Model):
@@ -44,9 +54,9 @@ class Roommate(models.Model):
     def getPercentPaid(self):
         # print("\n ~~~~ \n getPercentOwed()")
         # print("FOR USER: " + self.name)
-        all_bills           = UtilityBill.objects.all()
-        all_userPayments    = userPayment.objects.all()
-        all_paymentrequests = PaymentRequest.objects.all()
+        all_bills           = UtilityBill.objects.filter(house_id=self.house.id)
+        all_userPayments    = userPayment.objects.filter(house_id=self.house.id)
+        all_paymentrequests = PaymentRequest.objects.filter(house_id=self.house.id)
         totalowed=0
         totalpaid=0
         for i in all_paymentrequests:
@@ -82,12 +92,11 @@ class Roommate(models.Model):
                     owed+=i.amount
         return owed
     def getTotOwed(self):
-        all_requests = PaymentRequest.objects.all()
+        all_requests = PaymentRequest.objects.filter(requestee=self).exclude(requester=self)
         # Retrieve all payment requests
         owed=0
         for i in all_requests:
-            if i.requestee == self and i.requester != self:
-                owed+=i.amount
+            owed+=i.amount
         return owed
     def getTotDebt(self):
         # Retrieve all payment requests
@@ -106,8 +115,8 @@ class Roommate(models.Model):
                 paid+=i.amount
         return paid
     def getTotRemaining(self):
-        all_payments = userPayment.objects.all()
-        all_requests = PaymentRequest.objects.all()
+        all_payments = userPayment.objects.filter(house_id=self.house.id)
+        all_requests = PaymentRequest.objects.filter(house_id=self.house.id)
 
         # Retrieve all Requests owed to cur user
         debt=self.getTotDebt()
@@ -141,18 +150,20 @@ class Roommate(models.Model):
         print(str(message))
         print("__________________________________________________________________~")
         print("Sending message...")
-        # myemailgeek  = "marcsageek@gmail.com"
-        # passwordgeek = "usmtfzbmbyudsvcr"
-        # print("  creating server")
-        # server = smtplib.SMTP("smtp.gmail.com", 587)
-        # print("  Starting ttls")
-        # server.starttls()
-        # print("  Logging in")
-        # server.login(myemailgeek, passwordgeek)
-        # server.sendmail(str(myemailgeek), str(self.user.email), str(message))
-        # print("  Quitting Server")
-        # server.quit()
-        print("Message sent")
+        if sendemails == True:
+            myemailgeek  = "marcsageek@gmail.com"
+            passwordgeek = "usmtfzbmbyudsvcr"
+            print("  creating server")
+            server = smtplib.SMTP("smtp.gmail.com", 587)
+            print("  Starting ttls")
+            server.starttls()
+            print("  Logging in")
+            server.login(myemailgeek, passwordgeek)
+            if sendmailtrue == True:
+                server.sendmail(str(myemailgeek), str(self.user.email), str(message))
+            print("  Quitting Server")
+            server.quit()
+            print("Message sent")
 class UtilityType(models.Model):
     class Meta:
         ordering =('id', 'name')
@@ -166,11 +177,13 @@ class UtilityType(models.Model):
 class UtilityBill(models.Model):
     class Meta:
         ordering =('id', 'dueDate')
+
+    filepath=""
     amount          = models.DecimalField(max_digits=6, decimal_places=2)
     dueDate         = models.DateField(null=True, blank=True)
     statementDate   = models.DateField(null=True, blank=True)
     datepaid        = models.DateField(null=True, blank=True, default="")
-    image           = models.FileField(max_length=144, upload_to='uploads/%Y/%m%d/', null=True, blank=True, default="")
+    billdoc         = models.FileField(default=" ", upload_to=bill_directory_path, blank=True, null=True, max_length=144)
     owner           = models.ForeignKey(
                                 'Roommate', null=False,
                                 blank=False, default="",
@@ -250,15 +263,15 @@ class PaymentRequest(models.Model):
                             on_delete=models.SET_DEFAULT,
                             db_constraint=False
                             )
-    # house       = models.ForeignKey(
-    #                         'house', null=False,
-    #                         blank=False, default="",
-    #                         on_delete=models.SET_DEFAULT,
-    #                         db_constraint=False
-    #                         )
+    house       = models.ForeignKey(
+                            'Lease', null=False,
+                            blank=False, default="1",
+                            on_delete=models.SET_DEFAULT,
+                            db_constraint=False
+                            )
 
     def __str__(self):
-        return self.requester.name + " request payment of: $" + str(self.amount) + " From: " + self.requestee.name
+        return "ID: " + str(self.id) + " " + self.requester.name + " request payment of: $" + str(self.amount) + " From: " + self.requestee.name + "  - Bill ID: " + str(self.UtilBill.id)
     def email(self):
         subject     = "New Bill: $" + str(self.amount) + " > " + str(self.requester.name) + "\n\n\n"
                     #  Hello User!
@@ -267,7 +280,7 @@ class PaymentRequest(models.Model):
         line2       = "You have a new bill payment request from '" + self.requester.name + "' for " + self.UtilBill.utilType.name + ".\n"
                     #  The amount requested is $##.##
         line3       = "The amount requested is $" + str(self.amount) + ".\n"
-        line4       = "Click the link and sign in to view your bills (http://bills.dynu.net/utilities/)"
+        line4       = "Click the link and sign in to view your bills (" + url + ")"
         line5       = "\n\nYou currently have an unpaid total of $" + str(self.requestee.getTotRemaining()) + "."
         line6       = "\n\n --The Roommate Homebase Team"
 
@@ -312,6 +325,12 @@ class userPayment(models.Model):
                         blank=False, default="",
                         on_delete=models.SET_DEFAULT,
                         db_constraint=False, related_name="payee"
+                        )
+    house   = models.ForeignKey(
+                        'Lease', null=False,
+                        blank=False, default="1",
+                        on_delete=models.SET_DEFAULT,
+                        db_constraint=False
                         )
     def __str__(self):
         return "From: " + self.payer.name + " >> To: " + self.payee.name + " ||| $" + str(self.amount)

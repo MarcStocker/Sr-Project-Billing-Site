@@ -46,51 +46,51 @@
     },
     {
       "name": "DELETE",
-      "hidden": true
+      "hidden": false
     },
     {
       "name": "NOTE",
-      "hidden": false
+      "hidden": true
     },
     {
       "name": "11290",
-      "hidden": false
+      "hidden": true
     },
     {
       "name": "11356",
-      "hidden": false
+      "hidden": true
     },
     {
       "name": "11809",
-      "hidden": false
+      "hidden": true
     },
     {
       "name": "8152",
-      "hidden": false
+      "hidden": true
     },
     {
       "name": "XXX",
-      "hidden": false
+      "hidden": true
     },
     {
       "name": "7531",
-      "hidden": false
+      "hidden": true
     },
     {
       "name": "5866",
-      "hidden": false
+      "hidden": true
     },
     {
       "name": "10093",
-      "hidden": false
+      "hidden": true
     },
     {
       "name": "9682",
-      "hidden": false
+      "hidden": true
     },
     {
       "name": "1450",
-      "hidden": false
+      "hidden": true
     }
   ],
   "marked": {

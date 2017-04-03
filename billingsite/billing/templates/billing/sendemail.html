@@ -1,0 +1,24 @@
+{% extends "billingsite/base.html" %}
+{% load static %}
+{% block title %} {{ page_name }} {% endblock title %}
+
+
+{% block content %}
+<div class="column"> <!-- BEING Div Column -->
+   <div class="col-lg-6 col-lg-centered col-md-6 col-md-centered col-md-offset-3">
+      <form method="post" action="">
+        {% csrf_token %}
+        <div class="row column">
+          <p>
+            Email out to all users
+          </p>
+          <label>{{ form.textbody.label_tag }}
+            {{ form.textbody }}
+          </label>
+          <intput type="submit" class="btn btn-success" value="SEND"></intput>
+        </div>
+      </form>
+      <a role="btn" href="/utilities/admintablepage/" class="btn btn-alert">Cancel</a>
+   </div>
+</div> <!-- END size 12 column -->
+{% endblock %}
