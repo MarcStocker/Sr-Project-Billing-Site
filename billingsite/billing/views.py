@@ -21,10 +21,16 @@ import smtplib
 # Create your views here.
 @login_required(login_url="/login/")
 def billinghome(request):
+    if not Roommate.objects.filter(user_id=request.user.id):
+        print("User is not associated with a house")
+        context = { 'page_name':"Utilities - Roommate Homebase"}
+        return render(request, 'billing/billinghome.html', context)
 
     print("\n\n\n\n==========================================================")
     print("def billinghome(request)")
     print(">>>>>>>>>>>>>>>>>>>\n\n")
+
+
     cur_roommate = Roommate.objects.get(user=request.user.id)
     house        = cur_roommate.house
     my_roommates = Roommate.objects.filter(house_id=house.id)

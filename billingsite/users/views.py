@@ -3,6 +3,8 @@ from django.shortcuts import render, HttpResponse, HttpResponseRedirect, reverse
 from django.utils.html import escape
 import datetime
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+import json as json
 
 from .forms import *
 

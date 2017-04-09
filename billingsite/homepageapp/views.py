@@ -38,10 +38,15 @@ def home(request):
             'last5bills'    :last5bills,
             'my_roommates'  :my_roommates,
             }
+        else:
+            context = {
+            'page_name' :"Home - Roommate Homebase",
+            # 'randnum'   :randomnumber,
+            }
     else:
         context = {
         'page_name' :"Home - Roommate Homebase",
-        'randnum'   :randomnumber,
+        # 'randnum'   :randomnumber,
         }
 
     return render(request, 'homepageapp/homepage.html', context)

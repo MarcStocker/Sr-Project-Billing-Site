@@ -1,7 +1,7 @@
 {% extends "billingsite/base.html" %}
 {% load static %}
 
-{% block title %} Register - EdgarRaw {% endblock %}
+{% block title %} {{ page_name }} {% endblock %}
 {% block content %}
 <div class="container">
    <div class="col-lg-5 col-md-5 col-md-center col-lg-offset-3 col-md-offset-3 row main" style="background-color:#424242">
@@ -9,7 +9,7 @@
          <div class="row" style="text-align:center; background-color:#004360; outline-color:#000">
             <div class="col-lg-12 col-lg-centered">
                <div class="col-lg-7 col-lg-offset-3 row">
-                  <form method="post" action="{% url 'homepageapp:home' %}">
+                  <form method="post" action="/register/">
                      {% csrf_token %}
                      <div class="col-lg-12 row col log-in-form">
                         <h4 class="text-center">Register a New Account</h4>

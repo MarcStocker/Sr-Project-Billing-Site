@@ -90,14 +90,14 @@ class Roommate(models.Model):
             if i.payer.id == self.id:
                 if i.requester.id == rmid:
                     owed+=i.amount
-        return owed
+        return int(owed)
     def getTotOwed(self):
         all_requests = PaymentRequest.objects.filter(requestee=self).exclude(requester=self)
         # Retrieve all payment requests
         owed=0
         for i in all_requests:
             owed+=i.amount
-        return owed
+        return int(owed)
     def getTotDebt(self):
         # Retrieve all payment requests
         owed=self.getTotOwed()
@@ -105,7 +105,7 @@ class Roommate(models.Model):
         paid=self.getTotPaid()
         totDebt = self.getTotOwed() - self.getTotPaid()
         # print("Total Debt for '" + self.name + "' :"+ str(totDebt))
-        return totDebt
+        return int(totDebt)
     def getTotPaid(self):
         all_payments = userPayment.objects.all()
         # Retrieve all Payments made
@@ -113,7 +113,7 @@ class Roommate(models.Model):
         for i in all_payments:
             if i.payer == self:
                 paid+=i.amount
-        return paid
+        return int(paid)
     def getTotRemaining(self):
         all_payments = userPayment.objects.filter(house_id=self.house.id)
         all_requests = PaymentRequest.objects.filter(house_id=self.house.id)
@@ -123,7 +123,7 @@ class Roommate(models.Model):
         paid=self.getTotPaid()
 
         leftover=debt-paid
-        return leftover
+        return int(leftover)
     def getTotCollections(self):
         all_payments = userPayment.objects.all()
         all_requests = PaymentRequest.objects.all()
@@ -141,7 +141,7 @@ class Roommate(models.Model):
                 paid+=i.amount
 
         totcollections = collections - paid
-        return totcollections
+        return int(totcollections)
     def emailuser(self, message, emailfrom):
         print("\n===================================")
         print("From: " + str(emailfrom))
