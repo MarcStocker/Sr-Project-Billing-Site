@@ -2,13 +2,14 @@ from django.db import models
 from datetime import datetime
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
+from django.db.models import F, FloatField, Sum
 
 from datetime import datetime
 import smtplib
 import time
 
 sendemails   = True
-sendmailtrue = False
+sendmailtrue = True
 
 url = "http://homebase.dynu.net/utilities/"
 
@@ -56,31 +57,21 @@ class Roommate(models.Model):
     def __str__(self):
         return "#" + str(self.id) + " - " + str(self.name)
     def getPercentPaid(self):
-        # print("\n ~~~~ \n getPercentOwed()")
-        # print("FOR USER: " + self.name)
-        all_bills           = UtilityBill.objects.filter(house_id=self.house.id)
-        all_userPayments    = userPayment.objects.filter(house_id=self.house.id)
-        all_paymentrequests = PaymentRequest.objects.filter(house_id=self.house.id)
-        totalowed=0
-        totalpaid=0
-        for i in all_paymentrequests:
-            if i.requestee.id == self.id and i.requester.id != i.requestee.id:
-                totalowed += i.amount
-        # print("Total owed=",totalowed)
-        for i in all_userPayments:
-            if i.payer.id == self.id:
-                totalpaid+=i.amount
-        # print("Total paid=",totalpaid)
-        percentowed = totalowed - totalpaid
-        if totalowed == 0:
+        # print("_________ getPercentPaid() BEGIN")
+        totalowed = self.getTotOwed()
+        totalpaid = self.getTotPaid()
+        # print("TotalOwed == " + str(totalowed))
+        # print("TotalPaid == " + str(totalpaid))
+        if totalowed == 0 or str(totalowed) == "None":
             # print("All Paid Up")
             # print("\n ____\n END")
             return 100
-        elif totalpaid == 0:
+        elif totalpaid == 0 or str(totalpaid) == "None":
             # print("Nothing Paid yet")
             # print("\n ____\n END")
             return 0
         else:
+            percentowed = totalowed - totalpaid
             percentowed = percentowed / totalowed
             percentowed = percentowed - 1
             percentowed = percentowed * -1
@@ -89,48 +80,41 @@ class Roommate(models.Model):
             # print("\n ____\n END")
             return percentowed
     def getOwedTo(self, rmid):
-        owed = 0
-        for i in PaymentRequest.objects.all():
-            if i.payer.id == self.id:
-                if i.requester.id == rmid:
-                    owed+=i.amount
-        return int(owed)
+        owed = PaymentRequest.objects.filter(payer_id=self.id).aggregate(Sum(F('amount'))).get('amount__sum', 0.00)
+        if str(owed) == "None":
+            return 0
+        else:
+            return owed
     def getTotOwed(self):
-        all_requests = PaymentRequest.objects.filter(requestee=self).exclude(requester=self)
-        # Retrieve all payment requests
-        owed=0
-        for i in all_requests:
-            owed+=i.amount
-        return int(owed)
+        owed = PaymentRequest.objects.filter(requestee=self).exclude(requester=self).aggregate(Sum(F('amount'))).get('amount__sum', 0.00)
+        if str(owed) == "None":
+            return 0
+        else:
+            return owed
     def getTotDebt(self):
         # Retrieve all payment requests
         owed=self.getTotOwed()
         # Retrieve all Payments made
         paid=self.getTotPaid()
-        totDebt = self.getTotOwed() - self.getTotPaid()
+        totDebt = owed - paid
         # print("Total Debt for '" + self.name + "' :"+ str(totDebt))
-        return int(totDebt)
+        return totDebt
     def getTotPaid(self):
-        all_payments = userPayment.objects.all()
-        # Retrieve all Payments made
-        paid=0
-        for i in all_payments:
-            if i.payer == self:
-                paid+=i.amount
-        return int(paid)
-    def getTotRemaining(self):
-        all_payments = userPayment.objects.filter(house_id=self.house.id)
-        all_requests = PaymentRequest.objects.filter(house_id=self.house.id)
+        paid = userPayment.objects.filter(payer=self).exclude(payee=self).aggregate(Sum(F('amount'))).get('amount__sum', 0.00)
+        if str(paid) == "None":
+            return 0
+        else:
+            return paid
 
-        # Retrieve all Requests owed to cur user
+    def getTotRemaining(self):
         debt=self.getTotDebt()
         paid=self.getTotPaid()
-        print("Printing Total Left...")
-        print("debt = " + str(debt))
-        print("paid = " + str(paid))
+        # print("Printing Total Left...")
+        # print("debt = " + str(debt))
+        # print("paid = " + str(paid))
         leftover=debt+paid
-        print("Leftover = " + str(leftover))
-        return int(leftover)
+        # print("Leftover = " + str(leftover))
+        return leftover
     def getTotCollections(self):
         all_payments = userPayment.objects.all()
         all_requests = PaymentRequest.objects.all()
@@ -148,7 +132,7 @@ class Roommate(models.Model):
                 paid+=round(i.amount, 2)
 
         totcollections = collections - paid
-        return int(totcollections)
+        return int(round(totcollections,2))
     def emailuser(self, message, emailfrom):
         print("\n===================================")
         print("From: " + str(emailfrom))

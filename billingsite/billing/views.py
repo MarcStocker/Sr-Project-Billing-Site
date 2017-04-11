@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
+from django.db.models import F, FloatField, Sum
 
 from .models import PaymentRequest
 from .models import Lease, Roommate, UtilityBill
@@ -35,11 +36,6 @@ def billinghome(request):
     house        = cur_roommate.house
     my_roommates = Roommate.objects.filter(house_id=house.id).order_by('id')
 
-    # TODO - Total Owed Overall - # DONE
-    my_roommatespaid={}
-    for i in my_roommates:
-        my_roommatespaid[i.name]=i.getPercentPaid()
-        # print(i.name + " has paid "+ str(my_roommatespaid[i.name]) + "%")
     # TODO - Debt Tab
     roommates_iowe       = {}
     roommate_collections = {}
@@ -78,16 +74,13 @@ def billinghome(request):
 
 
 
-    # TODO - Total Collections of Current User
-    curuser_collect= round(cur_roommate.getTotCollections(), 2)
-    # TODO - Total Debt Of Current User
-    curuser_debt= round(cur_roommate.getTotDebt(), 2)
-    totmoney = str(round((curuser_collect - curuser_debt), 2))
+    # DONE - Total Collections of Current User
+    curuser_collect= PaymentRequest.objects.filter(requester=cur_roommate).exclude(requestee=cur_roommate).aggregate(Sum(F('amount')))
+    # DONE - Total Debt Of Current User
+    curuser_debt = PaymentRequest.objects.filter(requestee=cur_roommate).exclude(requester=cur_roommate).aggregate(Sum(F('amount')))
+    totmoney = curuser_collect['amount__sum'] - curuser_debt['amount__sum']
     # TODO - Display all Bill by month in new Tab
     # TODO - Display all Payments for each user in a new Tab
-
-    curuser_debt= str(round((cur_roommate.getTotDebt()),2))
-    curuser_collect= str(round((cur_roommate.getTotCollections()),2))
 
     numroommates= 0
 
@@ -101,13 +94,6 @@ def billinghome(request):
 
     #
     all_payments    = userPayment.objects.filter(house_id=1)
-    print("House id= " + str(house.id))
-    house_payments  = []
-    print("Print Roommate Names:")
-    for i in my_roommates:
-        print(i)
-        for j in all_payments:
-            house_payments.append(j)
 
     print("\n-------------------\n      END \n-------------------\n END BILLING HOME \n-------------------\n\n")
     context = {
@@ -117,15 +103,14 @@ def billinghome(request):
         'all_bills'         :all_bills,
         'last5bills'        :last5bills,
         'all_payments'      :all_payments,
-        'curuser_debt'      :curuser_debt,
         'numroommates'      :numroommates,
         'roommateowes'      :roommateowes,
         'roommatepaid'      :roommatepaid,
         'my_roommates'      :my_roommates,
         'roommates_iowe'    :roommates_iowe,
-        'curuser_collect'   :curuser_collect,
-        'my_roommatespaid'  :my_roommatespaid,
         'roommate_collections':roommate_collections,
+        'curuser_debt'      :curuser_debt['amount__sum'],
+        'curuser_collect'   :curuser_collect['amount__sum'],
     }
     return render(request, 'billing/billinghome.html', context)
 @login_required(login_url="/login/")
