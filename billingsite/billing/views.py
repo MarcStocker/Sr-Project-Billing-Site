@@ -76,9 +76,15 @@ def billinghome(request):
 
     # DONE - Total Collections of Current User
     curuser_collect= PaymentRequest.objects.filter(requester=cur_roommate).exclude(requestee=cur_roommate).aggregate(Sum(F('amount'))).get('amount__sum', 0.00)
+    if str(curuser_collect) == "None":
+        curuser_collect = 0
     # DONE - Total Debt Of Current User
     curuser_debt = PaymentRequest.objects.filter(requestee=cur_roommate).exclude(requester=cur_roommate).aggregate(Sum(F('amount'))).get('amount__sum', 0.00)
+    if str(curuser_debt) == "None":
+        curuser_debt = 0
     curuser_payments= userPayment.objects.filter(payer=cur_roommate).exclude(payee=cur_roommate).aggregate(Sum(F('amount'))).get('amount__sum', 0.00)
+    if str(curuser_payments) == "None":
+        curuser_payments = 0
     curuser_debt = curuser_payments - curuser_debt
     totmoney = curuser_collect - curuser_debt
     # TODO - Display all Bill by month in new Tab
