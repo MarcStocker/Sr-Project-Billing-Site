@@ -8,9 +8,9 @@ import smtplib
 import time
 
 sendemails   = True
-sendmailtrue = True
+sendmailtrue = False
 
-url = "http://bills.dynu.net/utilities/"
+url = "http://homebase.dynu.net/utilities/"
 
 def bill_directory_path(instance, filename):
     billname = str(instance.utilType.name.replace(' ','_'))
@@ -45,9 +45,13 @@ class Roommate(models.Model):
                         db_constraint=False
                         )
     isactive    = models.BooleanField(default=True)
-    totalowed   = models.DecimalField(max_digits=6, decimal_places=2, default=0)
-    totalpaid   = models.DecimalField(max_digits=6, decimal_places=2, default=0)
-    percentowed = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    # totalowed   = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
+    # totalpaid   = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
+    # percentowed = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
+    # totalowed   = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
+    # totaldebt   = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
+    # totalpaid   = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
+    # totalremaining=models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
 
     def __str__(self):
         return "#" + str(self.id) + " - " + str(self.name)
@@ -121,24 +125,27 @@ class Roommate(models.Model):
         # Retrieve all Requests owed to cur user
         debt=self.getTotDebt()
         paid=self.getTotPaid()
-
-        leftover=debt-paid
+        print("Printing Total Left...")
+        print("debt = " + str(debt))
+        print("paid = " + str(paid))
+        leftover=debt+paid
+        print("Leftover = " + str(leftover))
         return int(leftover)
     def getTotCollections(self):
         all_payments = userPayment.objects.all()
         all_requests = PaymentRequest.objects.all()
 
         # Retrieve all Requests owed to cur user
-        collections = 0
+        collections = round(0, 2)
         for i in all_requests:
             if i.requester == self and i.requestee != self:
-                collections+=i.amount
+                collections+=round(i.amount, 2)
 
         # Retrieve all Payments made to cur user
-        paid=0
+        paid = round(0, 2)
         for i in all_payments:
             if i.payee == self:
-                paid+=i.amount
+                paid+=round(i.amount, 2)
 
         totcollections = collections - paid
         return int(totcollections)
@@ -151,6 +158,7 @@ class Roommate(models.Model):
         print("__________________________________________________________________~")
         print("Sending message...")
         if sendemails == True:
+            time.sleep(.2)
             myemailgeek  = "marcsageek@gmail.com"
             passwordgeek = "usmtfzbmbyudsvcr"
             print("  creating server")
@@ -183,7 +191,7 @@ class UtilityBill(models.Model):
     dueDate         = models.DateField(null=True, blank=True)
     statementDate   = models.DateField(null=True, blank=True)
     datepaid        = models.DateField(null=True, blank=True, default="")
-    billdoc         = models.FileField(default=" ", upload_to=bill_directory_path, blank=True, null=True, max_length=144)
+    billdoc         = models.FileField(default=" ", upload_to=bill_directory_path,max_length=144, null=True, blank=True)
     owner           = models.ForeignKey(
                                 'Roommate', null=False,
                                 blank=False, default="",
@@ -220,7 +228,6 @@ class UtilityBill(models.Model):
 
         # Create a new PaymentRequest for each Roommate
         for i in my_roommates:
-            time.sleep(.3)
             print("Creating Payment Request for: " + i.name)
             paymentReq = PaymentRequest.objects.create(
                                     date    = self.statementDate,
@@ -230,16 +237,18 @@ class UtilityBill(models.Model):
                                     UtilBill    = self,
             )
             print("Before paymentReq.save()")
-            time.sleep(.2)
             paymentReq.save()
             print("After paymentReq.save()")
-            time.sleep(.2)
             print("Before paymentReq.email()")
             paymentReq.email()
             print("After paymentReq.email()")
             print("Request Saved...")
             print("Success!! Email has been sent to : " + i.name + " at: [" + i.user.email + "]\n")
         print("\n\nEND createRequests()")
+    def mysave(self, user, house, *args, **kwargs):
+        self.owner = user
+        self.house = house
+        super(UtilityBill, self).save(*args, **kwargs)
 class PaymentRequest(models.Model):
     class Meta:
         ordering =('id', 'date')

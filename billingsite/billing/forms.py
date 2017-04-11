@@ -50,19 +50,43 @@ class addNewBillForm(forms.ModelForm):
     datepaid = forms.DateField(
         label="Date Paid",
         help_text="Date the Bill was paid",
-        widget=DateInput()
+        widget=DateInput(),
+        required=False,
     )
     billdoc = forms.FileField(
         label="Bill Document",
-        help_text="Upload a PDF or Image of your bill"
+        help_text="Upload a PDF or Image of your bill",
+        required=False,
     )
     class Meta:
         model = UtilityBill
         fields= [
-            'utilType','owner','amount',
+            'utilType','amount', 'billdoc',
             'statementDate','dueDate','datepaid',
-            'house','billdoc'
         ]
+    def setVars(self, roommate, house, commit=True):
+        thisbill = UtilityBill()
+        thisbill.utilType = self.cleaned_data['utilType']
+        thisbill.amount = self.cleaned_data['amount']
+        thisbill.statementDate = self.cleaned_data['statementDate']
+        thisbill.dueDate = self.cleaned_data['dueDate']
+        if self.cleaned_data['datepaid'] != "":
+            thisbill.datepaid = self.cleaned_data['datepaid']
+        else:
+            thisbill.datepaid = ""
+        thisbill.datepaid = self.cleaned_data['datepaid']
+        if self.cleaned_data['billdoc'] != "":
+            thisbill.billdoc = self.cleaned_data['billdoc']
+        else:
+            thisbill.billdoc = null
+
+        thisbill.house = house
+        thisbill.owner = roommate
+        thisbill.save()
+        thisbill.createRequests()
+
+
+
 
 
 class addNewBillPaymentForm(forms.ModelForm):

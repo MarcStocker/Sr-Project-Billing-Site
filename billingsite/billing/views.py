@@ -33,7 +33,7 @@ def billinghome(request):
 
     cur_roommate = Roommate.objects.get(user=request.user.id)
     house        = cur_roommate.house
-    my_roommates = Roommate.objects.filter(house_id=house.id)
+    my_roommates = Roommate.objects.filter(house_id=house.id).order_by('id')
 
     # TODO - Total Owed Overall - # DONE
     my_roommatespaid={}
@@ -79,13 +79,15 @@ def billinghome(request):
 
 
     # TODO - Total Collections of Current User
-    curuser_collect=cur_roommate.getTotCollections()
+    curuser_collect= round(cur_roommate.getTotCollections(), 2)
     # TODO - Total Debt Of Current User
-    curuser_debt=cur_roommate.getTotDebt()
-    totmoney = curuser_collect - curuser_debt
+    curuser_debt= round(cur_roommate.getTotDebt(), 2)
+    totmoney = str(round((curuser_collect - curuser_debt), 2))
     # TODO - Display all Bill by month in new Tab
     # TODO - Display all Payments for each user in a new Tab
 
+    curuser_debt= str(round((cur_roommate.getTotDebt()),2))
+    curuser_collect= str(round((cur_roommate.getTotCollections()),2))
 
     numroommates= 0
 
@@ -101,7 +103,9 @@ def billinghome(request):
     all_payments    = userPayment.objects.filter(house_id=1)
     print("House id= " + str(house.id))
     house_payments  = []
+    print("Print Roommate Names:")
     for i in my_roommates:
+        print(i)
         for j in all_payments:
             house_payments.append(j)
 
@@ -124,15 +128,15 @@ def billinghome(request):
         'roommate_collections':roommate_collections,
     }
     return render(request, 'billing/billinghome.html', context)
+@login_required(login_url="/login/")
 def addbill(request):
+    cur_roommate = Roommate.objects.get(user=request.user.id)
+    house        = cur_roommate.house
+    my_roommates = Roommate.objects.filter(house_id=house.id)
     if request.method=='POST':
         form = addNewBillForm(request.POST, request.FILES)
         if form.is_valid():
-            j = form.save(request)
-            print("Before Save")
-            j.save()
-            j.createRequests()
-            print("After Save")
+            form.setVars(cur_roommate, house)
 
             return HttpResponseRedirect('/utilities/admintablepage/')
     else:
@@ -144,6 +148,7 @@ def addbill(request):
         'form':form,
     }
     return render(request, 'billing/addBill.html', context)
+@login_required(login_url="/login/")
 def addbilltype(request):
     if request.method=='POST':
         form = addUtilityTypeForm(request.POST)
@@ -160,6 +165,7 @@ def addbilltype(request):
         'form'      :form,
     }
     return render(request, 'billing/addBill.html', context)
+@login_required(login_url="/login/")
 def addbillpayment(request):
     if request.method=='POST':
         form = addNewBillPaymentForm(request.POST, request.FILES)
@@ -176,6 +182,7 @@ def addbillpayment(request):
         'form'      :form,
     }
     return render(request, 'billing/addBillPayment.html', context)
+@login_required(login_url="/login/")
 def adduserpayment(request):
     if request.method=='POST':
         form = addNewUserPaymentForm(request.POST, request.FILES)
@@ -192,6 +199,7 @@ def adduserpayment(request):
         'form'      :form,
     }
     return render(request, 'billing/addUserPayment.html', context)
+@login_required(login_url="/login/")
 def addlease(request):
     if request.method=='POST':
         form = addLeaseForm(request.POST)
@@ -208,6 +216,7 @@ def addlease(request):
         'form'      :form,
     }
     return render(request, 'billing/addLease.html', context)
+@login_required(login_url="/login/")
 def addroommate(request):
     if request.method=='POST':
         form = addRoommateForm(request.POST)
@@ -224,6 +233,7 @@ def addroommate(request):
         'form'      :form,
     }
     return render(request, 'billing/addRoommate.html', context)
+@login_required(login_url="/login/")
 def admintablepage(request):
     all_users           = User.objects.all()
     all_leases          = Lease.objects.all()
@@ -247,6 +257,7 @@ def admintablepage(request):
         'all_PaymentRequests':all_PaymentRequests,
     }
     return render(request, 'billingsite/adminTablePage.html', context)
+@login_required(login_url="/login/")
 def test(request):
     current_user = request.user
     print("")
@@ -258,6 +269,7 @@ def test(request):
     print("")
 
     return HttpResponseRedirect("/utilities/")
+@login_required(login_url="/login/")
 def emailusers(request):
     if request.method=='POST':
         form = sendEmailForm(request.POST)
@@ -290,8 +302,7 @@ def emailusers(request):
         'form'      :form,
     }
     return render(request, 'billing/sendemail.html', context)
-
-
+@login_required(login_url="/login/")
 def deleteallbills(request):
     print("Deleting all Requests, Bills, and payments")
     print("   Deleting PaymentRequests...")
@@ -311,7 +322,7 @@ def deleteallbills(request):
         time.sleep(.1)
         i.delete()
     return HttpResponseRedirect("/utilities/admintablepage")
-
+@login_required(login_url="/login/")
 def deleterequests(request):
     print("\n\nDeleting lastest Requests, and Bill associated with it.\n")
     last_bill = UtilityBill.objects.all().reverse()[0]

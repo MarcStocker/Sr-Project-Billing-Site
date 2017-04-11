@@ -100,12 +100,13 @@
             <div role="tabpanel" class="tab-pane fade in active .panelcust" id="overview">
                <h2><u>Percentage of bills paid by roommates</u></h2>
 
-               <!-- Payment Graphs -->
+               <!-- Payment Circular Graphs -->
                <div class="row">
-                  {% for key, values in my_roommatespaid.items %}
+                  {% for roommate in my_roommates %}
                   <div class="col-xs-2 col-md-2 ">
-                     <h3>{{ key }}</h3>
-                     <div class="test-circle" data-percent="{{ values }}" title="Percent Paid for {{ key }}" description="Percent Paid" data-dimension="150"></div>
+                     <h3 style="position: absolute; top: -22px; " align="center">{{ roommate.name }}</h3>
+                     <div class="test-circle" data-percent="{{ roommate.getPercentPaid }}" title="Percent Paid for {{ roommate.name }}" description="Percent Paid" data-dimension="150"></div>
+                     <!-- <div class="test-circle" data-percent="{{ values }}" title="Percent Paid for {{ key }}" description="Percent Paid" data-dimension="150"></div> -->
                   </div>
                   {% endfor %}
                </div>

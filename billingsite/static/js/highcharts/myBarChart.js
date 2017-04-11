@@ -9,7 +9,7 @@ Highcharts.chart('graphDiv', {
         text: ''
     },
     yAxis: {
-        allowDecimals: false,
+        allowDecimals: true,
         title: {
             text: '$ Dollars $'
         }
