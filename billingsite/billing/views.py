@@ -75,10 +75,12 @@ def billinghome(request):
 
 
     # DONE - Total Collections of Current User
-    curuser_collect= PaymentRequest.objects.filter(requester=cur_roommate).exclude(requestee=cur_roommate).aggregate(Sum(F('amount')))
+    curuser_collect= PaymentRequest.objects.filter(requester=cur_roommate).exclude(requestee=cur_roommate).aggregate(Sum(F('amount'))).get('amount__sum', 0.00)
     # DONE - Total Debt Of Current User
-    curuser_debt = PaymentRequest.objects.filter(requestee=cur_roommate).exclude(requester=cur_roommate).aggregate(Sum(F('amount')))
-    totmoney = curuser_collect['amount__sum'] - curuser_debt['amount__sum']
+    curuser_debt = PaymentRequest.objects.filter(requestee=cur_roommate).exclude(requester=cur_roommate).aggregate(Sum(F('amount'))).get('amount__sum', 0.00)
+    curuser_payments= userPayment.objects.filter(payer=cur_roommate).exclude(payee=cur_roommate).aggregate(Sum(F('amount'))).get('amount__sum', 0.00)
+    curuser_debt = curuser_payments - curuser_debt
+    totmoney = curuser_collect - curuser_debt
     # TODO - Display all Bill by month in new Tab
     # TODO - Display all Payments for each user in a new Tab
 
@@ -102,15 +104,15 @@ def billinghome(request):
         'totmoney'          :totmoney,
         'all_bills'         :all_bills,
         'last5bills'        :last5bills,
+        'curuser_debt'      :curuser_debt,
         'all_payments'      :all_payments,
         'numroommates'      :numroommates,
         'roommateowes'      :roommateowes,
         'roommatepaid'      :roommatepaid,
         'my_roommates'      :my_roommates,
         'roommates_iowe'    :roommates_iowe,
+        'curuser_collect'   :curuser_collect,
         'roommate_collections':roommate_collections,
-        'curuser_debt'      :curuser_debt['amount__sum'],
-        'curuser_collect'   :curuser_collect['amount__sum'],
     }
     return render(request, 'billing/billinghome.html', context)
 @login_required(login_url="/login/")

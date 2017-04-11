@@ -109,11 +109,11 @@ class Roommate(models.Model):
     def getTotRemaining(self):
         debt=self.getTotDebt()
         paid=self.getTotPaid()
-        # print("Printing Total Left...")
-        # print("debt = " + str(debt))
-        # print("paid = " + str(paid))
+        print("Printing Total Left...")
+        print("debt = " + str(debt))
+        print("paid = " + str(paid))
         leftover=debt+paid
-        # print("Leftover = " + str(leftover))
+        print("Leftover = " + str(leftover))
         return leftover
     def getTotCollections(self):
         all_payments = userPayment.objects.all()

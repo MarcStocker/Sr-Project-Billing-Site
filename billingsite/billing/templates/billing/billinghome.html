@@ -129,10 +129,10 @@
                            <td>{{  roommate.name }}</td>
                            <td>${{ roommate.getTotOwed }}</td>
                            <td>${{ roommate.getTotPaid }}</td>
-                           {% if roommate.getTotRemaining <= 0 %}
-                           <td style="color:#00d502"><b>${{ roommate.getTotRemaining }}</b></td>
-                           {% elif roommate.getTotRemaining > 0 %}
-                           <td style="color:#d61610"><b>${{ roommate.getTotRemaining }}</b></td>
+                           {% if roommate.getTotDebt <= 0.00 %}
+                           <td style="color:#00d502"><b>${{ roommate.getTotDebt }}</b></td>
+                           {% elif roommate.getTotDebt > 0 %}
+                           <td style="color:#d61610"><b>${{ roommate.getTotDebt }}</b></td>
                            {% endif %}
                         </tr>
                         {% endfor %}
@@ -153,7 +153,7 @@
                         {% for roommate in my_roommates %}
                         <tr>
                            <th>{{  roommate.name }}</th>
-                           <td>{{ roommate.getTotRemaining }}</td>
+                           <td>{{ roommate.getTotDebt }}</td>
                         </tr>
                         {% endfor %}
                      </tbody>
