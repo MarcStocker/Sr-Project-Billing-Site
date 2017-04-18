@@ -21,11 +21,12 @@ import smtplib
 
 # Create your views here.
 @login_required(login_url="/login/")
+
 def billinghome(request):
     if not Roommate.objects.filter(user_id=request.user.id):
         print("User is not associated with a house")
-        context = { 'page_name':"Utilities - Roommate Homebase"}
-        return render(request, 'billing/billinghome.html', context)
+        context = { 'page_name':"Join a House"}
+        return render(request, 'billing/joincreatehouse.html', context)
 
     print("\n\n\n\n==========================================================")
     print("def billinghome(request)")
@@ -86,7 +87,7 @@ def billinghome(request):
     if str(curuser_payments) == "None":
         curuser_payments = 0
     curuser_debt = curuser_payments - curuser_debt
-    totmoney = curuser_collect - curuser_debt
+    totmoney = curuser_collect - -curuser_debt
     # TODO - Display all Bill by month in new Tab
     # TODO - Display all Payments for each user in a new Tab
 
@@ -185,11 +186,31 @@ def adduserpayment(request):
             return HttpResponseRedirect('/utilities/admintablepage/')
     else:
         form = addNewUserPaymentForm()
+        cur_roommate = Roommate.objects.get(user=request.user.id)
+        house        = cur_roommate.house
+        my_roommates = Roommate.objects.filter(house_id=house.id).order_by('id')
+        roommates_iowe       = {}
+        for i in my_roommates:
+            if i.id != cur_roommate.id:
+                # Code for Roommates_iowe
+                all_requests = PaymentRequest.objects.filter(requester_id=i.id, requestee_id=cur_roommate.id)
+                userpayments = userPayment.objects.filter(payee_id=i.id, payer_id=cur_roommate.id)
+                temptotbill = 0
+                temptotpay   = 0
+                for bill in all_requests:
+                    temptotbill+=bill.amount
+                for payment in userpayments:
+                    temptotpay+=payment.amount
+                temptotstillowed = temptotbill - temptotpay
+                if temptotstillowed >= 1:
+                    roommates_iowe[i.name] = [temptotbill, temptotpay, temptotstillowed]
     context = {
-        'page_name' :"Add User Payment - Roommate Homebase",
-        'sitename'  :"Roommate Homebase",
-        'page_name' :"Add a User Payment",
-        'form'      :form,
+        'page_name'     :"Add User Payment - Roommate Homebase",
+        'sitename'      :"Roommate Homebase",
+        'page_name'     :"Add a User Payment",
+        'my_roommates'  :my_roommates,
+        'roommates_iowe':roommates_iowe ,
+        'form'          :form,
     }
     return render(request, 'billing/addUserPayment.html', context)
 @login_required(login_url="/login/")
@@ -199,7 +220,7 @@ def addlease(request):
         if form.is_valid():
             j = form.save(request)
             j.save()
-            return HttpResponseRedirect('/utilities/')
+            return HttpResponseRedirect('/addroommate/')
     else:
         form = addLeaseForm()
     context = {
@@ -220,10 +241,9 @@ def addroommate(request):
     else:
         form = addRoommateForm()
     context = {
-        'page_name' :"Add Roommate - Roommate Homebase",
-        'sitename'  :"Roommate Homebase",
-        'page_name' :"Add a Roommate",
-        'form'      :form,
+        'page_name'     :"Add Roommate - Roommate Homebase",
+        'sitename'      :"Roommate Homebase",
+        'form'          :form,
     }
     return render(request, 'billing/addRoommate.html', context)
 @login_required(login_url="/login/")

@@ -96,14 +96,14 @@
             </li>
          </ul>
          <!-- END Tab Selection ul -->
-         <div class="tab-content"> <!-- BEGIN Tab Panes Div -->
+         <div class="tab-content" style="position: relative; left: 22px;"> <!-- BEGIN Tab Panes Div -->
             <div role="tabpanel" class="tab-pane fade in active .panelcust" id="overview">
                <h2><u>Percentage of bills paid by roommates</u></h2>
 
                <!-- Payment Circular Graphs -->
                <div class="row">
                   {% for roommate in my_roommates %}
-                  <div class="col-xs-2 col-md-2 ">
+                  <div class="col-xs-2 col-md-2">
                      <h3 style="position: absolute; top: -22px; " align="center">{{ roommate.name }}</h3>
                      <div class="test-circle" data-percent="{{ roommate.getPercentPaid }}" title="Percent Paid for {{ roommate.name }}" description="Percent Paid" data-dimension="150"></div>
                      <!-- <div class="test-circle" data-percent="{{ values }}" title="Percent Paid for {{ key }}" description="Percent Paid" data-dimension="150"></div> -->
@@ -112,9 +112,9 @@
                </div>
 
                <!-- Overview Table -->
-               <div class="panel panel-default panel-inverted col-xs-4 col-md-4"  style="background-color:#252424">
+               <div class="panel panel-default panel-inverted col-xs-4 col-md-4"  style="background-color:#252424; border-color:#252424;">
                   <h2>Payment Overview</h2>
-                  <table class="table table-inverted table-bordered table-striped table-hover background-color:#595959">
+                  <table class="table table-inverted table-hover background-color:#595959">
                      <thead>
                         <tr>
                            <th>Name</th>
@@ -163,9 +163,9 @@
 
 
                <!-- BEGIN Last 5 Bills -->
-               <div class="panel panel-default panel-invert col-xs-6 col-md-6 col-sm-offset-1" style="background-color:#252424">
+               <div class="panel panel-default panel-invert col-xs-6 col-md-6 col-sm-offset-1" style="background-color:#252424; border-color:#252424;">
                   <h2>Last 5 Utility Bills</h2>
-                  <table class="table table-inverted table-bordered table-striped table-hover background-color:#595959">
+                  <table class="table table-inverted table-hover background-color:#595959">
                      <thead>
                         <tr>
                            <th>Utility</th>
@@ -195,7 +195,7 @@
                <script src="https://code.highcharts.com/modules/exporting.js"></script>
 
                <div class="col-xs-12 col-md-12 col-md-left">
-                  <div id="graphDiv" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                  <div id="graphDiv" style="min-width: 310px; height: 400px; margin: 0 auto; position: relative; right: 15px"></div>
                </div>
 
                <script src="{% static "/js/highcharts/myBarChart.js" %}"></script>

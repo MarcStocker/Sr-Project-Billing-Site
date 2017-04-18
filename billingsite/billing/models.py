@@ -46,13 +46,21 @@ class Roommate(models.Model):
                         db_constraint=False
                         )
     isactive    = models.BooleanField(default=True)
-    # totalowed   = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
-    # totalpaid   = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
-    # percentowed = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
-    # totalowed   = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
-    # totaldebt   = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
-    # totalpaid   = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
-    # totalremaining=models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
+    utiltotalowed       = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
+    utiltotalpaid       = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
+    utilpercentowed     = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
+    utiltotalowed       = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
+    utiltotaldebt       = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
+    utiltotalpaid       = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
+    utiltotalremaining  = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
+
+    ioutotalowed        = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
+    ioutotalpaid        = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
+    ioutotalowed        = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
+    ioutotaldebt        = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
+    ioutotalpaid        = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
+    ioutotalremaining   = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
+
 
     def __str__(self):
         return "#" + str(self.id) + " - " + str(self.name)

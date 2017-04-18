@@ -98,22 +98,29 @@
 
 
 <body>
-   <!-- Header Section -->
-   {% include "billingsite/includes/header.html" %}
-   <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  <div id=wrapper>
+    <!-- Header Section -->
+    <div id=header>
+      {% include "billingsite/includes/header.html" %}
+    </div>
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-   <!-- Individual App Body Section -->
-   {% block content %}{% endblock %}
-   <!-- ~~  END  INDIVIDUAL APP BODY (CURRENT PAGE) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!-- Individual App Body Section -->
+    <div id=content>
+      {% block content %}{% endblock %}
+    </div>
+    <!-- ~~  END  INDIVIDUAL APP BODY (CURRENT PAGE) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-   <!-- Footer Section -->
-   {% include "billingsite/includes/footer.html" %}
-   <!-- ~~  END FOOTER ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!-- Footer Section -->
+    <div id=footer>
+      {% include "billingsite/includes/footer.html" %}
+    </div>
+    <!-- ~~  END FOOTER ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-   <!-- JavaScript Seciton -->
-   <!-- Site JS - Must be located at bottom, otherwise will not load -->
-   <!-- Placed at the end of the document so the pages load faster -->
-   {% include "billingsite/includes/js.html" %}
-   <!-- ~~  END JAVASCRIPT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-
+    <!-- JavaScript Seciton -->
+    <!-- Site JS - Must be located at bottom, otherwise will not load -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    {% include "billingsite/includes/js.html" %}
+    <!-- ~~  END JAVASCRIPT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+  </div>
 </body>

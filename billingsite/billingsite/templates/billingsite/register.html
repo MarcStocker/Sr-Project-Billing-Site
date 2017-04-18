@@ -9,21 +9,21 @@
          <div class="row" style="text-align:center; background-color:#004360; outline-color:#000">
             <div class="col-lg-12 col-lg-centered">
                <div class="col-lg-7 col-lg-offset-3 row">
-                  <form method="post" action="/register/">
+                  <form method="post" action="/home/register/">
                      {% csrf_token %}
                      <div class="col-lg-12 row col log-in-form">
                         <h4 class="text-center">Register a New Account</h4>
                         {{ form.errors }}
-                        <label> {{ form.username.label_tag }}
+                        <label> {{ form.username.label_tag }}</br>
                            {{ form.username }}
                         </label>
-                        <label> {{ form.email.label_tag }}
+                        <label> {{ form.email.label_tag }}</br>
                            {{ form.email }}
                         </label>
-                        <label> {{ form.password1.label_tag }}
+                        <label> {{ form.password1.label_tag }}</br>
                            {{ form.password1 }}
                         </label>
-                        <label> {{ form.password2.label_tag }}
+                        <label> {{ form.password2.label_tag }}</br>
                            {{ form.password2 }}
                         </label>
                         <input type="submit" class="btn btn-block btn-success" value="Register"></input>

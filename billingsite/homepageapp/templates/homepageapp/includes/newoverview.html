@@ -1,0 +1,53 @@
+
+            <!-- All Roommates Payment Overview -->
+            <div class="panel panel-default panel-inverted col-xs-12 col-md-12"  style="background-color:#252424">
+               <h2>Payment Overview</h2>
+               <table class="table table-inverted">
+                  <thead>
+                     <tr>
+                        <th>Name</th>
+                        <th>Owed</th>
+                        <th>Paid</th>
+                        <th>Total Left</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     {% for roommate in my_roommates %}
+                     <tr>
+                        <td>{{ roommate.name }}</td>
+                        <td>${{ roommate.getTotDebt }}</td>
+                        <td>${{ roommate.getTotPaid }}</td>
+                        {% if roommate.getTotRemaining <= 0 %}
+                        <td style="color:#00d502"><b>${{ roommate.getTotRemaining }}</b></td>
+                        {% elif roommate.getTotRemaining > 0 %}
+                        <td style="color:#d61610"><b>${{ roommate.getTotRemaining }}</b></td>
+                        {% endif %}
+                     </tr>
+                     {% endfor %}
+                  </tbody>
+               </table>
+            </div>
+            <!-- Last 5 Utility Bills -->
+            <div class="panel panel-default panel-inverted col-xs-12 col-md-12" style="background-color:#252424">
+               <h2>Last 5 Utility Bills</h2>
+               <table class="table table-inverted">
+                  <thead>
+                     <tr>
+                        <th>Utility</th>
+                        <th>Amount</th>
+                        <th>Date Due</th>
+                        <th>Owner</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     {% for bill in last5bills %}
+                     <tr>
+                        <td>{{ bill.utilType.name }}</td>
+                        <td>${{ bill.amount }}</td>
+                        <td>{{ bill.dueDate }}</td>
+                        <td>{{ bill.owner.name }}</td>
+                     </tr>
+                     {% endfor %}
+                  </tbody>
+               </table>
+            </div>
