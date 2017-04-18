@@ -9,7 +9,7 @@ import smtplib
 import time
 
 sendemails   = True
-sendmailtrue = False
+sendmailtrue = True
 
 url = "http://homebase.dynu.net/utilities/"
 
@@ -274,17 +274,18 @@ class PaymentRequest(models.Model):
     def __str__(self):
         return "ID: " + str(self.id) + " " + self.requester.name + " request payment of: $" + str(self.amount) + " From: " + self.requestee.name + "  - Bill ID: " + str(self.UtilBill.id)
     def email(self):
-        line1       = "New Bill: $" + str(self.amount) + " > " + str(self.requester.name) + "\n\n\n"
+        line0       = "New Bill: $" + str(self.amount) + " > " + str(self.requester.name) + "\n\n\n"
+        line1       = "New Bill: $" + str(round(self.amount,2)) + " > " + str(self.requester.name) + "\n\n\n"
         line2       = "Hello "+self.requestee.name+"!!\n\n"
                     #  You have a new bill payment request from 'Roommate' for PG&E.
         line3       = "You have a new bill payment request from '" + self.requester.name + "' for " + self.UtilBill.utilType.name + ".\n"
                     #  The amount requested is $##.##
-        line4       = "The amount requested is $" + str(self.amount) + ".\n"
+        line4       = "The amount requested is $" + str(round(self.amount,2)) + ".\n"
         line5       = "Click the link and sign in to view your bills (" + url + ")"
         line6       = "\n\nYou currently have an unpaid total of $" + str(self.requestee.getTotRemaining()) + "."
         line7       = "\n\n --The Roommate Homebase Team"
 
-        message     = line1 + line2 + line3 + line4 + line5 + line6 + line7
+        message     = line0 + line1 + line2 + line3 + line4 + line5 + line6 + line7
         # message     = "Hello "+self.requestee.name+"!!\nYou have a new bill payment request from '"+self.requester.name+"' for "+self.UtilBill.utilType.name+".\nYou will receive another email reminder in 2 weeks regarding this payment"
         emailfrom   = "NewBills"
         self.requestee.emailuser(message,emailfrom)

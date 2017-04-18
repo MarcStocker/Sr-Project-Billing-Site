@@ -14,6 +14,14 @@ Highcharts.chart('graphDiv', {
             text: '$ Dollars $'
         }
     },
+    plotOptions: {
+      column: {
+            dataLabels: {
+                enabled: true
+            },
+            enableMouseTracking: false
+        }
+    },
     tooltip: {
         formatter: function () {
             return '<b>' + this.series.name + '</b><br/>' +
