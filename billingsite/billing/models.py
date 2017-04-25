@@ -114,6 +114,10 @@ class Roommate(models.Model):
         else:
             return paid
 
+    def iouGetOwedTo(self, owedto):
+        return 0
+
+
     def getTotRemaining(self):
         debt=self.getTotDebt()
         paid=self.getTotPaid()

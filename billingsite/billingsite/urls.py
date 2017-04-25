@@ -35,7 +35,7 @@ urlpatterns = [
 
     # Website App URLS
     url(r'^utilities/', include('billing.urls')),
-    # url(r'^ious/', include('iou.urls')),
+    url(r'^ious/', include('iou.urls')),
     # url(r'^chores/', include('chores.urls')),
 
 

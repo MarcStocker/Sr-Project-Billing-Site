@@ -3,6 +3,27 @@
 */
 
 
+.progressbarsOwed {
+   font-size   :18px;
+   color       :#fff;
+   position    :relative;
+   text-align  :right;
+   right       :5px;
+}
+.progressbarsOwedTo {
+   font-size   :18px;
+   color       :#fff;
+   position    :relative;
+   text-align  :left;
+   left       :5px;
+}
+.progressName{
+   top         : 3px;
+}
+.progressAmount {
+   bottom      : 7px;
+}
+
 td#owed {
   background: #f2c602;
   table-color-scale: 50%;

@@ -11,9 +11,22 @@ Highcharts.chart('userpaymentOverview', {
     yAxis: {
         allowDecimals: true,
         title: {
-            text: '$ Dollars $'
+            text: 'Total Owed'
         }
     },
+    plotOptions: {
+      column: {
+            // borderWidth = 0,
+            dataLabels: {
+                enabled: true,
+                format: '${point.y:.2f}',
+            },
+            enableMouseTracking: false
+        }
+    },
+    legend: {
+      enabled: false
+   },
     tooltip: {
         formatter: function () {
             return '<b>' + this.series.name + '</b><br/>' +
