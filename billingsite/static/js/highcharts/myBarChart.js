@@ -31,7 +31,7 @@ Highcharts.chart('graphDiv', {
           style : {fontSize: '30px'},
           enabled: true
         },
-        enableMouseTracking: true
+        enableMouseTracking: false
       }
     },
     legend: {

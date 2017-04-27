@@ -26,15 +26,12 @@
                </div>
                <!--Extra Graph to show current standing of roommates -->
                <script src="https://code.highcharts.com/highcharts.js"></script>
-               <!-- <script src="https://code.highcharts.com/js/themes/gray.js"></script> -->
-               <script src="{% static "/js/highcharts/dark-unica-neg.js" %}"></script>
                <script src="https://code.highcharts.com/modules/data.js"></script>
                <script src="https://code.highcharts.com/modules/exporting.js"></script>
-
+               <script src="{% static "/js/highcharts/dark-unica-neg.js" %}"></script>
                <div class="col-xs-12 col-md-12 col-md-left">
-                  <div id="userpaymentOverview" style="min-width: 310px; max-width: 1000px; height:   200px; margin: 0 auto;"></div>
+                  <div id="IoweOverview" style="min-width: 310px; max-width: 1000px; height:   200px; margin: 0 auto;"></div>
                </div>
-
                <script src="{% static "/js/highcharts/ioweOverview.js" %}"></script>
                {% else %}
                <hr />

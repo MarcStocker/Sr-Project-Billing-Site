@@ -2,6 +2,10 @@
  * Custom CSS file created by Marc Stocker
 */
 
+.highcharts-container {
+  width:100% !important;
+  height:100% !important;
+}
 
 .progressbarsOwed {
    font-size   :18px;

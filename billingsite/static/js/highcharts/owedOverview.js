@@ -33,7 +33,7 @@ Highcharts.chart('IamOwedGraph', {
                 format: '${point.y:.2f}',
                 style : {fontSize: '30px'},
             },
-            enableMouseTracking: true
+            enableMouseTracking: false
         }
     },
     legend: {
