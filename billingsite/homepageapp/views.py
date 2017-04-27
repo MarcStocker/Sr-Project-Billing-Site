@@ -70,3 +70,12 @@ def register(request):
         'page_name' :"Register - Roommate Homebase",
         }
         return render(request, 'billingsite/register.html', context)
+
+@login_required(login_url="/login/")
+def loggingin(request):
+    if request.user.is_authenticated:
+        print("nothing")
+        # TODO: Update User's last login time
+        return HttpResponseRedirect('/home/')
+    else:
+        return HttpResponseRedirect('/login/')

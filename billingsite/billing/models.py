@@ -4,19 +4,21 @@ from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.db.models import F, FloatField, Sum
 
-from datetime import datetime
+from datetime import datetime, date
 import smtplib
 import time
 
-sendemails   = True
-sendmailtrue = True
+sendemails   = False
+sendmailtrue = False
 
 url = "http://homebase.dynu.net/utilities/"
 
 def bill_directory_path(instance, filename):
     billname = str(instance.utilType.name.replace(' ','_'))
+    filetype = filename[-4:]
+    print("Filetype: " + filetype)
     print("\n\n\n\n Billname: " + billname)
-    return "uploads/bills/str(self.statementDate.date(time_string, '%Y'))/" + billname + '/' + "lease_id_" + str(instance.house.id) + billname + (str(instance.statementDate.strftime('%Y.%m.%d')))
+    return "uploads/bills/" + str(instance.statementDate.strftime('%Y'))+ "/" + billname + '/' + "lease_id_" + str(instance.house.id) + '_' + billname + '_' + (str(instance.statementDate.strftime('%Y.%m.%d'))) + (str(filetype))
 
 # Create your models here.
 class Lease(models.Model):
