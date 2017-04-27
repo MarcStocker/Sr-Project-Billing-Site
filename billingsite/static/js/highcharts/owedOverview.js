@@ -1,6 +1,6 @@
-Highcharts.chart('IoweOverview', {
+Highcharts.chart('IamOwedGraph', {
     data: {
-        table: 'ioweTable'
+        table: 'ImOwedTable'
     },
     chart: {
         type: 'column'
@@ -17,7 +17,7 @@ Highcharts.chart('IoweOverview', {
         labels: {
           style:{fontSize: '14px'},
           formatter: function() {
-            return '$-' + this.value;
+            return '$' + this.value;
           }
         },
         allowDecimals: true,
@@ -30,7 +30,7 @@ Highcharts.chart('IoweOverview', {
             // borderWidth = 0,
             dataLabels: {
                 enabled: true,
-                format: '$-{point.y:.2f}',
+                format: '${point.y:.2f}',
                 style : {fontSize: '30px'},
             },
             enableMouseTracking: true

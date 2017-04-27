@@ -146,7 +146,7 @@
                      <thead>
                         <tr>
                            <th></th>
-                           <th>Total Owed</th>
+                           <th>Total Owed To All Roommates</th>
                         </tr>
                      </thead>
                      <tbody>
@@ -187,18 +187,17 @@
                   </table>
                </div> <!-- END 5 Bills -->
 
-               <!--Extra Graph to show current standing of roommates -->
-               <script src="https://code.highcharts.com/highcharts.js"></script>
-               <!-- <script src="https://code.highcharts.com/js/themes/gray.js"></script> -->
-               <script src="{% static "/js/highcharts/dark-unica.js" %}"></script>
-               <script src="https://code.highcharts.com/modules/data.js"></script>
-               <script src="https://code.highcharts.com/modules/exporting.js"></script>
 
+               <!--Highcharts Graph - Extra Graph to show current standing of roommates -->
+              <script src="https://code.highcharts.com/highcharts.js"></script>
+              <script src="https://code.highcharts.com/modules/data.js"></script>
+              <script src="https://code.highcharts.com/modules/exporting.js"></script>
+              <script src="{% static "/js/highcharts/dark-unica-neg.js" %}"></script>
                <div class="col-xs-12 col-md-12 col-md-left">
                   <div id="graphDiv" style="min-width: 310px; height: 400px; margin: 0 auto; position: relative; right: 15px"></div>
                </div>
-
                <script src="{% static "/js/highcharts/myBarChart.js" %}"></script>
+
             </div> <!-- END First Tab -->
 
 
@@ -211,7 +210,7 @@
             <div role="tabpanel" class="tab-pane fade" id="debts">
                <h2>Debts: Money you Owe to Others.</h2>
                {% if roommates_iowe %}
-               <div class="panel panel-default panel-inverted col-xs-4 col-md-4" style="background-color:#252424; display:none">
+               <span style="display:none">
                   <table id="ioweTable" class="table table-inverted">
                      <thead>
                         <tr>
@@ -228,19 +227,15 @@
                         {% endfor %}
                      </tbody>
                   </table>
-               </div>
+               </span>
 
-               <!-- Highcharts graph for Money you owe roommates -->
-               <script src="https://code.highcharts.com/highcharts.js"></script>
-               <script src="{% static "/js/highcharts/dark-unica-neg.js" %}"></script>
-               <script src="https://code.highcharts.com/modules/data.js"></script>
-               <script src="https://code.highcharts.com/modules/exporting.js"></script>
 
+               <!-- Highcharts Graph - Debt - Money Owed to Roommates/Friends -->
                <div class="col-xs-12 col-md-12 col-md-left">
-                  <div id="userpaymentOverview" style="min-width: 500px; height: 350px; margin: 0 auto;"></div>
+                  <div id="IoweOverview" style="min-width: 500px; height: 350px; margin: 0 auto;"></div>
                </div>
+              <script src="{% static "/js/highcharts/ioweOverview.js" %}"></script>
 
-               <script src="{% static "/js/highcharts/ioweOverview.js" %}"></script>
                {% else %}
                <hr />
                <h1 style="text-align: center;"><mark style="background-color:#09a636; color:#450a6a;">You do not owe money to anyone for Utilities!</mark></h1>
@@ -252,44 +247,42 @@
 
             <!-- BEGIN 3rd Tab -->
             <div role="tabpanel" class="tab-pane fade" id="collections">
-               <h2>Collections: What others owe you.</h2>
-               {% if roommate_collections %}
-               <div class="panel panel-default panel-inverted col-xs-4 col-md-4" style="background-color:#252424">
-                  <h3>{{ key }}</h3>
-                  <table class="table table-inverted">
-                     <thead>
-                        <tr>
-                           <th>Total Owed To You</th>
-                        </tr>
-                     </thead>
-                     <tbody>
-                        {% for key, values in roommate_collections.items %}
-                        <tr>
-                           <th>{{ key }}</th>
-                           <td>${{ values.2 }}</td>
-                        </tr>
-                        {% endfor %}
-                     </tbody>
-                  </table>
-               </div>
-            </div>
-            <!-- Highcharts graph for Money you owe roommates -->
-            <script src="https://code.highcharts.com/highcharts.js"></script>
-            <script src="{% static "/js/highcharts/dark-unica-pos.js" %}"></script>
-            <script src="https://code.highcharts.com/modules/data.js"></script>
-            <script src="https://code.highcharts.com/modules/exporting.js"></script>
+              <h2>Collections: What others owe you.</h2>
+              {% if roommate_collections %}
+              <span style="display:none">
+                <h3>{{ key }}</h3>
+                <table id="ImOwedTable" class="table table-inverted">
+                  <thead>
+                    <tr>
+                      <th>Total Owed To You</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for key, values in roommate_collections.items %}
+                    <tr>
+                      <th>{{ key }}</th>
+                      <td>{{ values.2 }}</td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </span>
 
-            <div class="col-xs-12 col-md-12 col-md-left">
-               <div id="userpaymentOverview" style="min-width: 500px; height: 350px; margin: 0 auto;"></div>
-            </div>
+              <!-- Highchats Graph - Collections - Money Owed to User -->
+              <script src="{% static "/js/highcharts/dark-unica.js" %}"></script>
+              <div class="col-xs-12 col-md-12 col-md-left">
+                <div id="IamOwedGraph" style="min-width: 500px; height: 350px; margin: 0 auto;"></div>
+              </div>
+              <script src="{% static "/js/highcharts/owedOverview.js" %}"></script>
 
-            <script src="{% static "/js/highcharts/ioweOverview.js" %}"></script>
-            {% else %}
-            <hr />
-            <h1 style="text-align: center;"><mark style="background-color:#09a636; color:#450a6a;">No Body Owes You Money for Utilities</mark></h1>
-            {% endif %}
+              {% else %}
+              <hr />
+              <h1 style="text-align: center;"><mark style="background-color:#09a636; color:#450a6a;">No Body Owes You Money for Utilities</mark></h1>
+              {% endif %}
+            </div> <!-- END 3rd Tab -->
 
 
+            <!-- BEGIN 4th Tab -->
             <div role="tabpanel" class="tab-pane fade" id="allbills">
                <h2>All Bills: Every utility bill Associated with your house.</h2>
                <div class="panel panel-default panel-inverted col-xs-12 col-md-12" style="background-color:#252424">
@@ -316,9 +309,10 @@
                      </tbody>
                   </table>
                </div>
-            </div>
+            </div> <!-- END 4th Tab -->
 
 
+            <!-- BEGIN 5th Tab -->
             <!-- TODO: Grab Payments from other houses -->
             <div role="tabpanel" class="tab-pane fade" id="allpayments">
                <h2>All Payments: Every Payment Made to a Roommate.</h2>
@@ -350,7 +344,7 @@
                      </tbody>
                   </table>
                </div>
-            </div>
+            </div> <!-- END 5th Tab -->
 
 
          </div> <!-- END Tab Panes Div -->
@@ -358,5 +352,5 @@
    </div> <!-- Size 12 Column END -->
 </div> <!-- END Dic Column -->
 {% endblock %}
+
 <script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
-</div>
