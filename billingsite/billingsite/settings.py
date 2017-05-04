@@ -26,9 +26,10 @@ SECRET_KEY = 'j+-)%zn3#^jm1kc-f*u$y5ko(%a(vpugfdmdgi*@t#u4$1iun+'
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    'test',
 ]
 
-LOGIN_REDIRECT_URL = '/logginin/'
+LOGIN_REDIRECT_URL = '/loggin/'
 
 # Application definition
 

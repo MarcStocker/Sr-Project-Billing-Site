@@ -77,11 +77,12 @@ def billinghome(request):
 
     # DONE - Total Collections of Current User
     curuser_collect= PaymentRequest.objects.filter(requester=cur_roommate).exclude(requestee=cur_roommate).aggregate(Sum(F('amount'))).get('amount__sum', 0.00)
-    curuser_collect-= userPayment.objects.filter(payee=cur_roommate).exclude(payer=cur_roommate).aggregate(Sum(F('amount'))).get('amount__sum', 0.00)
-    print("curuser_collect:")
-    print(curuser_collect)
     if str(curuser_collect) == "None":
         curuser_collect = 0
+    else:
+        curuser_collect-= userPayment.objects.filter(payee=cur_roommate).exclude(payer=cur_roommate).aggregate(Sum(F('amount'))).get('amount__sum', 0.00)
+    print("curuser_collect:")
+    print(curuser_collect)
     # DONE - Total Debt Of Current User
     curuser_debt = PaymentRequest.objects.filter(requestee=cur_roommate).exclude(requester=cur_roommate).aggregate(Sum(F('amount'))).get('amount__sum', 0.00)
     if str(curuser_debt) == "None":
