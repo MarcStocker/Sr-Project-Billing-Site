@@ -37,6 +37,13 @@ class addUtilityTypeForm(forms.ModelForm):
         ]
 
 class addNewBillForm(forms.ModelForm):
+    owner = forms.ModelChoiceField(
+		queryset=UtilityBill.objects.all(),
+        label="Owner",
+        help_text="Date the bill is due by",
+        widget=DateInput(),
+		required=False
+    )
     dueDate = forms.DateField(
         label="Date Due",
         help_text="Date the bill is due by",

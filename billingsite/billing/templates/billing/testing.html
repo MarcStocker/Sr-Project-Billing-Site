@@ -45,57 +45,27 @@
 					<h1 class="text-center">Add a new User Payment</h1>
 					{{ form.errors }}
 					<div class="row">
-						<div class="col-lg-6 col-lg-left">
-							<div class="form-group">
-								<label>
-									{{ form.payer.label_tag }}
-									{{ form.payer }}
-								</label>
-							</div>
-						</div>
-						<div class="col-lg-6 col-lg-right">
-							<div class="form-group">
-								<label>
-									{{ form.payee.label_tag }}
-									{{ form.payee }}
-								</label>
-							</div>
-						</div>
-						<div class="col-lg-6 col-lg-right">
-							<div class="form-group">
-								<label>
-									{{ form.amount.label_tag }}
-									{{ form.amount }}
-								</label>
-							</div>
-						</div>
-						<div class="col-lg-6 col-lg-right">
-							<div class="form-group">
-								<label>
-									{{ form.date.label_tag }}
-									{{ form.date }}
-								</label>
-							</div>
-						</div>
-						<div class="col-lg-6 col-lg-right">
-							<div class="form-group">
-								<label>
-									{{ form.payType.label_tag }}
-									{{ form.payType }}
-								</label>
-							</div>
-						</div>
+						<span>
+							<select name="al1" id="val1">
+								<option value="">Select a value</option>
+								<option value="foo">foo</option>
+								<option value="bar">bar</option>
+							</select>
+							<input name="al2" id="val2" />
+							<input name="al3" id="val3" />
+							<input name="al4" id="val4" />
+							<a href="" id="finalURL">Click Here!</a>
+						</span>
 					</div>
-					<img src="{% static '/images/venmologo.png' %}" href="" id="finalURL" height="50px" width="200px"></a>
 					<input type="submit" class="btn btn-lg btn-group btn-success btn-block" value="Submit Payment" />
 				</form>
 				<form action="/utilities/">
 					<input type="submit" class="btn btn-group btn-danger btn-block" value="Cancel"/>
 				</form>
 			</div>
-		</div> <!-- END size 12 column -->
-	</div> <!-- END Div Column -->
-</div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="{% static 'myjs/helloworld.js' %}"></script>
+		</div>
+	</div>
+</div> <!-- END Div Column -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="{% static 'myjs/helloworld.js' %}"></script>
 {% endblock %}

@@ -18,6 +18,7 @@ def bill_directory_path(instance, filename):
     filetype = filename[-4:]
     print("Filetype: " + filetype)
     print("\n\n\n\n Billname: " + billname)
+    print("uploads/bills/" + str(instance.statementDate.strftime('%Y'))+ "/" + billname + '/' + "lease_id_" + str(instance.house.id) + '_' + billname + '_' + (str(instance.statementDate.strftime('%Y.%m.%d'))) + (str(filetype)))
     return "uploads/bills/" + str(instance.statementDate.strftime('%Y'))+ "/" + billname + '/' + "lease_id_" + str(instance.house.id) + '_' + billname + '_' + (str(instance.statementDate.strftime('%Y.%m.%d'))) + (str(filetype))
 
 # Create your models here.
@@ -208,6 +209,7 @@ class UtilityBill(models.Model):
                                 on_delete=models.SET_DEFAULT,
                                 db_constraint=False
                                 )
+    description		= models.TextField(null=True, blank=True)
 
     def __str__(self):
         return "#" + str(self.id) + "-" + str(self.utilType.name) + "  $" + str(self.amount) + "  due by: " + str(self.dueDate)

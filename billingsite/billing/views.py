@@ -77,12 +77,16 @@ def billinghome(request):
 
     # DONE - Total Collections of Current User
     curuser_collect= PaymentRequest.objects.filter(requester=cur_roommate).exclude(requestee=cur_roommate).aggregate(Sum(F('amount'))).get('amount__sum', 0.00)
-    if str(curuser_collect) == "None":
-        curuser_collect = 0
-    else:
-        curuser_collect-= userPayment.objects.filter(payee=cur_roommate).exclude(payer=cur_roommate).aggregate(Sum(F('amount'))).get('amount__sum', 0.00)
+    curuser_collected= userPayment.objects.filter(payee=cur_roommate).exclude(payer=cur_roommate).aggregate(Sum(F('amount'))).get('amount__sum', 0.00)
     print("curuser_collect:")
     print(curuser_collect)
+    print("curuser_collected:")
+    print(curuser_collected)
+    if str(curuser_collect) == "None":
+        curuser_collect = 0
+    if str(curuser_collected) == "None":
+        curuser_collected = 0
+    curuser_collect -= curuser_collected
     # DONE - Total Debt Of Current User
     curuser_debt = PaymentRequest.objects.filter(requestee=cur_roommate).exclude(requester=cur_roommate).aggregate(Sum(F('amount'))).get('amount__sum', 0.00)
     if str(curuser_debt) == "None":
@@ -190,7 +194,7 @@ def adduserpayment(request):
         if form.is_valid():
             j = form.save(request)
             j.save()
-            return HttpResponseRedirect('/utilities/admintablepage/')
+            return HttpResponseRedirect('/utilities/')
     else:
         form = addNewUserPaymentForm()
         cur_roommate = Roommate.objects.get(user=request.user.id)
@@ -220,6 +224,7 @@ def adduserpayment(request):
         'form'          :form,
     }
     return render(request, 'billing/addUserPayment.html', context)
+    # return render(request, 'billing/testing.html', context)
 @login_required(login_url="/login/")
 def addlease(request):
     if request.method=='POST':
