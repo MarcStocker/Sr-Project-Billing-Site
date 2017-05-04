@@ -27,7 +27,7 @@ Highcharts.chart('graphDiv', {
       column: {
         borderWidth: 0,
         dataLabels: {
-          format: '-${point.y:.2f}',
+          format: '${point.y:.2f}',
           style : {fontSize: '30px'},
           enabled: true
         },

@@ -13,6 +13,16 @@
                <h1 class="text-center">Add a new Bill</h1>
                {{ form.errors }}
                <div class="row">
+                  {% if user.is_superuser %}
+                  <div class="col-lg-6 col-sm-6 col-lg-left col-sm-left">
+                     <div class="form-group">
+                        <label>
+                           {{ form.owner.label_tag }}<br />
+                           {{ form.owner }}
+                        </label>
+                     </div>
+                  </div>
+                  {% endif %}
                   <div class="col-lg-6 col-sm-6 col-lg-left col-sm-left">
                      <div class="form-group">
                         <label>

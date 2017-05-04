@@ -77,6 +77,9 @@ def billinghome(request):
 
     # DONE - Total Collections of Current User
     curuser_collect= PaymentRequest.objects.filter(requester=cur_roommate).exclude(requestee=cur_roommate).aggregate(Sum(F('amount'))).get('amount__sum', 0.00)
+    curuser_collect-= userPayment.objects.filter(payee=cur_roommate).exclude(payer=cur_roommate).aggregate(Sum(F('amount'))).get('amount__sum', 0.00)
+    print("curuser_collect:")
+    print(curuser_collect)
     if str(curuser_collect) == "None":
         curuser_collect = 0
     # DONE - Total Debt Of Current User
@@ -130,7 +133,10 @@ def addbill(request):
     if request.method=='POST':
         form = addNewBillForm(request.POST, request.FILES)
         if form.is_valid():
-            form.setVars(cur_roommate, house)
+            if request.user.is_superuser == True:
+                form.specifyOwner(house)
+            else:
+                form.setVars(cur_roommate, house)
 
             return HttpResponseRedirect('/utilities/admintablepage/')
     else:

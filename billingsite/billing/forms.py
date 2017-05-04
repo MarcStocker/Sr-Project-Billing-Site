@@ -62,7 +62,7 @@ class addNewBillForm(forms.ModelForm):
         model = UtilityBill
         fields= [
             'utilType','amount', 'billdoc',
-            'statementDate','dueDate','datepaid',
+            'statementDate','dueDate','datepaid','owner'
         ]
     def setVars(self, roommate, house, commit=True):
         thisbill = UtilityBill()
@@ -82,6 +82,26 @@ class addNewBillForm(forms.ModelForm):
 
         thisbill.house = house
         thisbill.owner = roommate
+        thisbill.save()
+        thisbill.createRequests()
+    def specifyOwner(self, house, commit=True):
+        thisbill = UtilityBill()
+        thisbill.utilType = self.cleaned_data['utilType']
+        thisbill.amount = self.cleaned_data['amount']
+        thisbill.statementDate = self.cleaned_data['statementDate']
+        thisbill.dueDate = self.cleaned_data['dueDate']
+        thisbill.owner = self.cleaned_data['owner']
+        if self.cleaned_data['datepaid'] != "":
+            thisbill.datepaid = self.cleaned_data['datepaid']
+        else:
+            thisbill.datepaid = ""
+        thisbill.datepaid = self.cleaned_data['datepaid']
+        if self.cleaned_data['billdoc'] != "":
+            thisbill.billdoc = self.cleaned_data['billdoc']
+        else:
+            thisbill.billdoc = null
+
+        thisbill.house = house
         thisbill.save()
         thisbill.createRequests()
 
