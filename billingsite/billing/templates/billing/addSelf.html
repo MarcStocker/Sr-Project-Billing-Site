@@ -5,12 +5,13 @@
 
 {% block content %}
 <div class="column"> <!-- BEING Div Column -->
+   <!-- <div class="col-lg-10 col-lg-centered col-md-10 col-md-centered col-sm-10 row"> <!-- BEGIN size 12 column -->
    <div class="col-lg-6 col-lg-centered col-md-6 col-md-centered col-md-offset-3">
       <div class="row">
          <div class="col-lg-12">
             <form method="post" action="" enctype="multipart/form-data" runat="server">
                {% csrf_token %}
-               <h1 class="text-center">Add a new Lease/House</h1>
+               <h1 class="text-center">Add a new Roommate to House/Lease</h1>
                {{ form.errors }}
                <div class="row">
                   <div class="col-lg-6 col-lg-left">
@@ -21,43 +22,19 @@
                         </label>
                      </div>
                   </div>
-                  <div class="col-lg-6 col-lg-right">
-                     <div class="form-group">
-                        <label>
-                           {{ form.address.label_tag }}<br />
-                           {{ form.address }}
-                        </label>
-                     </div>
-                  </div>
                </div>
                <!-- <div class="col-lg-6 col-md-6 col-sm-6 column"> -->
                <div class="row">
                   <div class="col-lg-6 col-lg-left">
                      <div class="form-group">
                         <label>
-                           {{ form.startDate.label_tag }}<br />
-                           {{ form.startDate }}
+                           {{ form.house.label_tag }}<br />
+                           {{ form.house }}
                         </label>
                      </div>
                   </div>
-                  <div class="col-lg-6 col-lg-left">
-                     <div class="form-group">
-                        <label>
-                           {{ form.endDate.label_tag }}<br />
-                           {{ form.endDate }}
-                        </label>
-                     </div>
-                  </div>
-                  <div class="col-lg-6 col-lg-left">
-					  <div class="form-group">
-						<label>
-							{{ form.roommatename.label_tag }}<br />
-							{{ form.roommatename }}
-						</label>
-					  </div>
-				  </div>
                </div>
-               <input type="submit" class="btn btn-lg btn-group btn-success btn-block" value="Create Lease/House" />
+               <input type="submit" class="btn btn-lg btn-group btn-success btn-block" value="Add Roommate" />
             </form>
             <form action="/utilities/">
                <input type="submit" class="btn btn-group btn-danger btn-block" value="Cancel"/>

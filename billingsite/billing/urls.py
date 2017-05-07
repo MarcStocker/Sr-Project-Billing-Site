@@ -27,6 +27,8 @@ urlpatterns = [
     url(r'^addLease/$', views.addlease, name="addlease"),
     #<WebSite.com>/utilities/addRoommate/
     url(r'^addRoommate/$', views.addroommate, name="addroommate"),
+    #<WebSite.com>/utilities/addRoommate/
+    url(r'^addSelf/$', views.addself, name="addself"),
 
     #<WebSite.com>/utilities/admintablepage/
     url(r'^admintablepage/$', views.admintablepage, name="admintablepage"),

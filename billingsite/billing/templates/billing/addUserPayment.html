@@ -86,16 +86,31 @@
 							</div>
 						</div>
 					</div>
-					<img src="{% static '/images/venmologo.png' %}" href="" id="finalURL" height="50px" width="200px"></a>
+					<a href="#" id="URLLink">
+						<img src="{% static '/images/venmologo.png' %}" href="#" id="finalURL" height="50px" width="200px"/>
+					</a>
+					<p id=alink>This will be our link</p>
 					<input type="submit" class="btn btn-lg btn-group btn-success btn-block" value="Submit Payment" />
 				</form>
 				<form action="/utilities/">
 					<input type="submit" class="btn btn-group btn-danger btn-block" value="Cancel"/>
 				</form>
+				<table>
+					<thead>
+
+					</thead>
+					<tbody>
+						{% for roommate in my_roommates %}
+						<tr>
+							{{ roommate.name }}
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
 			</div>
 		</div> <!-- END size 12 column -->
 	</div> <!-- END Div Column -->
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="{% static 'myjs/helloworld.js' %}"></script>
+<script src="{% static 'myjs/mypaymentlink.js' %}"></script>
 {% endblock %}
