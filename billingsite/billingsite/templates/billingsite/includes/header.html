@@ -34,14 +34,18 @@
          <ul class="nav navbar-nav navbar-right">
             <li>
                {% if user.is_authenticated %}
-               <button type="button" class="btn btn-lg" style="background-color:#000000"><a href="#" roll="button">{{ user.username }}</a></button>
+               <button data-toggle="modal" data-target="#myModal" type="button" class="btn btn-lg" style="background-color:#000000">
+                   <a href="#" roll="button">{{ user.username }}</a>
+               </button>
                {% endif %}
             </li>
             <li>
                {% if user.is_superuser %}
                <!-- Single Button -->
                <div class="btn-group">
-                  <button type="button" class="btn btn-success btn-lg"><a href="/admin/" roll="button" style="color: #ffffff">Admin</a></button>
+                  <button type="button" class="btn btn-success btn-lg" href="/admin/">
+                      <a href="/admin/" roll="button" style="color: #ffffff">Admin</a>
+                  </button>
                   <button type="button" class="btn btn-primary btn-success btn-lg dropdown-toggle" data-toggle="dropdown">
                      <span class="caret"></span>
                      <span class="sr-only">Toggle Dropdown</span>
@@ -94,3 +98,38 @@
       </div>
    </nav>
 </div>
+
+
+{% if user.is_authenticated %}
+<!-- MODAL for above graph -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="background-color:#252424">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color:#a6a6a6"><span aria-hidden="true">&times;</span></button>
+                <h2 class="modal-title" id="myModalLabel">User Settings</h2>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <span>
+                        <h2>Account Settings</h2>
+                        <h4>Username: <text style="color: #fff">{{ user.username }}</text></h4>
+                        <h4>Email:    <text style="color: #fff">{{ user.email }}</text></h4>
+                    </span>
+                    <hr style="color:#2b2b2b; background-color:#2b2b2b"/>
+                    <span>
+                        <h2>Your Houses</h2>
+                        <h4>House Name: <text style="color: #fff">{{ house.name }}</text></h4>
+                        <h4>Lease Start Date: <text style="color: #fff">{{ house.startDate }}</text></h4>
+                        <h4>Lease Ending Date: <text style="color: #fff">{{ house.endDate }}</text></h4>
+                        <h4></h4>
+                    </span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}

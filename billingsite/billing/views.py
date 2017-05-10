@@ -4,9 +4,9 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.db.models import F, FloatField, Sum
 
-from .models import PaymentRequest
+from .models import PaymentRequest, UserSettings
 from .models import Lease, Roommate, UtilityBill
-from .models import UtilityType, billPayment, userPayment
+from .models import UtilityType, BillPayment, UserPayment
 from .forms import addLeaseForm, addRoommateForm
 from .forms import addUtilityBillPaymentForm, addNewBillForm
 from .forms import addNewBillPaymentForm, addNewUserPaymentForm
@@ -15,6 +15,7 @@ from .forms import UserPaymentForm, addUtilityTypeForm, sendEmailForm
 from decimal import *
 
 
+from datetime import datetime, date
 import random
 import os
 import time
@@ -38,14 +39,14 @@ def billinghome(request):
 	house        = cur_roommate.house
 	my_roommates = Roommate.objects.filter(house_id=house.id).order_by('id')
 
-	# TODO - Debt Tab
+	# WIP:0 - Debt Tab
 	roommates_iowe       = {}
 	roommate_collections = {}
 	for i in my_roommates:
 		if i.id != cur_roommate.id:
 			# Code for Roommates_iowe
 			all_requests = PaymentRequest.objects.filter(requester_id=i.id, requestee_id=cur_roommate.id)
-			userpayments = userPayment.objects.filter(payee_id=i.id, payer_id=cur_roommate.id)
+			userpayments = UserPayment.objects.filter(payee_id=i.id, payer_id=cur_roommate.id)
 			temptotbill = 0
 			temptotpay   = 0
 			for bill in all_requests:
@@ -60,7 +61,7 @@ def billinghome(request):
 
 			# Code for Roommate_Collections
 			all_requests = PaymentRequest.objects.filter(requester_id=cur_roommate.id, requestee_id=i.id)
-			userpayments = userPayment.objects.filter(payee_id=cur_roommate.id, payer_id=i.id)
+			userpayments = UserPayment.objects.filter(payee_id=cur_roommate.id, payer_id=i.id)
 			temptotpayments     = 0
 			temptotcollections  = 0
 			for charge in all_requests:
@@ -78,7 +79,7 @@ def billinghome(request):
 
 	# DONE - Total Collections of Current User
 	curuser_collect= PaymentRequest.objects.filter(requester=cur_roommate).exclude(requestee=cur_roommate).aggregate(Sum(F('amount'))).get('amount__sum', 0.00)
-	curuser_collected= userPayment.objects.filter(payee=cur_roommate).exclude(payer=cur_roommate).aggregate(Sum(F('amount'))).get('amount__sum', 0.00)
+	curuser_collected= UserPayment.objects.filter(payee=cur_roommate).exclude(payer=cur_roommate).aggregate(Sum(F('amount'))).get('amount__sum', 0.00)
 	print("curuser_collect:")
 	print(curuser_collect)
 	print("curuser_collected:")
@@ -92,26 +93,26 @@ def billinghome(request):
 	curuser_debt = PaymentRequest.objects.filter(requestee=cur_roommate).exclude(requester=cur_roommate).aggregate(Sum(F('amount'))).get('amount__sum', 0.00)
 	if str(curuser_debt) == "None":
 		curuser_debt = 0
-	curuser_payments= userPayment.objects.filter(payer=cur_roommate).exclude(payee=cur_roommate).aggregate(Sum(F('amount'))).get('amount__sum', 0.00)
+	curuser_payments= UserPayment.objects.filter(payer=cur_roommate).exclude(payee=cur_roommate).aggregate(Sum(F('amount'))).get('amount__sum', 0.00)
 	if str(curuser_payments) == "None":
 		curuser_payments = 0
 	curuser_debt = curuser_payments - curuser_debt
 	totmoney = curuser_collect - -curuser_debt
-	# TODO - Display all Bill by month in new Tab
-	# TODO - Display all Payments for each user in a new Tab
+	# TODO:60 - Display all Bill by month in new Tab
+	# TODO:70 - Display all Payments for each user in a new Tab
 
 	numroommates= 0
 
 	roommateowes=[]
 	roommatepaid=[]
 
-	# TODO - All Bills Associated With House
+	# TODO:50 - All Bills Associated With House
 	all_bills = UtilityBill.objects.filter(house_id=house.id)
 	all_bills = all_bills.order_by('-dueDate')
 	last5bills= all_bills.order_by('-dueDate')[:5]
 
 	#
-	all_payments    = userPayment.objects.filter(house_id=1)
+	all_payments    = UserPayment.objects.filter(house_id=1)
 
 	print("\n-------------------\n      END \n-------------------\n END BILLING HOME \n-------------------\n\n")
 	context = {
@@ -191,22 +192,34 @@ def addbillpayment(request):
 @login_required(login_url="/login/")
 def adduserpayment(request):
 	if request.method=='POST':
-		form = addNewUserPaymentForm(request.POST, request.FILES)
+		form = addNewUserPaymentForm(request.POST)
 		if form.is_valid():
-			j = form.save(request)
-			j.save()
+			cur_roommate = Roommate.objects.get(user=request.user.id)
+			house        = cur_roommate.house
+			form.setPayer(cur_roommate, house )
 			return HttpResponseRedirect('/utilities/')
+		else:
+			return HttpResponseRedirect('/utilities/addUserPayment/')
 	else:
+		# print(datetime.today().strfttime("%m/%d/%Y"))
+		thedate = "Todays Date: {:%m/%d/%Y}".format(datetime.now())
 		form = addNewUserPaymentForm()
+		form.date = thedate
 		cur_roommate = Roommate.objects.get(user=request.user.id)
 		house        = cur_roommate.house
 		my_roommates = Roommate.objects.filter(house_id=house.id).order_by('id')
+		usersettings = []
+		for i in my_roommates:
+			usersettings.append(UserSettings.objects.get(user=i.user).venmoAcct)
+			print(i)
+			print(UserSettings.objects.get(user=i.user).venmoAcct)
+			print(UserSettings.objects.get(user=i.user).venmoAcct)
 		roommates_iowe       = {}
 		for i in my_roommates:
 			if i.id != cur_roommate.id:
 				# Code for Roommates_iowe
 				all_requests = PaymentRequest.objects.filter(requester_id=i.id, requestee_id=cur_roommate.id)
-				userpayments = userPayment.objects.filter(payee_id=i.id, payer_id=cur_roommate.id)
+				userpayments = UserPayment.objects.filter(payee_id=i.id, payer_id=cur_roommate.id)
 				temptotbill = 0
 				temptotpay   = 0
 				for bill in all_requests:
@@ -216,16 +229,20 @@ def adduserpayment(request):
 				temptotstillowed = temptotbill - temptotpay
 				if temptotstillowed >= 1:
 					roommates_iowe[i.name] = [temptotbill, temptotpay, temptotstillowed]
-	context = {
-		'page_name'     :"Add User Payment - Roommate Homebase",
-		'sitename'      :"Roommate Homebase",
-		'page_name'     :"Add a User Payment",
-		'my_roommates'  :my_roommates,
-		'roommates_iowe':roommates_iowe ,
-		'form'          :form,
-	}
+		context = {
+			'page_name'     :"Add User Payment - Roommate Homebase",
+			'sitename'      :"Roommate Homebase",
+			'page_name'     :"Add a User Payment",
+			'my_roommates'  :my_roommates,
+			'roommates_iowe':roommates_iowe ,
+			'usersettings'	:usersettings,
+			'form'          :form,
+		}
 	return render(request, 'billing/addUserPayment.html', context)
 	# return render(request, 'billing/testing.html', context)
+# @login_required(login_url="/login/")
+# def venmopayment(request, user_id):
+
 @login_required(login_url="/login/")
 def addlease(request):
 	if request.method=='POST':
@@ -288,8 +305,8 @@ def admintablepage(request):
 	all_users           = User.objects.all()
 	all_leases          = Lease.objects.all()
 	all_roommates       = Roommate.objects.all()
-	all_userpayments    = userPayment.objects.all()
-	all_billpayments    = billPayment.objects.all()
+	all_userpayments    = UserPayment.objects.all()
+	all_billpayments    = BillPayment.objects.all()
 	all_utilityBills    = UtilityBill.objects.all()
 	all_utilityTypes    = UtilityType.objects.all()
 	all_PaymentRequests = PaymentRequest.objects.all()
@@ -364,11 +381,11 @@ def deleteallbills(request):
 		time.sleep(.1)
 		i.delete()
 	print("   Deleting userPayments...")
-	for i in userPayment.objects.all():
+	for i in UserPayment.objects.all():
 		time.sleep(.1)
 		i.delete()
 	print("   Deleting billPayments...")
-	for i in billPayment.objects.all():
+	for i in BillPayment.objects.all():
 		time.sleep(.1)
 		i.delete()
 	return HttpResponseRedirect("/utilities/admintablepage")

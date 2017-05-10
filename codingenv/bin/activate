@@ -1,6 +1,7 @@
 # This file must be used with "source bin/activate" *from bash*
 # you cannot run it directly
 
+export OLD_PYTHONPATH="$PYTHONPATH"
 deactivate () {
     unset -f pydoc >/dev/null 2>&1
 
@@ -35,6 +36,7 @@ deactivate () {
     # Self destruct!
         unset -f deactivate
     fi
+		export PYTHONPATH="$OLD_PYTHONPATH"
 }
 
 # unset irrelevant variables
@@ -44,6 +46,7 @@ VIRTUAL_ENV="/mnt/c/Dropbox/WebSites/Sr-Project-Billing-Site/codingenv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
+export PYTHONPATH="/cygdrive/c/Dropbox/Websites/Sr-Project-Billing-Site/codingenv/lib/python3.4"
 PATH="$VIRTUAL_ENV/bin:$PATH"
 export PATH
 

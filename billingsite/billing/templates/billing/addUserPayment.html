@@ -47,14 +47,14 @@
 					<div class="row">
 						<div class="col-lg-6 col-lg-left">
 							<div class="form-group">
-								<label>
-									{{ form.payer.label_tag }}
-									{{ form.payer }}
-								</label>
-							</div>
-						</div>
-						<div class="col-lg-6 col-lg-right">
-							<div class="form-group">
+								<!-- <label>
+									<label for="id_payee">Payee:</label>
+									<select id="id_payee" name="payee" required>
+										{% for key, value in usersettings.items %}
+										<option value="{{ value }}">{{ key }}</option>
+										{% endfor %}
+									</select>
+								</label> -->
 								<label>
 									{{ form.payee.label_tag }}
 									{{ form.payee }}
@@ -95,22 +95,25 @@
 				<form action="/utilities/">
 					<input type="submit" class="btn btn-group btn-danger btn-block" value="Cancel"/>
 				</form>
-				<table>
-					<thead>
-
-					</thead>
-					<tbody>
-						{% for roommate in my_roommates %}
-						<tr>
-							{{ roommate.name }}
-						</tr>
-						{% endfor %}
-					</tbody>
-				</table>
 			</div>
 		</div> <!-- END size 12 column -->
 	</div> <!-- END Div Column -->
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="{% static 'myjs/mypaymentlink.js' %}"></script>
+<script type="text/javascript">
+	var url = "https://venmo.com/?txn=pay&audience=friends&recipients={user}&amount={amount}&note={note}"
+
+	$("#id_payType, #id_payee, #id_amount").on('change keyup click paste', function() {
+		var amount 		= $('#id_amount').val();
+		var user 		= $('#id_payee').val();
+		var note 		= $('#id_payType').val();
+		var finalURL 	= url.replace('{user}', user).replace('{amount}', amount).replace('{note}', note);
+		$('#URLLink').attr('href',finalURL);
+		var test = "User: {user}  Amount: ${amount}   Note: {note}     Var: {test}";
+		var sitename = "Just some Stuff";
+		var djangovar= '{{ usersettings }}';
+		var teststring = test.replace('{user}', user).replace('{amount}', amount).replace('{note}', note).replace('{test}', djangovar);
+		$('#alink').html(teststring);
+	});
+</script>
 {% endblock %}

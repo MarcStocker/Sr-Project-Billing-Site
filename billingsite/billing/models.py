@@ -6,20 +6,21 @@ from django.db.models import F, FloatField, Sum
 
 from datetime import datetime, date
 import smtplib
-import time
+import time, os
 
-sendemails   = False
+sendemails   = True
 sendmailtrue = False
 
 url = "http://homebase.dynu.net/utilities/"
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def bill_directory_path(instance, filename):
 	billname = str(instance.utilType.name.replace(' ','_'))
 	filetype = filename[-4:]
 	print("Filetype: " + filetype)
 	print("\n\n\n\n Billname: " + billname)
-	print("uploads/bills/" + str(instance.statementDate.strftime('%Y'))+ "/" + billname + '/' + "lease_id_" + str(instance.house.id) + '_' + billname + '_' + (str(instance.statementDate.strftime('%Y.%m.%d'))) + (str(filetype)))
-	return "uploads/bills/" + str(instance.statementDate.strftime('%Y'))+ "/" + billname + '/' + "lease_id_" + str(instance.house.id) + '_' + billname + '_' + (str(instance.statementDate.strftime('%Y.%m.%d'))) + (str(filetype))
+	print(BASE_DIR + "/media/uploads/bills/" + str(instance.statementDate.strftime('%Y'))+ "/" + billname + '/' + "lease_id_" + str(instance.house.id) + '_' + billname + '_' + (str(instance.statementDate.strftime('%Y.%m.%d'))) + (str(filetype)))
+	return BASE_DIR + "/media/uploads/bills/" + str(instance.statementDate.strftime('%Y'))+ "/" + billname + '/' + "lease_id_" + str(instance.house.id) + '_' + billname + '_' + (str(instance.statementDate.strftime('%Y.%m.%d'))) + (str(filetype))
 
 # Create your models here.
 class Lease(models.Model):
@@ -32,39 +33,39 @@ class Lease(models.Model):
 
 	def __str__(self):
 		return "#" + str(self.id) + " - " + str(self.name)
-class userSettings(models.Model):
+class UserSettings(models.Model):
 	class Meta:
 		ordering=('id', 'user')
-	user        = models.ForeignKey(
+	user        = models.OneToOneField(
 						User, null=False,
 						blank=False, default="",
-						on_delete=models.SET_DEFAULT,
+						on_delete=models.CASCADE,
 						db_constraint=False
 						)
 	venmoAcct 	= models.CharField(
 						max_length=20,
 						null=True,
-						blank=False,
+						blank=True,
 						default=""
 						)
 	phonenumber = models.CharField(
 						max_length=10,
 						null=True,
-						blank=False,
+						blank=True,
 						default=""
 						)
 class Roommate(models.Model):
 	class Meta:
 		ordering=('id', 'name')
-	name        = models.CharField(max_length=25)
-	house       = models.ForeignKey(
-						'Lease', null=False,
+	user        = models.OneToOneField(
+						User, null=False,
 						blank=False, default="",
 						on_delete=models.SET_DEFAULT,
 						db_constraint=False
 						)
-	user        = models.ForeignKey(
-						User, null=False,
+	name        = models.CharField(max_length=25)
+	house       = models.ForeignKey(
+						'Lease', null=False,
 						blank=False, default="",
 						on_delete=models.SET_DEFAULT,
 						db_constraint=False
@@ -132,7 +133,7 @@ class Roommate(models.Model):
 		# print("Total Debt for '" + self.name + "' :"+ str(totDebt))
 		return totDebt
 	def getTotPaid(self):
-		paid = userPayment.objects.filter(payer=self).exclude(payee=self).aggregate(Sum(F('amount'))).get('amount__sum', 0.00)
+		paid = UserPayment.objects.filter(payer=self).exclude(payee=self).aggregate(Sum(F('amount'))).get('amount__sum', 0.00)
 		if str(paid) == "None":
 			return 0
 		else:
@@ -152,7 +153,7 @@ class Roommate(models.Model):
 		print("Leftover = " + str(leftover))
 		return leftover
 	def getTotCollections(self):
-		all_payments = userPayment.objects.all()
+		all_payments = UserPayment.objects.all()
 		all_requests = PaymentRequest.objects.all()
 
 		# Retrieve all Requests owed to cur user
@@ -198,7 +199,7 @@ class UtilityType(models.Model):
 	name        = models.CharField(max_length=20)
 	website     = models.CharField(max_length=200)
 	serviceType = models.CharField(max_length=50)
-	image       = models.FileField(max_length=144, upload_to='uploads/%Y/%m/%d/', null=True, blank=True)
+	image       = models.FileField(max_length=144, upload_to='uploads/utilityImgs', null=True, blank=True)
 
 	def __str__(self):
 		return "#" + str(self.id) + " - " + str(self.name)
@@ -318,7 +319,7 @@ class PaymentRequest(models.Model):
 		# message     = "Hello "+self.requestee.name+"!!\nYou have a new bill payment request from '"+self.requester.name+"' for "+self.UtilBill.utilType.name+".\nYou will receive another email reminder in 2 weeks regarding this payment"
 		emailfrom   = "NewBills"
 		self.requestee.emailuser(message,emailfrom)
-class billPayment(models.Model):
+class BillPayment(models.Model):
 	class Meta:
 		ordering =('id', 'date')
 	date        = models.DateField()
@@ -338,7 +339,7 @@ class billPayment(models.Model):
 							)
 	def __str__(self):
 		return self.payer.name + " " + self.UtilBill.utilType.name + " - $" + str(self.amount) + " || Payed on: " + str(self.date)
-class userPayment(models.Model):
+class UserPayment(models.Model):
 	class Meta:
 		ordering =('id', 'date')
 	date    = models.DateField(null=True, blank=True)

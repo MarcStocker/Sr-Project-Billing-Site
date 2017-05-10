@@ -188,7 +188,9 @@
                                         <div class="modal-content" style="background-color:#252424">
                                             <div class="modal-header">
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color:#a6a6a6"><span aria-hidden="true">&times;</span></button>
-                                                <h2 class="modal-title" id="myModalLabel">{{ bill.utilType.name }} - {{ bill.statementDate}}</h2><img src="{% static "images/cool.png" %}"></a>
+                                                <h2 class="modal-title" id="myModalLabel">{{ bill.utilType.name }} - {{ bill.statementDate}}</h2>
+                                                <img src="{{ bill.utilType.image.url }}"></a>
+                                                <!-- <h2 class="modal-title" id="myModalLabel">{{ bill.utilType.name }} - {{ bill.statementDate}}</h2><img src="{% static "images/cool.png" %}"></a> -->
                                             </div>
                                             <div class="modal-body">
                                                 <div class="container-fluid">
@@ -348,7 +350,7 @@
 
 
                 <!-- BEGIN 5th Tab -->
-                <!-- TODO: Grab Payments from other houses -->
+                <!-- TODO:100 Grab Payments from other houses -->
                 <div role="tabpanel" class="tab-pane fade" id="allpayments">
                     <h2>All Payments: Every Payment Made to a Roommate.</h2>
                     <div class="panel panel-default panel-inverted col-xs-12 col-md-12" style="background-color:#252424">

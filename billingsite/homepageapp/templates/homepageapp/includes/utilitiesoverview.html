@@ -1,56 +1,91 @@
 
-            <!-- All Roommates Payment Overview -->
-            <div class="panel panel-default panel-inverted col-xs-12 col-md-12"  style="background-color:#252424; border-color:#252424">
-               <h2>Payment Overview</h2>
-               <table class="table table-inverted">
-                  <thead>
-                     <tr>
-                        <th>Name</th>
-                        <th>Owed</th>
-                        <th>Paid</th>
-                        <th>Total Left</th>
-                     </tr>
-                  </thead>
-                  <tbody>
-                     {% for roommate in my_roommates %}
-                     <tr>
-                        <td>{{ roommate.name }}</td>
-                        <td>${{ roommate.getTotDebt }}</td>
-                        <td>${{ roommate.getTotPaid }}</td>
-                        {% if roommate.getTotDebt <= 0.00 %}
-                        <td style="color:#00d502"><b>${{ roommate.getTotDebt }}</b></td>
-                        {% elif roommate.getTotDebt > 0 %}
-                        <td style="color:#d61610"><b>${{ roommate.getTotDebt }}</b></td>
-                        {% endif %}
-                     </tr>
-                     {% endfor %}
-                  </tbody>
-               </table>
+            <!-- Overview Table -->
+            <div class="panel panel-default panel-inverted col-xs-12 col-md-12"  style="background-color:#252424; border-color:#252424;">
+                <h2>Payment Overview</h2>
+                <table class="table table-inverted table-hover background-color:#595959">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Owed</th>
+                            <th>Paid</th>
+                            <th>Total Left</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for roommate in my_roommates %}
+                        <tr>
+                            <td>{{  roommate.name }}</td>
+                            <td>${{ roommate.getTotOwed }}</td>
+                            <td>${{ roommate.getTotPaid }}</td>
+                            {% if roommate.getTotDebt <= 0.00 %}
+                            <td style="color:#00d502"><b>${{ roommate.getTotDebt }}</b></td>
+                            {% elif roommate.getTotDebt > 0 %}
+                            <td style="color:#d61610"><b>${{ roommate.getTotDebt }}</b></td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
 
 
 
-            <!-- Last 5 Utility Bills -->
-            <div class="panel panel-default panel-inverted col-xs-12 col-md-12" style="background-color:#252424; border-color:#252424">
-               <h2>Last 5 Utility Bills</h2>
-               <table class="table table-inverted">
-                  <thead>
-                     <tr>
-                        <th>Utility</th>
-                        <th>Amount</th>
-                        <th>Date Due</th>
-                        <th>Owner</th>
-                     </tr>
-                  </thead>
-                  <tbody>
-                     {% for bill in last5bills %}
-                     <tr>
-                        <td>{{ bill.utilType.name }}</td>
-                        <td>${{ bill.amount }}</td>
-                        <td>{{ bill.dueDate }}</td>
-                        <td>{{ bill.owner.name }}</td>
-                     </tr>
-                     {% endfor %}
-                  </tbody>
-               </table>
-            </div>
+            <!-- BEGIN Last 5 Bills -->
+            <div class="panel panel-default panel-invert col-xs-12 col-md-12" style="background-color:#252424; border-color:#252424;">
+                <h2>Last 5 Utility Bills</h2>
+                <table class="table table-inverted table-hover background-color:#595959">
+                    <thead>
+                        <tr>
+                            <th>Utility</th>
+                            <th>Amount</th>
+                            <th>Date Due</th>
+                            <th>Owner</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for bill in last5bills %}
+                        <tr data-toggle="modal" data-target="#myModal{{bill.id}}">
+                            <td>{{ bill.utilType.name }}</td>
+                            <td>${{ bill.amount }}</td>
+                            <td>{{ bill.dueDate }}</td>
+                            <td>{{ bill.owner.name }}</td>
+                        </tr>
+                        <!-- MODAL for above graph -->
+                        <div class="modal fade" id="myModal{{bill.id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content" style="background-color:#252424">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color:#a6a6a6"><span aria-hidden="true">&times;</span></button>
+                                        <h2 class="modal-title" id="myModalLabel">{{ bill.utilType.name }} - {{ bill.statementDate}}</h2>
+                                        <img src="{{ bill.utilType.image.url }}"></a>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="container-fluid">
+                                            <span>
+												<h3>Owner: 	{{ bill.owner.name }}</h3>
+												<h3>Amount: ${{ bill.amount }}</h3>
+                                            </span>
+											<hr style="color:#2b2b2b; background-color:#2b2b2b"/>
+											<span>
+												<h4>Statement Date: {{ bill.statementDate }}</h4>
+												<h4>Due Date: {{ bill.dueDate }}</h4>
+												<h4></h4>
+											</span>
+											<hr />
+											<span>
+											    <a href="{{ bill.billdoc.url }}" download="{{ bill.billdoc.url }}">
+												 	Download PDF
+												</a>
+											</span>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div> <!-- END 5 Bills -->

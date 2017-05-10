@@ -9,7 +9,7 @@ import os
 
 from .models import Lease, Roommate
 from .models import UtilityBill, UtilityType
-from .models import billPayment, userPayment
+from .models import BillPayment, UserPayment
 
 
 class UserPaymentForm(forms.ModelForm):
@@ -19,7 +19,7 @@ class UserPaymentForm(forms.ModelForm):
 		widget=DateInput()
 	)
 	class Meta:
-		model = userPayment
+		model = UserPayment
 		fields= [
 			'payer','payee',
 			'date','amount','payType'
@@ -123,7 +123,7 @@ class addNewBillPaymentForm(forms.ModelForm):
 		widget=DateInput()
 	)
 	class Meta:
-		model = billPayment
+		model = BillPayment
 		fields= [
 			'payer','amount','date','payType','UtilBill',
 		]
@@ -134,12 +134,57 @@ class addNewUserPaymentForm(forms.ModelForm):
 		help_text="Date that money was transferred",
 		widget=DateInput()
 	)
+	payer = forms.ModelChoiceField(
+		queryset=Roommate.objects.all(),
+		to_field_name="",
+		label="You",
+		required=False
+	)
+	payee = forms.ModelChoiceField(
+		queryset=Roommate.objects.all(),
+		to_field_name="",
+		label="Pay To"
+	)
+	house = forms.ModelChoiceField(
+		queryset=Lease.objects.all(),
+		required=False
+	)
 	class Meta:
-		model = userPayment
+		model = UserPayment
 		fields= [
-			'payer','payee','amount','date','payType',
+			'payee','amount','date','payType','payer', 'house'
 		]
+	def setPayer(self, payinguser, house):
+		thisPayment = UserPayment()
+		thisPayment.payee = self.cleaned_data['payee']
+		thisPayment.amount = self.cleaned_data['amount']
+		thisPayment.date = self.cleaned_data['date']
+		thisPayment.payType = self.cleaned_data['payType']
+		thisPayment.payer = Roommate.objects.get(pk=payinguser.id)
+		thisPayment.house = house
 
+		thisPayment.save()
+
+	def setVars(self, roommate, house, commit=True):
+		thisbill = UtilityBill()
+		thisbill.utilType = self.cleaned_data['utilType']
+		thisbill.amount = self.cleaned_data['amount']
+		thisbill.statementDate = self.cleaned_data['statementDate']
+		thisbill.dueDate = self.cleaned_data['dueDate']
+		if self.cleaned_data['datepaid'] != "":
+			thisbill.datepaid = self.cleaned_data['datepaid']
+		else:
+			thisbill.datepaid = ""
+		thisbill.datepaid = self.cleaned_data['datepaid']
+		if self.cleaned_data['billdoc'] != "":
+			thisbill.billdoc = self.cleaned_data['billdoc']
+		else:
+			thisbill.billdoc = null
+
+		thisbill.house = house
+		thisbill.owner = roommate
+		thisbill.save()
+		thisbill.createRequests()
 class addUtilityBillPaymentForm(forms.ModelForm):
 	class Meta:
 		model = UtilityBill
@@ -165,10 +210,10 @@ class addLeaseForm(forms.ModelForm):
 		]
 
 class addRoommateForm(forms.ModelForm):
-	roommatename = forms.CharField(
-		label="What would you like your public name to be?",
-		help_text="Name your roommates will see",
-	)
+	# roommatename = forms.CharField(
+	# 	label="What would you like your public name to be?",
+	# 	help_text="Name your roommates will see",
+	# )
 	class Meta:
 		model = Roommate
 		fields= [
