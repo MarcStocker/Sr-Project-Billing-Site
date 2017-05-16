@@ -75,9 +75,15 @@
 											</span>
 											<hr />
 											<span>
+                                                {% if bill.billdoc %}
 											    <a href="{{ bill.billdoc.url }}" download="{{ bill.billdoc.url }}">
 												 	Download PDF
 												</a>
+                                                {% else %}
+											    <a href="#">
+												 	No File
+												</a>
+                                                {% endif %}
 											</span>
                                         </div>
                                     </div>
