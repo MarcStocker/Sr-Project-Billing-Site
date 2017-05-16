@@ -17,16 +17,18 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 def bill_directory_path(instance, filename):
 	billname = str(instance.utilType.name.replace(' ','_'))
 	filetype = filename[-4:]
+	path = "uploads/bills/"
+	fileformat = str(instance.statementDate.strftime('%Y'))+ "/" + billname + '/' + "lease_id_" + str(instance.house.id) + '_' + billname + '_' + (str(instance.statementDate.strftime('%Y.%m.%d'))) + (str(filetype))
 	print("Filetype: " + filetype)
 	print("\n\n\n\n Billname: " + billname)
-	print(BASE_DIR + "/media/uploads/bills/" + str(instance.statementDate.strftime('%Y'))+ "/" + billname + '/' + "lease_id_" + str(instance.house.id) + '_' + billname + '_' + (str(instance.statementDate.strftime('%Y.%m.%d'))) + (str(filetype)))
-	return BASE_DIR + "/media/uploads/bills/" + str(instance.statementDate.strftime('%Y'))+ "/" + billname + '/' + "lease_id_" + str(instance.house.id) + '_' + billname + '_' + (str(instance.statementDate.strftime('%Y.%m.%d'))) + (str(filetype))
+	print("---\nSaving File to Location:\n"+path+fileformat)
+	return os.path.join(path, fileformat)
 
 # Create your models here.
 class Lease(models.Model):
 	class Meta:
 		ordering=('id', 'name')
-	name        = models.CharField(max_length=15)
+	name        = models.CharField(max_length=50)
 	address     = models.CharField(max_length=50)
 	startDate   = models.DateField(null=True, blank=True)
 	endDate     = models.DateField(null=True, blank=True)
@@ -54,6 +56,10 @@ class UserSettings(models.Model):
 						blank=True,
 						default=""
 						)
+	def __str__(self):
+		return "#" + str(self.id) + " - " + self.user
+
+
 class Roommate(models.Model):
 	class Meta:
 		ordering=('id', 'name')
@@ -199,7 +205,7 @@ class UtilityType(models.Model):
 	name        = models.CharField(max_length=20)
 	website     = models.CharField(max_length=200)
 	serviceType = models.CharField(max_length=50)
-	image       = models.FileField(max_length=144, upload_to='uploads/utilityImgs', null=True, blank=True)
+	image       = models.FileField(max_length=144, upload_to='utilityImgs', null=True, blank=True)
 
 	def __str__(self):
 		return "#" + str(self.id) + " - " + str(self.name)
@@ -212,7 +218,7 @@ class UtilityBill(models.Model):
 	dueDate         = models.DateField(null=True, blank=True)
 	statementDate   = models.DateField(null=True, blank=True)
 	datepaid        = models.DateField(null=True, blank=True, default="")
-	billdoc         = models.FileField(default=" ", upload_to=bill_directory_path,max_length=144, null=True, blank=True)
+	billdoc         = models.FileField(default=" ", upload_to=bill_directory_path ,max_length=144, null=True, blank=True)
 	owner           = models.ForeignKey(
 								'Roommate', null=False,
 								blank=False, default="",

@@ -112,7 +112,7 @@ def billinghome(request):
 	last5bills= all_bills.order_by('-dueDate')[:5]
 
 	#
-	all_payments    = UserPayment.objects.filter(house_id=1)
+	all_payments    = UserPayment.objects.filter(house_id=house.id)
 
 	print("\n-------------------\n      END \n-------------------\n END BILLING HOME \n-------------------\n\n")
 	context = {
@@ -140,12 +140,12 @@ def addbill(request):
 	if request.method=='POST':
 		form = addNewBillForm(request.POST, request.FILES)
 		if form.is_valid():
-			if request.user.is_superuser == True:
-				form.specifyOwner(house)
-			else:
-				form.setVars(cur_roommate, house)
+			# if request.user.is_superuser == True:
+				# form.specifyOwner(house)
+			# else:
+			form.setVars(cur_roommate, house)
 
-			return HttpResponseRedirect('/utilities/admintablepage/')
+			return HttpResponseRedirect('/utilities/')
 	else:
 		form = addNewBillForm()
 	context = {
@@ -162,7 +162,7 @@ def addbilltype(request):
 		if form.is_valid():
 			j = form.save(request, commit=False)
 			j.save()
-			return HttpResponseRedirect('/utilities/admintablepage/')
+			return HttpResponseRedirect('/utilities/')
 	else:
 		form = addNewBillForm()
 	context = {
@@ -179,7 +179,7 @@ def addbillpayment(request):
 		if form.is_valid():
 			j = form.save(request)
 			j.save()
-			return HttpResponseRedirect('/utilities/admintablepage/')
+			return HttpResponseRedirect('/utilities/')
 	else:
 		form = addNewBillPaymentForm()
 	context = {
@@ -203,17 +203,15 @@ def adduserpayment(request):
 	else:
 		# print(datetime.today().strfttime("%m/%d/%Y"))
 		thedate = "Todays Date: {:%m/%d/%Y}".format(datetime.now())
-		form = addNewUserPaymentForm()
-		form.date = thedate
 		cur_roommate = Roommate.objects.get(user=request.user.id)
 		house        = cur_roommate.house
 		my_roommates = Roommate.objects.filter(house_id=house.id).order_by('id')
-		usersettings = []
+		form = addNewUserPaymentForm()
+		form.fields['payee'].queryset = my_roommates
+		form.date = thedate
+		usersettings = {}
 		for i in my_roommates:
-			usersettings.append(UserSettings.objects.get(user=i.user).venmoAcct)
-			print(i)
-			print(UserSettings.objects.get(user=i.user).venmoAcct)
-			print(UserSettings.objects.get(user=i.user).venmoAcct)
+			usersettings[i.id] = UserSettings.objects.get(user=i.user).venmoAcct
 		roommates_iowe       = {}
 		for i in my_roommates:
 			if i.id != cur_roommate.id:

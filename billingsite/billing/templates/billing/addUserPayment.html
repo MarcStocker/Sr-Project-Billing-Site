@@ -86,11 +86,31 @@
 							</div>
 						</div>
 					</div>
-					<a href="#" id="URLLink">
-						<img src="{% static '/images/venmologo.png' %}" href="#" id="finalURL" height="50px" width="200px"/>
+					<a href="#" id="URLLink" target="_blank">
+						<img src="{% static '/images/venmologo.png' %}" target="_blank" href="#" id="finalURL" height="50px" width="200px"/>
 					</a>
-					<p id=alink>This will be our link</p>
-					<input type="submit" class="btn btn-lg btn-group btn-success btn-block" value="Submit Payment" />
+					<!-- <p id=alink>This will be our link</p> -->
+					<input id="submituserpayment" type="submit" class="btn btn-lg btn-group btn-success btn-block" value="Submit Payment" />
+					<!-- MODAL for "sending emails to roommates" -->
+					<div class="modal fade" id="sendingemailsmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content" style="background-color:#252424">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color:#a6a6a6"><span aria-hidden="true">&times;</span></button>
+									<h2 class="modal-title" id="myModalLabel">Sending Emails</h2>
+								</div>
+								<div class="modal-body">
+									<div class="container-fluid">
+										<h2>Sending Payment Request Emails to all Rooommates</h2>
+										<h2>Please wait...</h2>
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+								</div>
+							</div>
+						</div>
+					</div>
 				</form>
 				<form action="/utilities/">
 					<input type="submit" class="btn btn-group btn-danger btn-block" value="Cancel"/>
@@ -106,14 +126,23 @@
 	$("#id_payType, #id_payee, #id_amount").on('change keyup click paste', function() {
 		var amount 		= $('#id_amount').val();
 		var user 		= $('#id_payee').val();
+		{% for key, value in usersettings.items %}
+		if (user == {{ key }} )
+			var user = "{{ value }}";
+		{% endfor %}
 		var note 		= $('#id_payType').val();
 		var finalURL 	= url.replace('{user}', user).replace('{amount}', amount).replace('{note}', note);
 		$('#URLLink').attr('href',finalURL);
-		var test = "User: {user}  Amount: ${amount}   Note: {note}     Var: {test}";
-		var sitename = "Just some Stuff";
-		var djangovar= '{{ usersettings }}';
-		var teststring = test.replace('{user}', user).replace('{amount}', amount).replace('{note}', note).replace('{test}', djangovar);
-		$('#alink').html(teststring);
+		// var test = "User: {user}  Amount: ${amount}   Note: {note}     Var: {test}";
+		// var sitename = "Just some Stuff";
+		// var djangovar= '{{ usersettings }}';
+		// var teststring = test.replace('{user}', user).replace('{amount}', amount).replace('{note}', note).replace('{test}', djangovar);
+		// $('#alink').html(teststring);
 	});
+</script>
+<script type="text/javascript">
+    $("#submituserpayment").on('click change', function(){
+        $('#sendingemailmodal').modal('show');
+    });
 </script>
 {% endblock %}

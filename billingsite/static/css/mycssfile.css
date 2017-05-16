@@ -1,0 +1,127 @@
+/*!
+* Custom CSS file created by Marc Stocker
+*/
+
+
+.highcharts-container {
+	width:100% !important;
+	height:100% !important;
+}
+
+/* unvisited link */
+a:link {
+	color: #368afa;
+}
+
+
+.progressbarsOwed {
+	font-size   :18px;
+	color       :#fff;
+	position    :relative;
+	text-align  :right;
+	right       :5px;
+}
+.progressbarsOwedTo {
+	font-size   :18px;
+	color       :#fff;
+	position    :relative;
+	text-align  :left;
+	left       :5px;
+}
+.progressName{
+	top         : 3px;
+}
+.progressAmount {
+	bottom      : 7px;
+}
+
+td#owed {
+	background: #f2c602;
+	table-color-scale: 50%;
+	hover-scale: 10%;
+	padding: 0;
+}
+td#paid {
+	background: #00f560;
+	color-scale: 20%;
+	hover-scale: 10%;
+	padding: 0;
+}
+th#paid {
+	background: #14d760;
+	color-scale: 20%;
+	hover-scale: 10%;
+	padding: 0;
+}
+th#owed {
+	background: #d2af14;
+	color-scale: 20%;
+	hover-scale: 10%;
+	padding: 0;
+}
+td#Edgar {
+	background: #9bc2e6;
+	table-color-scale: 50%;
+	hover-scale: 10%;
+	padding: 0;
+}
+td#Marc {
+	background: #00b0f0;
+	table-color-scale: 50%;
+	hover-scale: 10%;
+	padding: 0;
+}
+td#Dom {
+	background: #757171;
+	table-color-scale: 50%;
+	hover-scale: 10%;
+	padding: 0;
+}
+td#John {
+	background: #bf8f00;
+	table-color-scale: 50%;
+	hover-scale: 10%;
+	padding: 0;
+}
+td#Erik {
+	background: #0070c0;
+	table-color-scale: 50%;
+	hover-scale: 10%;
+	padding: 0;
+}
+td#Mike {
+	background: #757171;
+	table-color-scale: 50%;
+	hover-scale: 10%;
+	padding: 0;
+}
+td#stillowed0 {
+	background: #11e600;
+	table-color-scale: 50%;
+	hover-scale: 10%;
+	padding: 0;
+}
+td#stillowed25 {
+	background: #99ff00;
+	table-color-scale: 50%;
+	hover-scale: 10%;
+	padding: 0;
+}
+td#stillowed50 {
+	background: #f9ff00;
+	table-color-scale: 50%;
+	hover-scale: 10%;
+	padding: 0;
+}
+td#stillowed75 {
+	background: #fe5301;
+	table-color-scale: 50%;
+	hover-scale: 10%;
+	padding: 0;
+}
+td#stillowed100 {
+	background: #ff0000;
+	table-color-scale: 50%;
+	hover-scale: 10%;
+	padding: 0;
+}

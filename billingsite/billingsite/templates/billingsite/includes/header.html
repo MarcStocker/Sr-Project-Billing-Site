@@ -1,135 +1,173 @@
 {% load static %}
-<div class="container">
-   <div class="row">
-      <div class="span3">
-         <div class="col-md-2">
-         </div>
-      </div>
-      <div class="span12">
-         <div class="col-md-8">
-            <img srcimg src="{% static "images/headerbanner.png" %}"></img>
-         </div>
-      </div>
-   </div>
-   <nav class="navbar navbar-inverse">
-      <div class="container-fluid">
-         <div class="nav navbar-nav">
-            <li class="active">
-               <a class="navbar-brand" href="{% url 'homepageapp:home'%}">
-                  <img alt="brand" src="{% static "images/homeicon.png" %}" />
-               </a>
-            </li>
-            <li>
-               <a href="/utilities/">Utilities</a>
-            </li>
-            <li>
-               <a href="/ious/">IOUs</a>
-               <!-- <a href="/ious/">IOUs</a> -->
-            </li>
-            <li>
-               <a href="#">Chores</a>
-               <!-- <a href="/chores/">Chores</a> -->
-            </li>
-         </div>
-         <ul class="nav navbar-nav navbar-right">
-            <li>
-               {% if user.is_authenticated %}
-               <button data-toggle="modal" data-target="#myModal" type="button" class="btn btn-lg" style="background-color:#000000">
-                   <a href="#" roll="button">{{ user.username }}</a>
-               </button>
-               {% endif %}
-            </li>
-            <li>
-               {% if user.is_superuser %}
-               <!-- Single Button -->
-               <div class="btn-group">
-                  <button type="button" class="btn btn-success btn-lg" href="/admin/">
-                      <a href="/admin/" roll="button" style="color: #ffffff">Admin</a>
-                  </button>
-                  <button type="button" class="btn btn-primary btn-success btn-lg dropdown-toggle" data-toggle="dropdown">
-                     <span class="caret"></span>
-                     <span class="sr-only">Toggle Dropdown</span>
-                  </button>
-                  <ul class="dropdown-menu">
-                     <li>
-                        <a href="{% url 'billing:addlease' %}">Add a new Lease/House</a>
-                     </li>
-                     <li>
-                        <a href="{% url 'billing:addroommate' %}">Add a Roommate to House X</a>
-                     </li>
-                     <li role="separator" class="divider "> </li>
-                     <li>
-                        <a href="#">Add a Utility Type</a>
-                     </li>
-                     <li>
-                        <a href="{% url 'billing:addbill' %}">Add a Utility Bill to House X</a>
-                     </li>
-                     <li role="separator" class="divider "> </li>
-                     <li>
-                        <a href="{% url 'billing:adduserpayment' %}">Add a User Payment</a>
-                     </li>
-                     <li>
-                        <a href="{% url 'billing:addbillpayment' %}">Add a Bill Payment</a>
-                     </li>
-                     <li role="separator" class="divider "> </li>
-                     <li>
-                        <a href="{% url 'billing:admintablepage' %}">View all Tables</a>
-                     </li>
-                     <li>
-                       <a href ="{% url 'billing:emailusers' %}">Email All Users</a>
-                     </li>
-                     <li role="separator" class="divider "> </li>
-                     <li role="separator" class="divider "> </li>
-                     <li>
-                       <a href="{% url 'billing:deleteallbills' %}" style="color:#e00b0b; background-color:#370f00">DELETE ALL BILLS</a>
-                     </li>
-                  </ul>
-               </div>
-               {% endif %}
-            </li>
-            <li class="active">
-               {% if user.is_authenticated %}
-               <a href="/logout/">Logout  <span class="glyphicon glyphicon-user" aria-hidden="true"></span></a>
-               {% else %}
-               <a href="/login/">Login  <span class="glyphicon glyphicon-user" aria-hidden="true"></span></a>
-               {% endif %}
-            </li>
-         </ul>
-      </div>
-   </nav>
-</div>
+			<div class="container">
+				<div class="row">
+					<div class="span3">
+						<div class="col-md-2">
+						</div>
+					</div>
+					<div class="span12">
+						<div class="col-md-8">
+							<img img src="{% static "images/banner.png" %}"></img>
+						</div>
+					</div>
+				</div>
+				<nav class="navbar navbar-inverse">
+					<div class="container-fluid">
+						<div class="nav navbar-nav">
+							<li class="active">
+								<a class="navbar-brand" href="{% url 'homepageapp:home'%}">
+									<img alt="brand" src="{% static "images/homeicon.png" %}" />
+								</a>
+							</li>
+							<li>
+								<a href="/utilities/">Utilities</a>
+							</li>
+							<li>
+								<a href="/ious/">IOUs</a>
+								<!-- <a href="/ious/">IOUs</a> -->
+							</li>
+							<li>
+								<a href="#">Chores</a>
+								<!-- <a href="/chores/">Chores</a> -->
+							</li>
+						</div>
+						<ul class="nav navbar-nav navbar-right">
+							<li>
+								{% if user.is_authenticated %}
+								<button data-toggle="modal" data-target="#myModal" type="button" class="btn btn-lg" style="background-color:#000000">
+									<a href="#" roll="button">{{ user.username }}</a>
+								</button>
+								{% endif %}
+							</li>
+							<li>
+								{% if user.is_superuser %}
+								<!-- Single Button -->
+								<div class="btn-group">
+									<button type="button" class="btn btn-success btn-lg" href="/admin/">
+										<a href="/admin/" roll="button" style="color: #ffffff">Admin</a>
+									</button>
+									<button type="button" class="btn btn-primary btn-success btn-lg dropdown-toggle" data-toggle="dropdown">
+										<span class="caret"></span>
+										<span class="sr-only">Toggle Dropdown</span>
+									</button>
+									<ul class="dropdown-menu">
+										<li>
+											<a href="{% url 'billing:addlease' %}">Add a new Lease/House</a>
+										</li>
+										<li>
+											<a href="{% url 'billing:addroommate' %}">Add a Roommate to House X</a>
+										</li>
+										<li role="separator" class="divider "> </li>
+										<li>
+											<a href="#">Add a Utility Type</a>
+										</li>
+										<li>
+											<a href="{% url 'billing:addbill' %}">Add a Utility Bill to House X</a>
+										</li>
+										<li role="separator" class="divider "> </li>
+										<li>
+											<a href="{% url 'billing:adduserpayment' %}">Add a User Payment</a>
+										</li>
+										<li>
+											<a href="{% url 'billing:addbillpayment' %}">Add a Bill Payment</a>
+										</li>
+										<li role="separator" class="divider "> </li>
+										<li>
+											<a href="{% url 'billing:admintablepage' %}">View all Tables</a>
+										</li>
+										<li>
+											<a href ="{% url 'billing:emailusers' %}">Email All Users</a>
+										</li>
+										<li role="separator" class="divider "> </li>
+										<li role="separator" class="divider "> </li>
+										<li>
+											<a href="{% url 'billing:deleteallbills' %}" style="color:#e00b0b; background-color:#370f00">DELETE ALL BILLS</a>
+										</li>
+									</ul>
+								</div>
+								{% endif %}
+							</li>
+							<li class="active">
+								{% if user.is_authenticated %}
+								<a href="/logout/">Logout  <span class="glyphicon glyphicon-user" aria-hidden="true"></span></a>
+								{% else %}
+								<a href="/login/">Login  <span class="glyphicon glyphicon-user" aria-hidden="true"></span></a>
+								{% endif %}
+							</li>
+						</ul>
+					</div>
+				</nav>
+			</div>
 
 
-{% if user.is_authenticated %}
-<!-- MODAL for above graph -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content" style="background-color:#252424">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color:#a6a6a6"><span aria-hidden="true">&times;</span></button>
-                <h2 class="modal-title" id="myModalLabel">User Settings</h2>
-            </div>
-            <div class="modal-body">
-                <div class="container-fluid">
-                    <span>
-                        <h2>Account Settings</h2>
-                        <h4>Username: <text style="color: #fff">{{ user.username }}</text></h4>
-                        <h4>Email:    <text style="color: #fff">{{ user.email }}</text></h4>
-                    </span>
-                    <hr style="color:#2b2b2b; background-color:#2b2b2b"/>
-                    <span>
-                        <h2>Your Houses</h2>
-                        <h4>House Name: <text style="color: #fff">{{ house.name }}</text></h4>
-                        <h4>Lease Start Date: <text style="color: #fff">{{ house.startDate }}</text></h4>
-                        <h4>Lease Ending Date: <text style="color: #fff">{{ house.endDate }}</text></h4>
-                        <h4></h4>
-                    </span>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
+			{% if user.is_authenticated %}
+			<!-- MODAL for above graph -->
+			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content" style="background-color:#252424">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color:#a6a6a6"><span aria-hidden="true">&times;</span></button>
+							<h2 class="modal-title" id="myModalLabel">User Settings</h2>
+						</div>
+						<div class="modal-body">
+							<div class="container-fluid">
+								<span>
+									<span class="md-col-left">
+										<h2>Account Settings</h2>
+									</span>
+									<span class="md-col-right" style="position: absolute; left: 265px; top: 42px">
+										<button data-toggle="modal" data-target="#editSettingsModal" class="mybtn btn btn-xs editSettings">Edit</button>
+									</span>
+									<h4>Username: <text style="color: #fff">{{ user.username }}</text></h4>
+									<h4>Email:    <text style="color: #fff">{{ user.email }}</text></h4>
+									<h3>Payment Options:</h3>
+									<h4>Venmo: </h4>
+								</span>
+								<hr style="color:#2b2b2b; background-color:#2b2b2b"/>
+								<span>
+									<h2>Your Houses</h2>
+									<h4>House Name: <text style="color: #fff">{{ house.name }}</text></h4>
+									<h4>Lease Start Date: <text style="color: #fff">{{ house.startDate }}</text></h4>
+									<h4>Lease Ending Date: <text style="color: #fff">{{ house.endDate }}</text></h4>
+									<h4></h4>
+								</span>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Second Modal for editting User Settings -->
+			<div class="modal fade" id="editSettingsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="width=60%">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content" style="background-color:#252424">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color:#a6a6a6"><span aria-hidden="true">&times;</span></button>
+							<h2 class="modal-title" id="myModalLabel">Edit User Settings</h2>
+						</div>
+						<div class="modal-body">
+							<div class="container-fluid">
+								<h3>Account Settings</h3>
+								<label class="mycustlabel" id="usernamelabel" for="username">Username: </label><input id="username" type="text"><br />
+								<label class="mycustlabel" id="emaillabel" for="email">Email:</label><input id="email" type="text"><br />
+								<h3>Payment Options</h3>
+								<label class="mycustlabel" id="venmolabel" for="venmo">Venmo: </label><input id="venmo" type="text"><br />
+								<label class="mycustlabel" id="paypallabel" for="paypal">Paypal: </label><input id="paypal" type="text"><br />
+								<label class="mycustlabel" id="googlewalletlablel" for="googlewallet">Google Wallet: </label><input id="googlewallet" type="text"><br />
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<script class="text/javascript">
+			$('#username').on('click', function() {
+				var element = document.getElementByID("username");
+				element.innerHTML = "<text>something new</text>"
+			});
+			</script>
 {% endif %}

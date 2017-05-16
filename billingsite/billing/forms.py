@@ -7,7 +7,7 @@ DateInput = partial(forms.DateInput, {'class': 'datepicker'})
 import datetime
 import os
 
-from .models import Lease, Roommate
+from .models import Lease, Roommate, UserSettings
 from .models import UtilityBill, UtilityType
 from .models import BillPayment, UserPayment
 
@@ -24,7 +24,6 @@ class UserPaymentForm(forms.ModelForm):
 			'payer','payee',
 			'date','amount','payType'
 		]
-
 # Adding a New utility Type
 class addUtilityTypeForm(forms.ModelForm):
 	name = forms.CharField()
@@ -35,7 +34,6 @@ class addUtilityTypeForm(forms.ModelForm):
 			'name','website',
 			'serviceType', 'image'
 		]
-
 class addNewBillForm(forms.ModelForm):
 	owner = forms.ModelChoiceField(
 		queryset=UtilityBill.objects.all(),
@@ -111,11 +109,6 @@ class addNewBillForm(forms.ModelForm):
 		thisbill.house = house
 		thisbill.save()
 		thisbill.createRequests()
-
-
-
-
-
 class addNewBillPaymentForm(forms.ModelForm):
 	date = forms.DateField(
 		label="Date Paid",
@@ -127,7 +120,6 @@ class addNewBillPaymentForm(forms.ModelForm):
 		fields= [
 			'payer','amount','date','payType','UtilBill',
 		]
-
 class addNewUserPaymentForm(forms.ModelForm):
 	date = forms.DateField(
 		label="Date Paid",
@@ -191,7 +183,6 @@ class addUtilityBillPaymentForm(forms.ModelForm):
 		fields= [
 
 		]
-
 class addLeaseForm(forms.ModelForm):
 	startDate = forms.DateField(
 		label="Lease Start Date",
@@ -208,7 +199,6 @@ class addLeaseForm(forms.ModelForm):
 		fields= [
 			'name', 'address', 'startDate', 'endDate',
 		]
-
 class addRoommateForm(forms.ModelForm):
 	# roommatename = forms.CharField(
 	# 	label="What would you like your public name to be?",
@@ -219,6 +209,12 @@ class addRoommateForm(forms.ModelForm):
 		fields= [
 			'name', 'house', 'user',
 		]
-
 class sendEmailForm(forms.Form):
 	textbody = forms.CharField(label='Your name', max_length=500)
+class editUserSettingsGLOBAL(forms.ModelForm):
+	class Meta:
+		model = UserSettings
+		fields = [
+			# 'venmoAcct', 'phonenumber', 'googleWallet', 'paypal'
+			'venmoAcct', 'phonenumber'
+		]

@@ -5,34 +5,63 @@
 
 {% block content %}
 <div class="container">
-   <div class="column">
-      <div class="span4 col-md-left">
-         <div class="col-md-4">
-            <div class="page-header">
-               <h1 class="text-center">Utilities Overview</h1>
-            </div>
-            <!-- BEGIN Last 5 Bills -->
-            {% if user.is_authenticated %}
-            <!-- Overview Table -->
-            {% include "homepageapp/includes/utilitiesoverview.html" %}
-            {% endif %}
-            <!-- END 5 Bills -->
-         </div>
-      </div>
-   </div>
-   <div class="span4 col-md-center">
-      <div class="col-md-4">
-         <div class="page-header">
-            <h1 class="text-center">IOU's Overview</h1>
-         </div>
-      </div>
-   </div>
-   <div class="span4 col-md-right">
-      <div class="col-md-4">
-         <div class="page-header">
-            <h1 class="text-center">Chores Overview</h1>
-         </div>
-      </div>
-   </div>
+	<span>
+		<p>
+			<font size="5">
+				Hello User, thank you for visiting my website! The site is still a <b style="color:#ffffff">WIP</b> and will continue to be updated.
+				Unfortunately I do not have a dedicated server to host this site on yet. So for the time being, <b style="color:#ffffff">it will be hosted on my personal desktop PC</b>.
+				With this in mind, please realize that I may <b style="color:#ffffff">turn my PC off from time to time</b>. I will work to remedy this ASAP.
+				In the mean time, <b style="color:#ffffff">if the site is down, try checking back in a few hours.</b>
+			</font>
+		</p>
+		<p>
+			<font size="5">
+				Thank you for your understanding,
+			</font>
+		</p>
+		<p>
+			<font size="5">
+				- The Homebase Team (Marc Stocker)
+			</font>
+		</p>
+	</span>
+	<div class="column">
+		<div class="span4 col-md-left">
+			<div class="col-md-4">
+				<div class="page-header">
+					<h1 class="text-center">Utilities Overview</h1>
+				</div>
+				<!-- BEGIN Last 5 Bills -->
+				{% if user.is_authenticated %}
+				<!-- Overview Table -->
+				{% include "homepageapp/includes/utilitiesoverview.html" %}
+				{% endif %}
+				<!-- END 5 Bills -->
+			</div>
+		</div>
+	</div>
+	<div class="column">
+		<div class="span4 col-md-center">
+			<div class="col-md-4">
+				<div class="page-header">
+					<h1 class="text-center">IOU's Overview</h1>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="column">
+		<div class="span4 col-md-right">
+			<div class="col-md-4">
+				<div class="page-header">
+					<h1 class="text-center">Chores Overview</h1>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="container">
+	<br />
+	<br />
+	<h1>This website powered by:</h1>
 </div>
 {% endblock %}
