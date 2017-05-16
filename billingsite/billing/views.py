@@ -372,19 +372,19 @@ def deleteallbills(request):
 	print("Deleting all Requests, Bills, and payments")
 	print("   Deleting PaymentRequests...")
 	for i in PaymentRequest.objects.all():
-		time.sleep(.1)
+		# time.sleep(.1)
 		i.delete()
 	print("   Deleting UtilityBills...")
 	for i in UtilityBill.objects.all():
-		time.sleep(.1)
+		# time.sleep(.1)
 		i.delete()
 	print("   Deleting userPayments...")
 	for i in UserPayment.objects.all():
-		time.sleep(.1)
+		# time.sleep(.1)
 		i.delete()
 	print("   Deleting billPayments...")
 	for i in BillPayment.objects.all():
-		time.sleep(.1)
+		# time.sleep(.1)
 		i.delete()
 	return HttpResponseRedirect("/utilities/admintablepage")
 @login_required(login_url="/login/")
@@ -395,7 +395,7 @@ def deleterequests(request):
 	lastid = last_bill.id
 	recent_requests = PaymentRequest.objects.filter(UtilBill_id=lastid)
 	for i in recent_requests:
-		time.sleep(.2)
+		# time.sleep(.2)
 		i.delete()
 	last_bill.delete()
 	print("Selected Payment requests associated with Bill ID: " + str(lastid))

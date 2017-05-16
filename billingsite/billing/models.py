@@ -76,21 +76,21 @@ class Roommate(models.Model):
 						on_delete=models.SET_DEFAULT,
 						db_constraint=False
 						)
-	isactive    = models.BooleanField(default=True)
-	utiltotalowed       = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
-	utiltotalpaid       = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
-	utilpercentowed     = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
-	utiltotalowed       = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
-	utiltotaldebt       = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
-	utiltotalpaid       = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
-	utiltotalremaining  = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
-
-	ioutotalowed        = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
-	ioutotalpaid        = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
-	ioutotalowed        = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
-	ioutotaldebt        = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
-	ioutotalpaid        = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
-	ioutotalremaining   = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
+	## isactive    = models.BooleanField(default=True)
+	## utiltotalowed       = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
+	## utiltotalpaid       = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
+	## utilpercentowed     = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
+	## utiltotalowed       = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
+	## utiltotaldebt       = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
+	## utiltotalpaid       = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
+	## utiltotalremaining  = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
+##
+	## ioutotalowed        = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
+	## ioutotalpaid        = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
+	## ioutotalowed        = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
+	## ioutotaldebt        = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
+	## ioutotalpaid        = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
+	## ioutotalremaining   = models.DecimalField(max_digits=6, decimal_places=2, default=0, null=True, blank=True)
 
 
 	def __str__(self):
@@ -185,7 +185,6 @@ class Roommate(models.Model):
 		print("__________________________________________________________________~")
 		print("Sending message...")
 		if sendemails == True:
-			time.sleep(.2)
 			myemailgeek  = "marcsageek@gmail.com"
 			passwordgeek = "usmtfzbmbyudsvcr"
 			print("  creating server")
