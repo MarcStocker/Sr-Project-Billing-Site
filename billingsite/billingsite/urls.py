@@ -32,6 +32,7 @@ urlpatterns = [
     # Home, etc. URLS
     url(r'^', include('homepageapp.urls')),
     url(r'^home/', include('homepageapp.urls')),
+	url(r'^newuser/', include('homepageapp.urls')),
 
     # Website App URLS
     url(r'^utilities/', include('billing.urls')),

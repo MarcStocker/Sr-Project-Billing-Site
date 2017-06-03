@@ -33,7 +33,7 @@ ALLOWED_HOSTS = [
 			'homebase.maxximou5.com',
 ]
 
-LOGIN_REDIRECT_URL = '/home/'
+LOGIN_REDIRECT_URL = '/newuser/'
 
 # Application definition
 

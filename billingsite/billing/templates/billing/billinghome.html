@@ -359,7 +359,7 @@
 												<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color:#a6a6a6"><span aria-hidden="true">&times;</span></button>
 												<h2 class="modal-title" id="myModalLabel">{{ bill.utilType.name }} - {{ bill.statementDate}}</h2>
 												{% if bill.utilType.image %}
-												<img src="{{ bill.utilType.image.url }}"></a>
+												<img src="media/{{ bill.utilType.image }}"></a>
 												{% endif %}
 												<!-- <h2 class="modal-title" id="myModalLabel">{{ bill.utilType.name }} - {{ bill.statementDate}}</h2><img src="{% static "images/cool.png" %}"></a> -->
 											</div>

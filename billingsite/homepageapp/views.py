@@ -55,26 +55,26 @@ def home(request):
 def register(request):
 	if request.method=='POST':
 		form = RegisterForm(request.POST)
-		if form.is_valid():
-			user = form.save()
-			user = authenticate(username=form.cleaned_data.get('username'), password=form.cleaned_data.get('password1'))
-			newsettings = UserSettings()
-			newsettings.user = user
-			newsettings.save()
-			print(login(request, user))
+	if form.is_valid():
+		user = form.save()
+		user = authenticate(username=form.cleaned_data.get('username'), password=form.cleaned_data.get('password1'))
+		newsettings = UserSettings()
+		newsettings.user = user
+		newsettings.save()
+		print("User that was just created: ")
+		print(login(request, user))
 
-			return HttpResponseRedirect('/')
-	else:
-		form = RegisterForm
-		print("something")
-		# form = blog_entry()
+	return HttpResponseRedirect('/home/')
+	form = RegisterForm
+	print("something")
+	# form = blog_entry()
 
-		context = {
-		'page_name':"Register",
-		'form':form,
-		'page_name' :"Register - Roommate Homebase",
-		}
-		return render(request, 'billingsite/register.html', context)
+	context = {
+	'page_name':"Register",
+	'form':form,
+	'page_name' :"Register - Roommate Homebase",
+	}
+	return render(request, 'billingsite/register.html', context)
 
 @login_required(login_url="/login/")
 def loggingin(request):

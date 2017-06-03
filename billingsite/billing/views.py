@@ -21,6 +21,9 @@ import os
 import time
 import smtplib
 
+
+
+
 # Create your views here.
 @login_required(login_url="/login/")
 
@@ -114,6 +117,12 @@ def billinghome(request):
 	#
 	all_payments    = UserPayment.objects.filter(house_id=house.id)
 
+	# usersettings for Venmo Tag
+	usersettings = {}
+	usersettings[0] = " - Placeholder - "
+	for i in my_roommates:
+		usersettings[i.id] = UserSettings.objects.get(user=i.user).venmoAcct
+
 	print("\n-------------------\n      END \n-------------------\n END BILLING HOME \n-------------------\n\n")
 	context = {
 		'page_name'         :"Utilities - Roommate Homebase",
@@ -121,12 +130,14 @@ def billinghome(request):
 		'totmoney'          :totmoney,
 		'all_bills'         :all_bills,
 		'last5bills'        :last5bills,
+		'cur_roommate'		:cur_roommate,
 		'curuser_debt'      :curuser_debt,
 		'all_payments'      :all_payments,
 		'numroommates'      :numroommates,
 		'roommateowes'      :roommateowes,
 		'roommatepaid'      :roommatepaid,
 		'my_roommates'      :my_roommates,
+		'usersettings'		:usersettings,
 		'roommates_iowe'    :roommates_iowe,
 		'curuser_collect'   :curuser_collect,
 		'roommate_collections':roommate_collections,
@@ -137,6 +148,10 @@ def addbill(request):
 	cur_roommate = Roommate.objects.get(user=request.user.id)
 	house        = cur_roommate.house
 	my_roommates = Roommate.objects.filter(house_id=house.id)
+	# usersettings for Venmo Tag
+	usersettings = {}
+	for i in my_roommates:
+		usersettings[i.id] = UserSettings.objects.get(user=i.user).venmoAcct
 	if request.method=='POST':
 		form = addNewBillForm(request.POST, request.FILES)
 		if form.is_valid():
@@ -151,12 +166,21 @@ def addbill(request):
 	context = {
 		'page_name' :"Add New Bill - Roommate Homebase",
 		'sitename'  :"Roommate Homebase",
+		'cur_roommate'		:cur_roommate,
 		'page_name' :"Add a Bill",
+		'usersettings':usersettings,
 		'form':form,
 	}
 	return render(request, 'billing/addBill.html', context)
 @login_required(login_url="/login/")
 def addbilltype(request):
+	cur_roommate = Roommate.objects.get(user=request.user.id)
+	house        = cur_roommate.house
+	my_roommates = Roommate.objects.filter(house_id=house.id)
+	# usersettings for Venmo Tag
+	usersettings = {}
+	for i in my_roommates:
+		usersettings[i.id] = UserSettings.objects.get(user=i.user).venmoAcct
 	if request.method=='POST':
 		form = addUtilityTypeForm(request.POST)
 		if form.is_valid():
@@ -169,11 +193,20 @@ def addbilltype(request):
 		'page_name' :"Add a New Bill Type - Roommate Homebase",
 		'sitename'  :"Roommate Homebase",
 		'page_name' :"Add a Bill Payment",
+		'usersettings'		:usersettings,
+		'cur_roommate'		:cur_roommate,
 		'form'      :form,
 	}
 	return render(request, 'billing/addBill.html', context)
 @login_required(login_url="/login/")
 def addbillpayment(request):
+	cur_roommate = Roommate.objects.get(user=request.user.id)
+	house        = cur_roommate.house
+	my_roommates = Roommate.objects.filter(house_id=house.id)
+	# usersettings for Venmo Tag
+	usersettings = {}
+	for i in my_roommates:
+		usersettings[i.id] = UserSettings.objects.get(user=i.user).venmoAcct
 	if request.method=='POST':
 		form = addNewBillPaymentForm(request.POST, request.FILES)
 		if form.is_valid():
@@ -185,12 +218,21 @@ def addbillpayment(request):
 	context = {
 		'page_name' :"Add Bill Payment - Roommate Homebase",
 		'sitename'  :"Roommate Homebase",
+		'cur_roommate'		:cur_roommate,
 		'page_name' :"Add a Bill Payment",
+		'usersettings'		:usersettings,
 		'form'      :form,
 	}
 	return render(request, 'billing/addBillPayment.html', context)
 @login_required(login_url="/login/")
 def adduserpayment(request):
+	cur_roommate = Roommate.objects.get(user=request.user.id)
+	house        = cur_roommate.house
+	my_roommates = Roommate.objects.filter(house_id=house.id)
+	# usersettings for Venmo Tag
+	usersettings = {}
+	for i in my_roommates:
+		usersettings[i.id] = UserSettings.objects.get(user=i.user).venmoAcct
 	if request.method=='POST':
 		form = addNewUserPaymentForm(request.POST)
 		if form.is_valid():
@@ -233,6 +275,7 @@ def adduserpayment(request):
 			'page_name'     :"Add a User Payment",
 			'my_roommates'  :my_roommates,
 			'roommates_iowe':roommates_iowe ,
+		'cur_roommate'		:cur_roommate,
 			'usersettings'	:usersettings,
 			'form'          :form,
 		}
@@ -243,6 +286,13 @@ def adduserpayment(request):
 
 @login_required(login_url="/login/")
 def addlease(request):
+	cur_roommate = Roommate.objects.get(user=request.user.id)
+	house        = cur_roommate.house
+	my_roommates = Roommate.objects.filter(house_id=house.id)
+	# usersettings for Venmo Tag
+	usersettings = {}
+	for i in my_roommates:
+		usersettings[i.id] = UserSettings.objects.get(user=i.user).venmoAcct
 	if request.method=='POST':
 		form = addLeaseForm(request.POST)
 		if form.is_valid():
@@ -261,11 +311,20 @@ def addlease(request):
 		'page_name' :"Add Lease - Roommate Homebase",
 		'sitename'  :"Roommate Homebase",
 		'page_name' :"Add a Lease",
+		'usersettings'		:usersettings,
+		'cur_roommate'		:cur_roommate,
 		'form'      :form,
 	}
 	return render(request, 'billing/addLease.html', context)
 @login_required(login_url="/login/")
 def addroommate(request):
+	cur_roommate = Roommate.objects.get(user=request.user.id)
+	house        = cur_roommate.house
+	my_roommates = Roommate.objects.filter(house_id=house.id)
+	# usersettings for Venmo Tag
+	usersettings = {}
+	for i in my_roommates:
+		usersettings[i.id] = UserSettings.objects.get(user=i.user).venmoAcct
 	if request.method=='POST':
 		form = addRoommateForm(request.POST)
 		if form.is_valid():
@@ -277,11 +336,20 @@ def addroommate(request):
 	context = {
 		'page_name'     :"Add Roommate - Roommate Homebase",
 		'sitename'      :"Roommate Homebase",
+		'usersettings'		:usersettings,
 		'form'          :form,
+		'cur_roommate'		:cur_roommate,
 	}
 	return render(request, 'billing/addRoommate.html', context)
 @login_required(login_url="/login/")
 def addself(request):
+	cur_roommate = Roommate.objects.get(user=request.user.id)
+	house        = cur_roommate.house
+	my_roommates = Roommate.objects.filter(house_id=house.id)
+	# usersettings for Venmo Tag
+	usersettings = {}
+	for i in my_roommates:
+		usersettings[i.id] = UserSettings.objects.get(user=i.user).venmoAcct
 	if request.method=='POST':
 		form = addRoommateForm(request.POST)
 		form.user = request.user
@@ -294,12 +362,21 @@ def addself(request):
 		form = addRoommateForm()
 	context = {
 		'page_name'     :"Add Roommate - Roommate Homebase",
+		'usersettings'		:usersettings,
+		'cur_roommate'		:cur_roommate,
 		'sitename'      :"Roommate Homebase",
 		'form'          :form,
 	}
 	return render(request, 'billing/addSelf.html', context)
 @login_required(login_url="/login/")
 def admintablepage(request):
+	cur_roommate = Roommate.objects.get(user=request.user.id)
+	house        = cur_roommate.house
+	my_roommates = Roommate.objects.filter(house_id=house.id)
+	# usersettings for Venmo Tag
+	usersettings = {}
+	for i in my_roommates:
+		usersettings[i.id] = UserSettings.objects.get(user=i.user).venmoAcct
 	all_users           = User.objects.all()
 	all_leases          = Lease.objects.all()
 	all_roommates       = Roommate.objects.all()
@@ -313,29 +390,45 @@ def admintablepage(request):
 		'sitename'  :"Roommate Homebase",
 		'page_name' :"Admin - All Tables",
 		'all_users'          :all_users,
+		'cur_roommate'		:cur_roommate,
 		'all_leases'         :all_leases,
 		'all_roommates'      :all_roommates,
 		'all_userpayments'   :all_userpayments,
 		'all_billpayments'   :all_billpayments,
 		'all_utilityBills'   :all_utilityBills,
+		'usersettings'		:usersettings,
 		'all_utilityTypes'   :all_utilityTypes,
 		'all_PaymentRequests':all_PaymentRequests,
 	}
 	return render(request, 'billingsite/adminTablePage.html', context)
 @login_required(login_url="/login/")
 def test(request):
+	cur_roommate = Roommate.objects.get(user=request.user.id)
+	house        = cur_roommate.house
+	my_roommates = Roommate.objects.filter(house_id=house.id)
+	# usersettings for Venmo Tag
+	usersettings = {}
+	for i in my_roommates:
+		usersettings[i.id] = UserSettings.objects.get(user=i.user).venmoAcct
 	current_user = request.user
 	print("")
 	print("Current user: " + str(current_user))
 	print("-------------------")
 	print("User ID: " + str(current_user.id))
-	print("Email:   " + str(current_user.email))
+	print("Date_Created: " + str(current_user.date_created))
 	print("=================================")
 	print("")
 
 	return HttpResponseRedirect("/utilities/")
 @login_required(login_url="/login/")
 def emailusers(request):
+	cur_roommate = Roommate.objects.get(user=request.user.id)
+	house        = cur_roommate.house
+	my_roommates = Roommate.objects.filter(house_id=house.id)
+	# usersettings for Venmo Tag
+	usersettings = {}
+	for i in my_roommates:
+		usersettings[i.id] = UserSettings.objects.get(user=i.user).venmoAcct
 	if request.method=='POST':
 		form = sendEmailForm(request.POST)
 		message = form
@@ -362,8 +455,10 @@ def emailusers(request):
 		form = sendEmailForm()
 	context = {
 		'page_name' :"Admin Email Panel",
+		'cur_roommate'		:cur_roommate,
 		'sitename'  :"Roommate Homebase",
 		'page_name' :"Email Users",
+		'usersettings'		:usersettings,
 		'form'      :form,
 	}
 	return render(request, 'billing/sendemail.html', context)

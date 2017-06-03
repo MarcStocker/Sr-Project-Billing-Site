@@ -48,16 +48,16 @@ class UserSettings(models.Model):
 						max_length=20,
 						null=True,
 						blank=True,
-						default=""
+						default="No Account Info"
 						)
 	phonenumber = models.CharField(
 						max_length=10,
 						null=True,
 						blank=True,
-						default=""
+						default="-"
 						)
 	def __str__(self):
-		return "#" + str(self.id) + " - " + self.user
+		return "#" + str(self.id) + " - " + str(self.user)
 
 
 class Roommate(models.Model):
