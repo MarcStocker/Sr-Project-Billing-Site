@@ -6,7 +6,7 @@ This section of the website will handle utilities between roommates.
 - Total amount for each month
 - Automattically split the bill for # of roommates in house
 Preview:
-![alt tag](https://puu.sh/uWptf/bcb5d29e2c.png)
+![alt text](https://github.com/MarcStocker/Sr-Project-Billing-Site/blob/master/CINS%20Senior%20Project%20Poster.jpg?raw=true
 
 ## IOU
 This section will handle money that roommates have borrowed or owe for shared household items. 
